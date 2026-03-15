@@ -32,9 +32,13 @@ export interface GeneratedResult {
 
 /** A single renderable unit: one mockup + art assignment. */
 export interface Combination {
-  /** `${mockupId}:${artId}` for single-frame, `${mockupId}` for multi-frame. */
+  /**
+   * Single-frame: `${mockupId}:${artId}`
+   * Multi-frame:  `${mockupId}:${artStartIdx}`
+   */
   id: string;
   type: 'single' | 'multi';
   mockupId: string;
-  artId?: string; // single-frame only
+  artId?: string;       // single-frame: the specific art to place
+  artStartIdx?: number; // multi-frame: starting index into the arts array for the sliding window
 }

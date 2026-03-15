@@ -10,30 +10,29 @@ function getOrientation(aspect: number): Orientation {
   return 'square';
 }
 
-/** Whether an art aspect ratio is strictly compatible with a frame aspect ratio. */
-function isStrictlyCompatible(artAspect: number, frameAspect: number): boolean {
+/**
+ * Whether this specific art is compatible with this specific frame.
+ * Square frames fall back to accepting any art when no square art exists.
+ */
+function isCompatible(artAspect: number, frameAspect: number, hasSquareArt: boolean): boolean {
   const frameOrient = getOrientation(frameAspect);
   const artOrient = getOrientation(artAspect);
   if (frameOrient === 'portrait') return artOrient === 'portrait';
   if (frameOrient === 'landscape') return artOrient === 'landscape';
-  return artOrient === 'square'; // square frame — prefers square art
-}
-
-/** True if at least one art in the pool is compatible with this frame. */
-function frameHasCompatibleArt(frameAspect: number, arts: ArtImage[]): boolean {
-  const frameOrient = getOrientation(frameAspect);
-  if (frameOrient === 'square') return arts.length > 0; // always has a closest-match fallback
-  return arts.some((a) => getOrientation(a.w / a.h) === frameOrient);
+  // Square frame: prefer square art; if none exists, accept any
+  return hasSquareArt ? artOrient === 'square' : true;
 }
 
 // ── Combination computation ──────────────────────────────────────────────────
 
 /**
- * Compute every valid (mockup × art) combination given the current state.
- * - Single-frame mockup: one combination per compatible art
- * - Multi-frame mockup: one combination total, skipped if any frame has no
- *   compatible art in the pool
- * - Square frames fall back to closest match when no square art exists
+ * Compute every valid combination:
+ *
+ * Single-frame mockup × each compatible art = 1 combination per art
+ *
+ * Multi-frame mockup (N frames) × M arts = up to M combinations via sliding window:
+ *   combo i → frame[j] receives arts[(i + j) % M]
+ *   A combo is skipped only when the assigned art for any frame is orientation-incompatible.
  */
 export function computeCombinations(
   mockups: MockupTemplate[],
@@ -48,32 +47,43 @@ export function computeCombinations(
     if (mockup.frames.length === 0) continue;
 
     if (mockup.frames.length === 1) {
+      // ── Single-frame: one combination per compatible art ──────────────────
       const frame = mockup.frames[0];
       const frameAspect = frame.w / frame.h;
-      const frameOrient = getOrientation(frameAspect);
-
       for (const art of arts) {
-        const artOrient = getOrientation(art.w / art.h);
-        let compatible: boolean;
-        if (frameOrient === 'portrait') {
-          compatible = artOrient === 'portrait';
-        } else if (frameOrient === 'landscape') {
-          compatible = artOrient === 'landscape';
-        } else {
-          // Square frame: prefer square art; if none exists accept anything
-          compatible = hasSquareArt ? artOrient === 'square' : true;
-        }
-        if (compatible) {
-          combinations.push({ id: `${mockup.id}:${art.id}`, type: 'single', mockupId: mockup.id, artId: art.id });
+        if (isCompatible(art.w / art.h, frameAspect, hasSquareArt)) {
+          combinations.push({
+            id: `${mockup.id}:${art.id}`,
+            type: 'single',
+            mockupId: mockup.id,
+            artId: art.id,
+          });
         }
       }
     } else {
-      // Multi-frame: valid only when every frame has at least one compatible art
-      const allFramesHaveArt = mockup.frames.every((f) =>
-        frameHasCompatibleArt(f.w / f.h, arts)
-      );
-      if (allFramesHaveArt) {
-        combinations.push({ id: mockup.id, type: 'multi', mockupId: mockup.id });
+      // ── Multi-frame: M combinations, one per sliding-window start position ─
+      const N = mockup.frames.length;
+      const M = arts.length;
+
+      for (let startIdx = 0; startIdx < M; startIdx++) {
+        // Check that every (frame[j], arts[(startIdx+j)%M]) pair is orientation-compatible
+        let valid = true;
+        for (let j = 0; j < N; j++) {
+          const art = arts[(startIdx + j) % M];
+          const frame = mockup.frames[j];
+          if (!isCompatible(art.w / art.h, frame.w / frame.h, hasSquareArt)) {
+            valid = false;
+            break;
+          }
+        }
+        if (valid) {
+          combinations.push({
+            id: `${mockup.id}:${startIdx}`,
+            type: 'multi',
+            mockupId: mockup.id,
+            artStartIdx: startIdx,
+          });
+        }
       }
     }
   }
@@ -111,51 +121,6 @@ function coverCrop(
   return { sx, sy, sw, sh };
 }
 
-// ── Art assignment with strict orientation, no repeats ───────────────────────
-
-/**
- * Pick the best unused art for a frame:
- * 1. Compatible orientation, unused → closest aspect ratio
- * 2. Any unused (fallback for square frames or pool exhaustion) → closest aspect ratio
- * 3. Pool was exhausted → reset and retry
- */
-function pickBestUnused(
-  frameAspect: number,
-  artAspects: number[],
-  usedIndices: Set<number>
-): number {
-  if (usedIndices.size >= artAspects.length) usedIndices.clear();
-
-  const frameOrient = getOrientation(frameAspect);
-  let bestIdx = -1;
-  let bestDiff = Infinity;
-
-  // Pass 1: compatible + unused
-  for (let j = 0; j < artAspects.length; j++) {
-    if (usedIndices.has(j)) continue;
-    const artOrient = getOrientation(artAspects[j]);
-    const compat =
-      frameOrient === 'portrait' ? artOrient === 'portrait' :
-      frameOrient === 'landscape' ? artOrient === 'landscape' :
-      artOrient === 'square';
-    if (compat) {
-      const diff = Math.abs(artAspects[j] - frameAspect);
-      if (diff < bestDiff) { bestDiff = diff; bestIdx = j; }
-    }
-  }
-  if (bestIdx !== -1) return bestIdx;
-
-  // Pass 2: any unused (fallback — square frames, or portrait/landscape
-  // after pool reset when frames outnumber compatible arts)
-  bestDiff = Infinity;
-  for (let j = 0; j < artAspects.length; j++) {
-    if (usedIndices.has(j)) continue;
-    const diff = Math.abs(artAspects[j] - frameAspect);
-    if (diff < bestDiff) { bestDiff = diff; bestIdx = j; }
-  }
-  return bestIdx !== -1 ? bestIdx : 0;
-}
-
 // ── Single combination → GeneratedResult ────────────────────────────────────
 
 async function compositeCombination(
@@ -164,13 +129,21 @@ async function compositeCombination(
   allArts: ArtImage[],
   resultId: string
 ): Promise<GeneratedResult> {
-  const artsToDraw = combination.type === 'single'
-    ? [allArts.find((a) => a.id === combination.artId)!]
-    : allArts;
+  // Resolve which arts to draw, in frame order
+  let artsInOrder: ArtImage[];
+  if (combination.type === 'single') {
+    artsInOrder = [allArts.find((a) => a.id === combination.artId)!];
+  } else {
+    // Sliding window: frame[j] ← allArts[(startIdx + j) % M]
+    const startIdx = combination.artStartIdx ?? 0;
+    const M = allArts.length;
+    const N = mockup.frames.length;
+    artsInOrder = Array.from({ length: N }, (_, j) => allArts[(startIdx + j) % M]);
+  }
 
   const [mockupImg, ...artImgs] = await Promise.all([
     loadImage(mockup.url),
-    ...artsToDraw.map((a) => loadImage(a.url)),
+    ...artsInOrder.map((a) => loadImage(a.url)),
   ]);
 
   const canvas = document.createElement('canvas');
@@ -178,31 +151,14 @@ async function compositeCombination(
   canvas.height = mockupImg.naturalHeight;
   const ctx = canvas.getContext('2d')!;
 
-  const usedNames: string[] = [];
-
-  if (combination.type === 'single') {
-    const frame = mockup.frames[0];
-    const artImg = artImgs[0];
+  for (let j = 0; j < mockup.frames.length; j++) {
+    const frame = mockup.frames[j];
+    const artImg = artImgs[j];
     const { sx, sy, sw, sh } = coverCrop(artImg.naturalWidth, artImg.naturalHeight, frame.w, frame.h);
     ctx.drawImage(artImg, sx, sy, sw, sh, frame.x, frame.y, frame.w, frame.h);
-    usedNames.push(artsToDraw[0].name);
-  } else {
-    const artAspects = artImgs.map((img) => img.naturalWidth / img.naturalHeight);
-    const usedIndices = new Set<number>();
-
-    for (const frame of mockup.frames) {
-      const frameAspect = frame.w / frame.h;
-      const bestIdx = pickBestUnused(frameAspect, artAspects, usedIndices);
-      usedIndices.add(bestIdx);
-      usedNames.push(artsToDraw[bestIdx].name);
-
-      const artImg = artImgs[bestIdx];
-      const { sx, sy, sw, sh } = coverCrop(artImg.naturalWidth, artImg.naturalHeight, frame.w, frame.h);
-      ctx.drawImage(artImg, sx, sy, sw, sh, frame.x, frame.y, frame.w, frame.h);
-    }
   }
 
-  // Multiply blend: white frame areas show art, shadows/textures preserved
+  // Multiply blend: white frame areas show art through; shadows/textures preserved
   ctx.globalCompositeOperation = 'multiply';
   ctx.drawImage(mockupImg, 0, 0);
   ctx.globalCompositeOperation = 'source-over';
@@ -211,7 +167,7 @@ async function compositeCombination(
     id: resultId,
     mockupId: mockup.id,
     mockupName: mockup.name,
-    artNames: usedNames,
+    artNames: artsInOrder.map((a) => a.name),
     dataUrl: canvas.toDataURL('image/jpeg', 0.93),
   };
 }
