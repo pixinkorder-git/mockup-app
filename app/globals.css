@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #080808;
+  --surface: #0e0e0e;
+  --surface-2: #161616;
+  --surface-3: #1f1f1f;
+  --border: #222222;
+  --border-2: #303030;
+  --accent: #dba842;
+  --accent-dim: #8a6820;
+  --accent-glow: rgba(219, 168, 66, 0.14);
+  --text: #e4ddd3;
+  --text-2: #7a746c;
+  --text-3: #363330;
+  --success: #578a56;
+  --danger: #b84040;
+  --radius: 4px;
+}
+
+@theme inline {
+  --color-bg: #080808;
+  --color-surface: #0e0e0e;
+  --color-surface-2: #161616;
+  --color-surface-3: #1f1f1f;
+  --color-border: #222222;
+  --color-border-2: #303030;
+  --color-accent: #dba842;
+  --color-accent-dim: #8a6820;
+  --color-text: #e4ddd3;
+  --color-text-2: #7a746c;
+  --color-text-3: #363330;
+  --color-success: #578a56;
+  --color-danger: #b84040;
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--bg);
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-body), system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dot-grid background texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Ensure content is above grid */
+#__next,
+main {
+  position: relative;
+  z-index: 1;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-spin {
+  animation: spin 0.8s linear infinite;
+}
+
+.font-display {
+  font-family: var(--font-display), sans-serif;
+}
+
+.font-mono {
+  font-family: var(--font-mono), monospace;
+}
