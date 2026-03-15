@@ -16,6 +16,10 @@ const FRAME_COLORS = [
   'rgba(168,66,219,0.50)',
 ];
 
+const MAX_ART = 10;
+const MAX_MOCKUPS = 10;
+const MAX_RESULTS = 40;
+
 function genId() {
   return Math.random().toString(36).slice(2, 10);
 }
@@ -163,12 +167,16 @@ export default function Home() {
 
   // ── Art upload ───────────────────────────────────────────────────────────────
   const handleArtUpload = useCallback((files: File[]) => {
-    const newArts: ArtImage[] = files.map((f) => ({
-      id: genId(),
-      name: f.name.replace(/\.[^.]+$/, ''),
-      url: URL.createObjectURL(f),
-    }));
-    setArtImages((prev) => [...prev, ...newArts]);
+    setArtImages((prev) => {
+      const slots = MAX_ART - prev.length;
+      if (slots <= 0) return prev;
+      const newArts: ArtImage[] = files.slice(0, slots).map((f) => ({
+        id: genId(),
+        name: f.name.replace(/\.[^.]+$/, ''),
+        url: URL.createObjectURL(f),
+      }));
+      return [...prev, ...newArts];
+    });
   }, []);
 
   const removeArt = useCallback((id: string) => {
@@ -181,18 +189,19 @@ export default function Home() {
 
   // ── Mockup upload ────────────────────────────────────────────────────────────
   const handleMockupUpload = useCallback((files: File[]) => {
-    const newMockups: MockupTemplate[] = files.map((f) => ({
-      id: genId(),
-      name: f.name.replace(/\.[^.]+$/, ''),
-      url: URL.createObjectURL(f),
-      frames: [],
-    }));
     setMockups((prev) => {
-      const updated = [...prev, ...newMockups];
-      return updated;
+      const slots = MAX_MOCKUPS - prev.length;
+      if (slots <= 0) return prev;
+      const newMockups: MockupTemplate[] = files.slice(0, slots).map((f) => ({
+        id: genId(),
+        name: f.name.replace(/\.[^.]+$/, ''),
+        url: URL.createObjectURL(f),
+        frames: [],
+      }));
+      // Auto-select first uploaded mockup
+      setActiveMockupId((cur) => cur ?? newMockups[0]?.id ?? null);
+      return [...prev, ...newMockups];
     });
-    // Auto-select first uploaded mockup
-    setActiveMockupId((prev) => prev ?? newMockups[0]?.id ?? null);
   }, []);
 
   const removeMockup = useCallback(
@@ -271,13 +280,18 @@ export default function Home() {
     }
   }, [mockups, artImages]);
 
-  const canGenerate =
-    artImages.length > 0 && mockups.some((m) => m.frames.length > 0) && !isGenerating;
-
   const totalExpectedResults = mockups.reduce((acc, m) => {
     if (m.frames.length === 0) return acc;
     return acc + (m.frames.length === 1 ? artImages.length : 1);
   }, 0);
+
+  const tooManyCombinations = totalExpectedResults > MAX_RESULTS;
+
+  const canGenerate =
+    artImages.length > 0 &&
+    mockups.some((m) => m.frames.length > 0) &&
+    !isGenerating &&
+    !tooManyCombinations;
 
   return (
     <div className="relative min-h-screen" style={{ zIndex: 1 }}>
@@ -335,7 +349,11 @@ export default function Home() {
               label="Drop artwork here"
               sublabel="PNG, JPG, WEBP · Multiple files supported"
               multiple
+              disabled={artImages.length >= MAX_ART}
             />
+            <p className="font-mono text-[10px] mt-2" style={{ color: artImages.length >= MAX_ART ? 'var(--danger)' : 'var(--text-3)' }}>
+              Max {MAX_ART} · {artImages.length} uploaded
+            </p>
             {artImages.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-4">
                 {artImages.map((art) => (
@@ -357,7 +375,11 @@ export default function Home() {
               label="Drop mockup templates here"
               sublabel="Use templates with white/light frame areas"
               multiple
+              disabled={mockups.length >= MAX_MOCKUPS}
             />
+            <p className="font-mono text-[10px] mt-2" style={{ color: mockups.length >= MAX_MOCKUPS ? 'var(--danger)' : 'var(--text-3)' }}>
+              Max {MAX_MOCKUPS} · {mockups.length} uploaded
+            </p>
             {mockups.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-4">
                 {mockups.map((m) => (
@@ -501,6 +523,11 @@ export default function Home() {
                     {progress.done}/{progress.total}
                   </span>
                 </div>
+              )}
+              {tooManyCombinations && (
+                <p className="font-mono text-[11px] mt-1" style={{ color: 'var(--danger)' }}>
+                  Too many combinations — reduce art images or templates to stay under {MAX_RESULTS} results.
+                </p>
               )}
             </div>
 
