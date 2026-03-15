@@ -49,19 +49,31 @@ async function compositeSingle(
   // Pre-compute each art image's aspect ratio
   const artAspects = artImgs.map((img) => img.naturalWidth / img.naturalHeight);
 
-  // Draw arts into frame bounding boxes first
-  for (const frame of mockup.frames) {
-    const frameAspect = frame.w / frame.h;
-    // Pick the art whose aspect ratio is closest to this frame's
-    let bestIdx = 0;
+  // Draw arts into frame bounding boxes — each art used at most once per mockup.
+  // Pick by closest aspect ratio from the remaining unused pool; if frames outnumber
+  // arts, reset the pool and allow reuse for the overflow frames.
+  const usedIndices = new Set<number>();
+
+  const pickBestUnused = (frameAspect: number): number => {
+    if (usedIndices.size >= artImgs.length) usedIndices.clear(); // reset when pool exhausted
+    let bestIdx = -1;
     let bestDiff = Infinity;
     for (let j = 0; j < artAspects.length; j++) {
+      if (usedIndices.has(j)) continue;
       const diff = Math.abs(artAspects[j] - frameAspect);
       if (diff < bestDiff) {
         bestDiff = diff;
         bestIdx = j;
       }
     }
+    return bestIdx;
+  };
+
+  // Draw arts into frame bounding boxes first
+  for (const frame of mockup.frames) {
+    const frameAspect = frame.w / frame.h;
+    const bestIdx = pickBestUnused(frameAspect);
+    usedIndices.add(bestIdx);
     const artImg = artImgs[bestIdx];
     const { sx, sy, sw, sh } = coverCrop(
       artImg.naturalWidth,

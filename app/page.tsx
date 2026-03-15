@@ -16,9 +16,8 @@ const FRAME_COLORS = [
   'rgba(168,66,219,0.50)',
 ];
 
-const MAX_ART = 10;
-const MAX_MOCKUPS = 10;
-const MAX_RESULTS = 40;
+const MAX_ART = 6;
+const MAX_MOCKUPS = 6;
 
 function genId() {
   return Math.random().toString(36).slice(2, 10);
@@ -285,13 +284,8 @@ export default function Home() {
     return acc + (m.frames.length === 1 ? artImages.length : 1);
   }, 0);
 
-  const tooManyCombinations = totalExpectedResults > MAX_RESULTS;
-
   const canGenerate =
-    artImages.length > 0 &&
-    mockups.some((m) => m.frames.length > 0) &&
-    !isGenerating &&
-    !tooManyCombinations;
+    artImages.length > 0 && mockups.some((m) => m.frames.length > 0) && !isGenerating;
 
   return (
     <div className="relative min-h-screen" style={{ zIndex: 1 }}>
@@ -523,11 +517,6 @@ export default function Home() {
                     {progress.done}/{progress.total}
                   </span>
                 </div>
-              )}
-              {tooManyCombinations && (
-                <p className="font-mono text-[11px] mt-1" style={{ color: 'var(--danger)' }}>
-                  Too many combinations — reduce art images or templates to stay under {MAX_RESULTS} results.
-                </p>
               )}
             </div>
 
