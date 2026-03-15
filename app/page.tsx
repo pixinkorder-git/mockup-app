@@ -1,11 +1,22 @@
 'use client';
 
-import { useState, useCallback, useId } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import DropZone from '@/app/components/DropZone';
 import MockupEditor from '@/app/components/MockupEditor';
 import ResultsGrid from '@/app/components/ResultsGrid';
 import { ArtImage, MockupTemplate, Frame, GeneratedResult } from '@/app/utils/types';
-import { generateAllResults } from '@/app/utils/compositor';
+import { computeCombinations, generateBatch } from '@/app/utils/compositor';
+
+const BATCH_SIZE = 36;
+
+function loadImageDimensions(url: string): Promise<{ w: number; h: number }> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve({ w: img.naturalWidth, h: img.naturalHeight });
+    img.onerror = () => resolve({ w: 0, h: 0 });
+    img.src = url;
+  });
+}
 
 const FRAME_COLORS = [
   'rgba(219,168,66,0.50)',
@@ -158,25 +169,49 @@ export default function Home() {
   const [mockups, setMockups] = useState<MockupTemplate[]>([]);
   const [activeMockupId, setActiveMockupId] = useState<string | null>(null);
   const [results, setResults] = useState<GeneratedResult[]>([]);
+  const [generatedIds, setGeneratedIds] = useState<Set<string>>(new Set());
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState({ done: 0, total: 0 });
   const [tolerance, setTolerance] = useState(45);
 
+  const allCombinations = useMemo(
+    () => computeCombinations(mockups, artImages),
+    [mockups, artImages]
+  );
+  const pendingCombinations = useMemo(
+    () => allCombinations.filter((c) => !generatedIds.has(c.id)),
+    [allCombinations, generatedIds]
+  );
+  const remainingCount = pendingCombinations.length;
+  const isExhausted = allCombinations.length > 0 && remainingCount === 0;
+  const hasNoCombinations =
+    artImages.length > 0 &&
+    mockups.some((m) => m.frames.length > 0) &&
+    allCombinations.length === 0;
+
   const activeMockup = mockups.find((m) => m.id === activeMockupId) ?? null;
 
   // ── Art upload ───────────────────────────────────────────────────────────────
-  const handleArtUpload = useCallback((files: File[]) => {
-    setArtImages((prev) => {
-      const slots = MAX_ART - prev.length;
-      if (slots <= 0) return prev;
-      const newArts: ArtImage[] = files.slice(0, slots).map((f) => ({
-        id: genId(),
-        name: f.name.replace(/\.[^.]+$/, ''),
-        url: URL.createObjectURL(f),
-      }));
-      return [...prev, ...newArts];
-    });
-  }, []);
+  const handleArtUpload = useCallback(
+    async (files: File[]) => {
+      const slots = MAX_ART - artImages.length;
+      if (slots <= 0) return;
+      const toAdd = files.slice(0, slots);
+      const newArts = await Promise.all(
+        toAdd.map(async (f) => {
+          const url = URL.createObjectURL(f);
+          const { w, h } = await loadImageDimensions(url);
+          return { id: genId(), name: f.name.replace(/\.[^.]+$/, ''), url, w, h } as ArtImage;
+        })
+      );
+      setArtImages((prev) => {
+        const actualSlots = MAX_ART - prev.length;
+        if (actualSlots <= 0) return prev;
+        return [...prev, ...newArts.slice(0, actualSlots)];
+      });
+    },
+    [artImages.length]
+  );
 
   const removeArt = useCallback((id: string) => {
     setArtImages((prev) => {
@@ -262,30 +297,33 @@ export default function Home() {
 
   // ── Generate ─────────────────────────────────────────────────────────────────
   const handleGenerate = useCallback(async () => {
-    const validMockups = mockups.filter((m) => m.frames.length > 0);
-    if (validMockups.length === 0 || artImages.length === 0) return;
+    if (pendingCombinations.length === 0 || isGenerating) return;
+    const batch = pendingCombinations.slice(0, BATCH_SIZE);
 
     setIsGenerating(true);
-    setResults([]);
-    setProgress({ done: 0, total: 0 });
+    setProgress({ done: 0, total: batch.length });
 
     try {
-      const generated = await generateAllResults(validMockups, artImages, (done, total) => {
+      const newResults = await generateBatch(batch, mockups, artImages, (done, total) => {
         setProgress({ done, total });
       });
-      setResults(generated);
+      setResults((prev) => [...prev, ...newResults]);
+      setGeneratedIds((prev) => {
+        const next = new Set(prev);
+        batch.forEach((c) => next.add(c.id));
+        return next;
+      });
     } finally {
       setIsGenerating(false);
     }
-  }, [mockups, artImages]);
+  }, [pendingCombinations, isGenerating, mockups, artImages]);
 
-  const totalExpectedResults = mockups.reduce((acc, m) => {
-    if (m.frames.length === 0) return acc;
-    return acc + (m.frames.length === 1 ? artImages.length : 1);
-  }, 0);
+  const handleClearResults = useCallback(() => {
+    setResults([]);
+    setGeneratedIds(new Set());
+  }, []);
 
-  const canGenerate =
-    artImages.length > 0 && mockups.some((m) => m.frames.length > 0) && !isGenerating;
+  const canGenerate = !isGenerating && pendingCombinations.length > 0;
 
   return (
     <div className="relative min-h-screen" style={{ zIndex: 1 }}>
@@ -324,10 +362,10 @@ export default function Home() {
           <Stat label="ART" value={artImages.length} />
           <div className="w-px h-4" style={{ background: 'var(--border-2)' }} />
           <Stat label="TEMPLATES" value={mockups.length} />
-          {totalExpectedResults > 0 && (
+          {results.length > 0 && (
             <>
               <div className="w-px h-4" style={{ background: 'var(--border-2)' }} />
-              <Stat label="RESULTS" value={totalExpectedResults} accent />
+              <Stat label="RESULTS" value={results.length} accent />
             </>
           )}
         </div>
@@ -485,32 +523,25 @@ export default function Home() {
         {/* ── Generate ────────────────────────────────────────────────────────── */}
         {(artImages.length > 0 || mockups.length > 0) && (
           <section
-            className="rounded-sm flex items-center justify-between gap-4 px-5 py-4 animate-fade-up"
+            className="rounded-sm flex items-center justify-between gap-4 px-5 py-4 animate-fade-up flex-wrap"
             style={{ border: '1px solid var(--border)', background: 'var(--surface)' }}
           >
-            <div className="flex flex-col gap-1">
-              <div className="flex items-center gap-2 font-mono text-sm">
+            {/* Left: stats + progress */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center gap-2 font-mono text-sm flex-wrap">
                 <CountChip value={artImages.length} label="art" />
                 <span style={{ color: 'var(--text-3)' }}>×</span>
-                <CountChip
-                  value={mockups.filter((m) => m.frames.length > 0).length}
-                  label="templates"
-                />
+                <CountChip value={mockups.filter((m) => m.frames.length > 0).length} label="templates" />
                 <span style={{ color: 'var(--text-3)' }}>=</span>
-                <CountChip value={totalExpectedResults} label="results" accent />
+                <CountChip value={allCombinations.length} label="combinations" accent />
               </div>
+
               {isGenerating && progress.total > 0 && (
-                <div className="flex items-center gap-2 mt-1">
-                  <div
-                    className="flex-1 h-1 rounded-full overflow-hidden"
-                    style={{ background: 'var(--surface-3)' }}
-                  >
+                <div className="flex items-center gap-2">
+                  <div className="w-48 h-1 rounded-full overflow-hidden" style={{ background: 'var(--surface-3)' }}>
                     <div
                       className="h-full rounded-full transition-all duration-300"
-                      style={{
-                        width: `${(progress.done / progress.total) * 100}%`,
-                        background: 'var(--accent)',
-                      }}
+                      style={{ width: `${(progress.done / progress.total) * 100}%`, background: 'var(--accent)' }}
                     />
                   </div>
                   <span className="font-mono text-[10px]" style={{ color: 'var(--text-2)' }}>
@@ -518,54 +549,93 @@ export default function Home() {
                   </span>
                 </div>
               )}
+
+              {hasNoCombinations && (
+                <p className="font-mono text-[11px]" style={{ color: 'var(--danger)' }}>
+                  No valid combinations — art orientations don't match any pinned frame orientations.
+                </p>
+              )}
             </div>
 
-            <button
-              onClick={handleGenerate}
-              disabled={!canGenerate}
-              className="flex items-center gap-2.5 px-6 py-2.5 rounded-sm font-display tracking-widest text-sm transition-all active:scale-95"
-              style={{
-                background: canGenerate ? 'var(--accent)' : 'var(--surface-3)',
-                color: canGenerate ? '#080808' : 'var(--text-3)',
-                cursor: canGenerate ? 'pointer' : 'not-allowed',
-                letterSpacing: '0.12em',
-              }}
-            >
-              {isGenerating ? (
-                <>
-                  <span
-                    className="w-3.5 h-3.5 rounded-full border-2 border-t-transparent animate-spin"
-                    style={{ borderColor: '#080808', borderTopColor: 'transparent' }}
-                  />
-                  GENERATING
-                </>
-              ) : (
-                <>
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polygon points="5 3 19 12 5 21 5 3" />
-                  </svg>
-                  GENERATE ALL
-                </>
+            {/* Right: action buttons */}
+            <div className="flex items-center gap-3">
+              {/* Clear results */}
+              {results.length > 0 && (
+                <button
+                  onClick={handleClearResults}
+                  className="px-3 py-2 rounded-sm text-xs font-medium transition-colors"
+                  style={{
+                    border: '1px solid var(--border-2)',
+                    color: 'var(--text-2)',
+                    background: 'transparent',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--danger)';
+                    e.currentTarget.style.color = 'var(--danger)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--border-2)';
+                    e.currentTarget.style.color = 'var(--text-2)';
+                  }}
+                >
+                  Clear Results
+                </button>
               )}
-            </button>
+
+              {/* Exhausted message or Generate button */}
+              {isExhausted ? (
+                <div className="flex items-center gap-2">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                  <span className="font-mono text-xs" style={{ color: 'var(--text-2)' }}>
+                    All {results.length} results generated
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  {remainingCount > 0 && results.length > 0 && (
+                    <span className="font-mono text-xs" style={{ color: 'var(--text-2)' }}>
+                      {remainingCount} remaining
+                    </span>
+                  )}
+                  <button
+                    onClick={handleGenerate}
+                    disabled={!canGenerate}
+                    className="flex items-center gap-2.5 px-6 py-2.5 rounded-sm font-display tracking-widest text-sm transition-all active:scale-95"
+                    style={{
+                      background: canGenerate ? 'var(--accent)' : 'var(--surface-3)',
+                      color: canGenerate ? '#080808' : 'var(--text-3)',
+                      cursor: canGenerate ? 'pointer' : 'not-allowed',
+                      letterSpacing: '0.12em',
+                    }}
+                  >
+                    {isGenerating ? (
+                      <>
+                        <span
+                          className="w-3.5 h-3.5 rounded-full border-2 border-t-transparent animate-spin"
+                          style={{ borderColor: '#080808', borderTopColor: 'transparent' }}
+                        />
+                        GENERATING
+                      </>
+                    ) : (
+                      <>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polygon points="5 3 19 12 5 21 5 3" />
+                        </svg>
+                        {results.length === 0 ? 'GENERATE' : 'GENERATE MORE'}
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
+            </div>
           </section>
         )}
 
         {/* Validation hints */}
         {artImages.length > 0 && mockups.length > 0 && !mockups.some((m) => m.frames.length > 0) && (
-          <p
-            className="text-xs text-center font-mono animate-fade-up"
-            style={{ color: 'var(--text-2)' }}
-          >
+          <p className="text-xs text-center font-mono animate-fade-up" style={{ color: 'var(--text-2)' }}>
             ↑ Pin at least one frame on a template to enable generation
           </p>
         )}
