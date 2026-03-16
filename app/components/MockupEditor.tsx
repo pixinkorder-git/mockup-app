@@ -31,6 +31,8 @@ export default function MockupEditor({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const snapshotRef = useRef<ImageData | null>(null);
+  // Cached image so redraw is synchronous — no flicker after frame confirm
+  const imgCacheRef = useRef<HTMLImageElement | null>(null);
 
   const [imgNatural, setImgNatural] = useState({ w: 0, h: 0 });
   const [displaySize, setDisplaySize] = useState({ w: 0, h: 0 });
@@ -43,45 +45,47 @@ export default function MockupEditor({
   const scale = imgNatural.w > 0 ? displaySize.w / imgNatural.w : 1;
 
   // ── Redraw base canvas (mockup + committed frames) ──────────────────────────
+  // Synchronous: uses cached image so frame white-fills appear immediately.
   const redraw = useCallback(
     (frameList: Frame[]) => {
       const canvas = canvasRef.current;
-      if (!canvas || !imgNatural.w) return;
+      const img = imgCacheRef.current;
+      if (!canvas || !img || !imgNatural.w) return;
       const ctx = canvas.getContext('2d')!;
 
-      const img = new Image();
-      img.onload = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, displaySize.w, displaySize.h);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, displaySize.w, displaySize.h);
 
-        for (const frame of frameList) {
-          const fx = frame.x * scale;
-          const fy = frame.y * scale;
-          const fw = frame.w * scale;
-          const fh = frame.h * scale;
+      for (const frame of frameList) {
+        const fx = frame.x * scale;
+        const fy = frame.y * scale;
+        const fw = frame.w * scale;
+        const fh = frame.h * scale;
 
-          ctx.fillStyle = frame.color;
-          ctx.fillRect(fx, fy, fw, fh);
+        // Solid white first — mockup must not show through the frame area
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(fx, fy, fw, fh);
 
-          ctx.strokeStyle = frame.color.replace('0.50', '0.95');
-          ctx.lineWidth = 2;
-          ctx.strokeRect(fx, fy, fw, fh);
+        ctx.fillStyle = frame.color;
+        ctx.fillRect(fx, fy, fw, fh);
 
-          ctx.fillStyle = frame.color.replace('0.50', '0.95');
-          ctx.font = `bold 11px var(--font-mono, monospace)`;
-          ctx.fillText(
-            `F${frameList.indexOf(frame) + 1} ${frame.w}×${frame.h}`,
-            fx + 6,
-            fy + 16
-          );
-        }
+        ctx.strokeStyle = frame.color.replace('0.50', '0.95');
+        ctx.lineWidth = 2;
+        ctx.strokeRect(fx, fy, fw, fh);
 
-        // Save snapshot for drag-preview restoration
-        snapshotRef.current = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      };
-      img.src = mockupUrl;
+        ctx.fillStyle = frame.color.replace('0.50', '0.95');
+        ctx.font = `bold 11px var(--font-mono, monospace)`;
+        ctx.fillText(
+          `F${frameList.indexOf(frame) + 1} ${frame.w}×${frame.h}`,
+          fx + 6,
+          fy + 16
+        );
+      }
+
+      // Save snapshot for drag-preview restoration
+      snapshotRef.current = ctx.getImageData(0, 0, canvas.width, canvas.height);
     },
-    [mockupUrl, imgNatural.w, displaySize.w, displaySize.h, scale]
+    [imgNatural.w, displaySize.w, displaySize.h, scale]
   );
 
   // ── Draw live drag-preview rect on top of snapshot ─────────────────────────
@@ -125,6 +129,9 @@ export default function MockupEditor({
     if (!mockupUrl) return;
     const img = new Image();
     img.onload = () => {
+      // Cache image so subsequent redraws are synchronous (no img.onload delay)
+      imgCacheRef.current = img;
+
       const nw = img.naturalWidth;
       const nh = img.naturalHeight;
       setImgNatural({ w: nw, h: nh });
@@ -132,7 +139,7 @@ export default function MockupEditor({
       const container = containerRef.current;
       if (!container) return;
       const maxW = container.clientWidth;
-      const maxH = 560;
+      const maxH = 820;
       const s = Math.min(maxW / nw, maxH / nh, 1);
       const dw = Math.round(nw * s);
       const dh = Math.round(nh * s);

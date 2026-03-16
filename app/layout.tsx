@@ -24,8 +24,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Mockup Studio',
-  description: 'Professional client-side mockup placement tool',
+  title: 'MockPlacer - Bulk Mockup Generator',
+  description: 'Upload your art and mockup templates, pin frames, generate all combinations in bulk',
 };
 
 export default function RootLayout({

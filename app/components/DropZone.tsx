@@ -9,6 +9,7 @@ interface Props {
   label: string;
   sublabel?: string;
   disabled?: boolean;
+  minHeight?: number;
 }
 
 export default function DropZone({
@@ -18,6 +19,7 @@ export default function DropZone({
   label,
   sublabel,
   disabled = false,
+  minHeight = 200,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -48,31 +50,37 @@ export default function DropZone({
       onDragOver={onDragOver}
       onDragLeave={onDragLeave}
       onDrop={onDrop}
-      className={[
-        'relative flex flex-col items-center justify-center gap-3 rounded-sm border border-dashed transition-all duration-200 cursor-pointer select-none',
-        'py-8 px-6 min-h-[140px]',
-        isDragging
-          ? 'border-accent bg-[rgba(219,168,66,0.06)] scale-[1.01]'
-          : 'border-border-2 hover:border-accent/40 hover:bg-surface-2',
-        disabled ? 'opacity-40 cursor-not-allowed pointer-events-none' : '',
-      ].join(' ')}
+      style={{
+        minHeight,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 14,
+        padding: '24px 20px',
+        borderRadius: 4,
+        border: `1.5px dashed ${isDragging ? 'var(--accent)' : 'var(--border-2)'}`,
+        background: isDragging ? 'rgba(219,168,66,0.05)' : 'var(--surface-2)',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.4 : 1,
+        pointerEvents: disabled ? 'none' : 'auto',
+        transition: 'border-color 0.2s, background 0.2s',
+        userSelect: 'none',
+      }}
     >
       {/* Upload icon */}
       <div
-        className={[
-          'w-10 h-10 rounded-sm flex items-center justify-center transition-colors',
-          isDragging ? 'bg-accent/20' : 'bg-surface-3',
-        ].join(' ')}
+        style={{
+          width: 48, height: 48, borderRadius: 4,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: isDragging ? 'rgba(219,168,66,0.15)' : 'var(--surface-3)',
+          transition: 'background 0.2s',
+        }}
       >
         <svg
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
+          width="22" height="22" viewBox="0 0 24 24" fill="none"
           stroke={isDragging ? 'var(--accent)' : 'var(--text-2)'}
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+          strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
         >
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
           <polyline points="17 8 12 3 7 8" />
@@ -80,15 +88,12 @@ export default function DropZone({
         </svg>
       </div>
 
-      <div className="text-center">
-        <p
-          className="text-sm font-medium"
-          style={{ color: isDragging ? 'var(--accent)' : 'var(--text)' }}
-        >
+      <div style={{ textAlign: 'center' }}>
+        <p style={{ fontSize: 18, fontWeight: 500, color: isDragging ? 'var(--accent)' : 'var(--text)', margin: 0 }}>
           {label}
         </p>
         {sublabel && (
-          <p className="text-xs mt-1" style={{ color: 'var(--text-2)' }}>
+          <p style={{ fontSize: 14, color: 'var(--text-2)', marginTop: 6 }}>
             {sublabel}
           </p>
         )}
@@ -99,7 +104,7 @@ export default function DropZone({
         type="file"
         accept={accept}
         multiple={multiple}
-        className="hidden"
+        style={{ display: 'none' }}
         onChange={(e) => handleFiles(e.target.files)}
       />
     </div>

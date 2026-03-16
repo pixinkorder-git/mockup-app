@@ -39,6 +39,6 @@ export interface Combination {
   id: string;
   type: 'single' | 'multi';
   mockupId: string;
-  artId?: string;       // single-frame: the specific art to place
-  artStartIdx?: number; // multi-frame: starting index into the arts array for the sliding window
+  artId?: string;     // single-frame: the specific art to place
+  artIds?: string[];  // multi-frame: explicit art id per frame (index matches frame index)
 }
