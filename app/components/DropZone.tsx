@@ -60,7 +60,7 @@ export default function DropZone({
         padding: '24px 20px',
         borderRadius: 4,
         border: `1.5px dashed ${isDragging ? 'var(--accent)' : 'var(--border-2)'}`,
-        background: isDragging ? 'rgba(219,168,66,0.05)' : 'var(--surface-2)',
+        background: isDragging ? 'rgba(255,107,53,0.05)' : 'var(--surface-2)',
         cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.4 : 1,
         pointerEvents: disabled ? 'none' : 'auto',
@@ -73,7 +73,7 @@ export default function DropZone({
         style={{
           width: 48, height: 48, borderRadius: 4,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          background: isDragging ? 'rgba(219,168,66,0.15)' : 'var(--surface-3)',
+          background: isDragging ? 'rgba(255,107,53,0.15)' : 'var(--surface-3)',
           transition: 'background 0.2s',
         }}
       >

@@ -204,7 +204,7 @@ function ResultCard({ result, index }: { result: GeneratedResult; index: number 
             className="flex items-center gap-2 px-4 py-2 rounded-sm text-sm font-medium transition-transform active:scale-95"
             style={{
               background: 'var(--accent)',
-              color: '#080808',
+              color: '#fff',
             }}
           >
             <svg
