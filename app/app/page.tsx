@@ -45,10 +45,10 @@ function SectionLabel({ children, badge }: { children: React.ReactNode; badge?: 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
       <span style={{
-        fontFamily: 'var(--font-display)',
+        fontFamily: "'Clash Display', sans-serif",
         fontSize: 13, fontWeight: 600,
         letterSpacing: '0.07em', textTransform: 'uppercase',
-        color: 'var(--text)',
+        color: '#151515',
       }}>
         {children}
       </span>
@@ -276,7 +276,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FDFCFB', paddingTop: NAV_H }}>
+    <div style={{ minHeight: '100vh', background: '#FFFFFF', paddingTop: NAV_H }}>
 
       {/* ── NAV ────────────────────────────────────────────────────────────── */}
       <header style={{
@@ -290,17 +290,10 @@ export default function Home() {
         borderBottom: '1px solid var(--border)',
         boxShadow: '0 1px 8px rgba(0,0,0,0.03)',
       }}>
-        {/* Logo + brand */}
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
+        {/* Logo */}
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" width="32" height="32" style={{ borderRadius: 8 }} alt="MockPlacer" />
-          <span style={{
-            fontFamily: 'var(--font-display)',
-            fontWeight: 700, fontSize: '1.3rem',
-            letterSpacing: '-0.02em', color: 'var(--text)',
-          }}>
-            MockPlacer
-          </span>
+          <img src="/logo.png" width="180" height="45" style={{ display: 'block' }} alt="MockPlacer" />
         </Link>
 
         {/* Stats + back link */}
@@ -317,7 +310,7 @@ export default function Home() {
           <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
           <Link
             href="/"
-            style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-2)', textDecoration: 'none' }}
+            style={{ fontSize: 13, fontWeight: 600, color: '#FF6B35', textDecoration: 'none' }}
           >
             ← Home
           </Link>
@@ -329,8 +322,8 @@ export default function Home() {
 
         {/* ── TOOL CARD ──────────────────────────────────────────────────── */}
         <div style={{
-          borderRadius: 16,
-          border: '1px solid var(--border)',
+          borderRadius: 20,
+          border: '1px solid #E5E5E5',
           background: '#fff',
           overflow: 'hidden',
           boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.06)',
@@ -463,13 +456,13 @@ export default function Home() {
               {isExhausted ? (
                 <div style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  gap: 8, height: 50, borderRadius: 10,
+                  gap: 8, height: 50, borderRadius: 12,
                   background: '#F0FBF0', border: '1px solid #B7DFB7',
                 }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
-                  <span style={{ fontSize: 13, color: 'var(--success)', fontFamily: 'var(--font-display)', fontWeight: 600, letterSpacing: '0.04em' }}>
+                  <span style={{ fontSize: 13, color: 'var(--success)', fontFamily: "'Clash Display', sans-serif", fontWeight: 600, letterSpacing: '0.04em' }}>
                     All {results.length} generated
                   </span>
                 </div>
@@ -478,11 +471,11 @@ export default function Home() {
                   onClick={handleGenerate}
                   disabled={!canGenerate}
                   style={{
-                    width: '100%', height: 50, borderRadius: 10,
+                    width: '100%', height: 50, borderRadius: 12,
                     fontSize: 15, fontWeight: 700, letterSpacing: '0.04em',
-                    fontFamily: 'var(--font-display)',
+                    fontFamily: "'Clash Display', sans-serif",
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                    background: canGenerate ? 'var(--accent)' : 'var(--surface-3)',
+                    background: canGenerate ? '#FF6B35' : 'var(--surface-3)',
                     color: canGenerate ? '#fff' : 'var(--text-3)',
                     border: 'none', cursor: canGenerate ? 'pointer' : 'not-allowed',
                     transition: 'background 0.2s, transform 0.15s, box-shadow 0.2s',
@@ -499,7 +492,7 @@ export default function Home() {
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'none';
                     e.currentTarget.style.boxShadow = canGenerate ? '0 4px 14px rgba(255,107,53,0.30)' : 'none';
-                    e.currentTarget.style.background = canGenerate ? 'var(--accent)' : 'var(--surface-3)';
+                    e.currentTarget.style.background = canGenerate ? '#FF6B35' : 'var(--surface-3)';
                   }}
                 >
                   {isGenerating ? (
@@ -605,11 +598,11 @@ export default function Home() {
                           display: 'flex', alignItems: 'center', gap: 6,
                           padding: '6px 14px', borderRadius: 8,
                           fontSize: 14, fontFamily: 'var(--font-body)', fontWeight: 500,
-                          background: m.id === activeMockupId ? '#fff' : 'transparent',
-                          border: `1.5px solid ${m.id === activeMockupId ? 'var(--accent)' : 'var(--border)'}`,
-                          color: m.id === activeMockupId ? 'var(--accent)' : 'var(--text-2)',
+                          background: m.id === activeMockupId ? 'rgba(255,107,53,0.10)' : 'transparent',
+                          border: `1.5px solid ${m.id === activeMockupId ? '#FF6B35' : '#E5E5E5'}`,
+                          color: m.id === activeMockupId ? '#FF6B35' : 'var(--text-2)',
                           cursor: 'pointer', transition: 'all 0.15s',
-                          boxShadow: m.id === activeMockupId ? '0 2px 8px rgba(255,107,53,0.12)' : 'none',
+                          boxShadow: 'none',
                         }}
                       >
                         {m.name}
@@ -675,7 +668,7 @@ export default function Home() {
         {/* Footer note */}
         <p style={{
           textAlign: 'center', marginTop: 48,
-          fontSize: 12, color: 'var(--text-3)',
+          fontSize: 12, color: '#A3A3A3',
           letterSpacing: '0.05em', fontFamily: 'monospace',
         }}>
           All processing is client-side · No uploads · No backend
