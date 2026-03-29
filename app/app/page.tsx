@@ -477,8 +477,8 @@ export default function Home() {
                     fontSize: 16, fontWeight: 700, letterSpacing: '0.04em',
                     fontFamily: "'Clash Display', sans-serif",
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                    background: canGenerate ? '#FF6B35' : 'rgba(255,107,53,0.15)',
-                    color: canGenerate ? '#fff' : 'rgba(255,107,53,0.4)',
+                    background: canGenerate ? '#FF6B35' : 'rgba(255,107,53,0.4)',
+                    color: canGenerate ? '#fff' : 'rgba(255,255,255,0.6)',
                     border: 'none', cursor: canGenerate ? 'pointer' : 'not-allowed',
                     transition: 'background 0.2s, transform 0.15s, box-shadow 0.2s',
                     boxShadow: canGenerate ? '0 4px 20px rgba(255,107,53,0.3)' : 'none',
@@ -494,7 +494,7 @@ export default function Home() {
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'none';
                     e.currentTarget.style.boxShadow = canGenerate ? '0 4px 20px rgba(255,107,53,0.3)' : 'none';
-                    e.currentTarget.style.background = canGenerate ? '#FF6B35' : 'rgba(255,107,53,0.15)';
+                    e.currentTarget.style.background = canGenerate ? '#FF6B35' : 'rgba(255,107,53,0.4)';
                   }}
                 >
                   {isGenerating ? (
