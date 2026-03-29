@@ -62,7 +62,7 @@ export default function DropZone({
         gap: 14,
         padding: '24px 20px',
         borderRadius: 10,
-        border: `1.5px dashed ${isDragging ? '#FF6B35' : isHovered ? '#FF6B35' : '#E5E5E5'}`,
+        border: `1.5px dashed ${isDragging || isHovered ? '#FF6B35' : 'rgba(255,107,53,0.3)'}`,
         background: isDragging ? 'rgba(255,107,53,0.08)' : isHovered ? 'rgba(255,107,53,0.04)' : 'var(--surface-2)',
         cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.4 : 1,

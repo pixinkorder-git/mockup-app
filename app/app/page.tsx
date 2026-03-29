@@ -49,6 +49,8 @@ function SectionLabel({ children, badge }: { children: React.ReactNode; badge?: 
         fontSize: 18, fontWeight: 700,
         letterSpacing: '-0.01em',
         color: '#151515',
+        borderLeft: '3px solid #FF6B35',
+        paddingLeft: 10,
       }}>
         {children}
       </span>
@@ -285,15 +287,15 @@ export default function Home() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 clamp(16px, 3vw, 40px)',
         background: 'rgba(255,255,255,0.90)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
         borderBottom: '1px solid rgba(0,0,0,0.05)',
         boxShadow: '0 1px 8px rgba(0,0,0,0.03)',
       }}>
         {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" width="180" height="45" style={{ display: 'block' }} alt="MockPlacer" />
+          <img src="/1logo.png" width="180" height="45" style={{ display: 'block' }} alt="MockPlacer" />
         </Link>
 
         {/* Stats + back link */}
@@ -323,8 +325,8 @@ export default function Home() {
         {/* ── TOOL CARD ──────────────────────────────────────────────────── */}
         <div style={{
           borderRadius: 20,
-          border: '1px solid #E5E5E5',
-          background: '#fff',
+          border: '1px solid rgba(255,107,53,0.12)',
+          background: '#FDFCFB',
           overflow: 'hidden',
           boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.06)',
         }}>
@@ -475,8 +477,8 @@ export default function Home() {
                     fontSize: 16, fontWeight: 700, letterSpacing: '0.04em',
                     fontFamily: "'Clash Display', sans-serif",
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                    background: canGenerate ? '#FF6B35' : '#E5E5E5',
-                    color: canGenerate ? '#fff' : '#A3A3A3',
+                    background: canGenerate ? '#FF6B35' : 'rgba(255,107,53,0.15)',
+                    color: canGenerate ? '#fff' : 'rgba(255,107,53,0.4)',
                     border: 'none', cursor: canGenerate ? 'pointer' : 'not-allowed',
                     transition: 'background 0.2s, transform 0.15s, box-shadow 0.2s',
                     boxShadow: canGenerate ? '0 4px 20px rgba(255,107,53,0.3)' : 'none',
@@ -492,7 +494,7 @@ export default function Home() {
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'none';
                     e.currentTarget.style.boxShadow = canGenerate ? '0 4px 20px rgba(255,107,53,0.3)' : 'none';
-                    e.currentTarget.style.background = canGenerate ? '#FF6B35' : '#E5E5E5';
+                    e.currentTarget.style.background = canGenerate ? '#FF6B35' : 'rgba(255,107,53,0.15)';
                   }}
                 >
                   {isGenerating ? (
@@ -642,11 +644,11 @@ export default function Home() {
                     border: '1.5px dashed var(--border)',
                     background: 'var(--surface-2)',
                   }}>
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--border-2)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,107,53,0.3)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="3" y="3" width="18" height="18" rx="2" />
                       <path d="M3 9h18M9 21V9" />
                     </svg>
-                    <p style={{ fontSize: 14, color: 'var(--text-3)', textAlign: 'center', lineHeight: 1.6, fontFamily: 'var(--font-body)' }}>
+                    <p style={{ fontSize: 14, color: '#737373', textAlign: 'center', lineHeight: 1.6, fontFamily: 'var(--font-body)' }}>
                       {mockups.length === 0
                         ? 'Upload a mockup template to begin'
                         : 'Select a template above to pin frames'}
@@ -670,7 +672,7 @@ export default function Home() {
         <p style={{
           textAlign: 'center', marginTop: 48,
           fontSize: 12, color: '#A3A3A3',
-          letterSpacing: '0.05em', fontFamily: 'monospace',
+          letterSpacing: '0.04em', fontFamily: 'monospace',
         }}>
           All processing is client-side · No uploads · No backend
         </p>
