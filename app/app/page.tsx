@@ -46,7 +46,7 @@ function SectionLabel({ children, badge }: { children: React.ReactNode; badge?: 
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
       <span style={{
         fontFamily: "'Clash Display', sans-serif",
-        fontSize: 13, fontWeight: 600,
+        fontSize: 18, fontWeight: 700,
         letterSpacing: '0.07em', textTransform: 'uppercase',
         color: '#151515',
       }}>
@@ -293,7 +293,7 @@ export default function Home() {
         {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" width="180" height="45" style={{ display: 'block' }} alt="MockPlacer" />
+          <img src="/logo.png" width="200" height="50" style={{ display: 'block' }} alt="MockPlacer" />
         </Link>
 
         {/* Stats + back link */}
@@ -310,7 +310,7 @@ export default function Home() {
           <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
           <Link
             href="/"
-            style={{ fontSize: 13, fontWeight: 600, color: '#FF6B35', textDecoration: 'none' }}
+            style={{ fontSize: 15, fontWeight: 600, color: '#FF6B35', textDecoration: 'none' }}
           >
             ← Home
           </Link>
@@ -471,12 +471,12 @@ export default function Home() {
                   onClick={handleGenerate}
                   disabled={!canGenerate}
                   style={{
-                    width: '100%', height: 50, borderRadius: 12,
-                    fontSize: 15, fontWeight: 700, letterSpacing: '0.04em',
+                    width: '100%', height: 56, borderRadius: 12,
+                    fontSize: 16, fontWeight: 700, letterSpacing: '0.04em',
                     fontFamily: "'Clash Display', sans-serif",
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                    background: canGenerate ? '#FF6B35' : 'var(--surface-3)',
-                    color: canGenerate ? '#fff' : 'var(--text-3)',
+                    background: canGenerate ? '#FF6B35' : '#E5E5E5',
+                    color: canGenerate ? '#fff' : '#A3A3A3',
                     border: 'none', cursor: canGenerate ? 'pointer' : 'not-allowed',
                     transition: 'background 0.2s, transform 0.15s, box-shadow 0.2s',
                     boxShadow: canGenerate ? '0 4px 14px rgba(255,107,53,0.30)' : 'none',
@@ -492,7 +492,7 @@ export default function Home() {
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'none';
                     e.currentTarget.style.boxShadow = canGenerate ? '0 4px 14px rgba(255,107,53,0.30)' : 'none';
-                    e.currentTarget.style.background = canGenerate ? '#FF6B35' : 'var(--surface-3)';
+                    e.currentTarget.style.background = canGenerate ? '#FF6B35' : '#E5E5E5';
                   }}
                 >
                   {isGenerating ? (
@@ -683,10 +683,10 @@ export default function Home() {
 function NavStat({ label, value, accent = false }: { label: string; value: number; accent?: boolean }) {
   return (
     <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-      <span style={{ fontSize: 11, color: 'var(--text-3)', letterSpacing: '0.06em', fontFamily: 'var(--font-display)', fontWeight: 600, textTransform: 'uppercase' }}>
+      <span style={{ fontSize: 14, color: 'var(--text-3)', letterSpacing: '0.06em', fontFamily: 'var(--font-display)', fontWeight: 600, textTransform: 'uppercase' }}>
         {label}
       </span>
-      <span style={{ fontSize: 16, fontWeight: 700, color: accent ? 'var(--accent)' : 'var(--text)', fontFamily: 'var(--font-display)' }}>
+      <span style={{ fontSize: 20, fontWeight: 700, color: accent ? 'var(--accent)' : 'var(--text)', fontFamily: 'var(--font-display)' }}>
         {value}
       </span>
     </div>

@@ -78,7 +78,7 @@ export default function DropZone({
         }}
       >
         <svg
-          width="22" height="22" viewBox="0 0 24 24" fill="none"
+          width="28" height="28" viewBox="0 0 24 24" fill="none"
           stroke={isDragging ? 'var(--accent)' : 'var(--text-2)'}
           strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
         >
@@ -89,11 +89,11 @@ export default function DropZone({
       </div>
 
       <div style={{ textAlign: 'center' }}>
-        <p style={{ fontSize: 18, fontWeight: 500, color: isDragging ? 'var(--accent)' : 'var(--text)', margin: 0 }}>
+        <p style={{ fontSize: 16, fontWeight: 500, color: isDragging ? 'var(--accent)' : 'var(--text)', margin: 0 }}>
           {label}
         </p>
         {sublabel && (
-          <p style={{ fontSize: 14, color: 'var(--text-2)', marginTop: 6 }}>
+          <p style={{ fontSize: 13, color: 'var(--text-2)', marginTop: 6 }}>
             {sublabel}
           </p>
         )}
