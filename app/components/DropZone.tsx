@@ -23,6 +23,7 @@ export default function DropZone({
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleFiles = useCallback(
     (files: FileList | null) => {
@@ -50,6 +51,8 @@ export default function DropZone({
       onDragOver={onDragOver}
       onDragLeave={onDragLeave}
       onDrop={onDrop}
+      onMouseEnter={() => !disabled && setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       style={{
         minHeight,
         display: 'flex',
@@ -59,8 +62,8 @@ export default function DropZone({
         gap: 14,
         padding: '24px 20px',
         borderRadius: 10,
-        border: `1.5px dashed ${isDragging ? '#FF6B35' : '#E5E5E5'}`,
-        background: isDragging ? 'rgba(255,107,53,0.08)' : 'var(--surface-2)',
+        border: `1.5px dashed ${isDragging ? '#FF6B35' : isHovered ? '#FF6B35' : '#E5E5E5'}`,
+        background: isDragging ? 'rgba(255,107,53,0.08)' : isHovered ? 'rgba(255,107,53,0.04)' : 'var(--surface-2)',
         cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.4 : 1,
         pointerEvents: disabled ? 'none' : 'auto',

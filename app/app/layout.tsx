@@ -21,9 +21,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       --danger: #CC3300;
       --font-display: 'Clash Display', sans-serif;
       --font-body: 'Satoshi', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --bg-warm: #FDFCFB;
+      --bg-section: #F8F7F5;
+      --card-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.06);
+      --float-shadow: 0 12px 48px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.04);
     }
     html { color-scheme: light; }
-    body { background: #FFFFFF; color: #151515; font-family: 'Satoshi', system-ui, sans-serif; }
+    body { background: #FFFFFF; color: #151515; font-family: 'Satoshi', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
   `;
 
   return (

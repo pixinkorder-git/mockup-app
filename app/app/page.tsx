@@ -47,7 +47,7 @@ function SectionLabel({ children, badge }: { children: React.ReactNode; badge?: 
       <span style={{
         fontFamily: "'Clash Display', sans-serif",
         fontSize: 18, fontWeight: 700,
-        letterSpacing: '0.07em', textTransform: 'uppercase',
+        letterSpacing: '-0.01em',
         color: '#151515',
       }}>
         {children}
@@ -284,16 +284,16 @@ export default function Home() {
         height: NAV_H,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 clamp(16px, 3vw, 40px)',
-        background: 'rgba(255,255,255,0.92)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderBottom: '1px solid var(--border)',
+        background: 'rgba(255,255,255,0.90)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        borderBottom: '1px solid rgba(0,0,0,0.05)',
         boxShadow: '0 1px 8px rgba(0,0,0,0.03)',
       }}>
         {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" width="200" height="50" style={{ display: 'block' }} alt="MockPlacer" />
+          <img src="/logo.png" width="180" height="45" style={{ display: 'block' }} alt="MockPlacer" />
         </Link>
 
         {/* Stats + back link */}
@@ -479,19 +479,19 @@ export default function Home() {
                     color: canGenerate ? '#fff' : '#A3A3A3',
                     border: 'none', cursor: canGenerate ? 'pointer' : 'not-allowed',
                     transition: 'background 0.2s, transform 0.15s, box-shadow 0.2s',
-                    boxShadow: canGenerate ? '0 4px 14px rgba(255,107,53,0.30)' : 'none',
+                    boxShadow: canGenerate ? '0 4px 20px rgba(255,107,53,0.3)' : 'none',
                     flexShrink: 0,
                   }}
                   onMouseEnter={(e) => {
                     if (canGenerate) {
                       e.currentTarget.style.transform = 'translateY(-1px)';
-                      e.currentTarget.style.boxShadow = '0 6px 20px rgba(255,107,53,0.40)';
+                      e.currentTarget.style.boxShadow = '0 8px 28px rgba(255,107,53,0.40)';
                       e.currentTarget.style.background = '#E85A28';
                     }
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'none';
-                    e.currentTarget.style.boxShadow = canGenerate ? '0 4px 14px rgba(255,107,53,0.30)' : 'none';
+                    e.currentTarget.style.boxShadow = canGenerate ? '0 4px 20px rgba(255,107,53,0.3)' : 'none';
                     e.currentTarget.style.background = canGenerate ? '#FF6B35' : '#E5E5E5';
                   }}
                 >
@@ -598,11 +598,12 @@ export default function Home() {
                           display: 'flex', alignItems: 'center', gap: 6,
                           padding: '6px 14px', borderRadius: 8,
                           fontSize: 14, fontFamily: 'var(--font-body)', fontWeight: 500,
-                          background: m.id === activeMockupId ? 'rgba(255,107,53,0.10)' : 'transparent',
+                          background: 'transparent',
                           border: `1.5px solid ${m.id === activeMockupId ? '#FF6B35' : '#E5E5E5'}`,
+                          borderBottom: m.id === activeMockupId ? '2.5px solid #FF6B35' : '1.5px solid #E5E5E5',
                           color: m.id === activeMockupId ? '#FF6B35' : 'var(--text-2)',
                           cursor: 'pointer', transition: 'all 0.15s',
-                          boxShadow: 'none',
+                          boxShadow: m.id === activeMockupId ? '0 2px 8px rgba(255,107,53,0.15)' : 'none',
                         }}
                       >
                         {m.name}
@@ -686,7 +687,7 @@ function NavStat({ label, value, accent = false }: { label: string; value: numbe
       <span style={{ fontSize: 14, color: 'var(--text-3)', letterSpacing: '0.06em', fontFamily: 'var(--font-display)', fontWeight: 600, textTransform: 'uppercase' }}>
         {label}
       </span>
-      <span style={{ fontSize: 20, fontWeight: 700, color: accent ? 'var(--accent)' : 'var(--text)', fontFamily: 'var(--font-display)' }}>
+      <span style={{ fontSize: 20, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-display)' }}>
         {value}
       </span>
     </div>
