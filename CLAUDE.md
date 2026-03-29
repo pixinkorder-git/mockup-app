@@ -59,3 +59,36 @@ app/
 ### Fonts
 
 Geist Sans and Geist Mono are loaded via `next/font/google` in `app/layout.tsx` and exposed as CSS variables `--font-geist-sans` / `--font-geist-mono`.
+
+---
+
+## 📍 Proje Linkleri & Deployment
+
+- **GitHub:** https://github.com/pixinkorder-git/mockup-app
+- **Vercel (Live):** https://mockup-app-olive.vercel.app
+- **Domain:** mockplacer.com
+- **Lokal Klasör:** C:\Users\Umut\Desktop\mockup-app
+
+## 💰 İş Modeli (Planlanan)
+
+### Free Tier
+- Aylık 5 mockup, watermark ile, temel şablonlar
+
+### Pro Tier ($9-15/ay)
+- Sınırsız mockup, watermark yok, tüm şablonlar, yüksek çözünürlük
+
+## 📋 Roadmap
+
+### Faz 1: MVP (Mevcut) ✅
+- Landing page
+- Temel mockup editörü
+- Kullanıcı upload sistemi
+
+### Faz 2: Beta (Sonraki)
+- Kullanıcı hesapları
+- Ödeme entegrasyonu (Stripe)
+- Daha fazla şablon
+
+### Faz 3: Launch
+- SEO optimizasyonu
+- Marketing kampanyaları
