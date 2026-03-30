@@ -24,8 +24,21 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://mockplacer.com'),
   title: 'MockPlacer - Bulk Mockup Generator',
-  description: 'Upload your art and mockup templates, pin frames, generate all combinations in bulk',
+  description: 'Create professional mockups instantly. Upload your designs, auto-detect frames, generate bulk mockups. Free, fast, no setup required.',
+  openGraph: {
+    title: 'MockPlacer - Bulk Mockup Generator',
+    description: 'Create professional mockups instantly. Free, fast, no setup.',
+    images: ['/og-image.png'],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'MockPlacer - Bulk Mockup Generator',
+    description: 'Create professional mockups instantly. Free, fast, no setup.',
+    images: ['/og-image.png'],
+  },
 };
 
 export default function RootLayout({
