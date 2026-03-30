@@ -13,12 +13,34 @@ interface DragState {
   curY: number;
 }
 
+/** Tracks an in-progress frame reposition drag */
+interface MoveState {
+  frameId: string;
+  startCursorDx: number; // display coords where drag began
+  startCursorDy: number;
+  startFrameX: number;   // frame's image-coord origin at drag start
+  startFrameY: number;
+}
+
 interface Props {
   mockupUrl: string;
   frames: Frame[];
   tolerance: number;
   onAddFrame: (frame: Omit<Frame, 'id' | 'color'>) => void;
   onRemoveFrame: (id: string) => void;
+  onUpdateFrame: (id: string, changes: Pick<Frame, 'x' | 'y'>) => void;
+}
+
+/** Returns the topmost frame under (dx, dy) in display coords, or null. */
+function hitTestFrame(dx: number, dy: number, frameList: Frame[], scale: number): Frame | null {
+  for (let i = frameList.length - 1; i >= 0; i--) {
+    const f = frameList[i];
+    if (dx >= f.x * scale && dx <= (f.x + f.w) * scale &&
+        dy >= f.y * scale && dy <= (f.y + f.h) * scale) {
+      return f;
+    }
+  }
+  return null;
 }
 
 export default function MockupEditor({
@@ -27,23 +49,28 @@ export default function MockupEditor({
   tolerance,
   onAddFrame,
   onRemoveFrame,
+  onUpdateFrame,
 }: Props) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef    = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const snapshotRef = useRef<ImageData | null>(null);
-  // Cached image so redraw is synchronous — no flicker after frame confirm
-  const imgCacheRef = useRef<HTMLImageElement | null>(null);
-  // Mirror of drag state for touch handlers (useEffect closures would otherwise go stale)
-  const dragRef = useRef<DragState | null>(null);
+  const snapshotRef  = useRef<ImageData | null>(null);
+  const imgCacheRef  = useRef<HTMLImageElement | null>(null);
 
-  const [imgNatural, setImgNatural] = useState({ w: 0, h: 0 });
+  // Refs for touch-handler closures (avoid stale state captures)
+  const dragRef    = useRef<DragState | null>(null);
+  const moveRef    = useRef<MoveState | null>(null);
+  const framesRef  = useRef<Frame[]>(frames);
+
+  const [imgNatural, setImgNatural]   = useState({ w: 0, h: 0 });
   const [displaySize, setDisplaySize] = useState({ w: 0, h: 0 });
   const [isProcessing, setIsProcessing] = useState(false);
   const [hoveredFrame, setHoveredFrame] = useState<string | null>(null);
-  const [warning, setWarning] = useState<string | null>(null);
-  const [mode, setMode] = useState<Mode>('auto');
-  const [drag, setDrag] = useState<DragState | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [warning, setWarning]           = useState<string | null>(null);
+  const [mode, setMode]                 = useState<Mode>('auto');
+  const [drag, setDrag]                 = useState<DragState | null>(null);
+  const [moveState, setMoveState]       = useState<MoveState | null>(null);
+  const [hoverOnFrame, setHoverOnFrame] = useState(false);
+  const [isMobile, setIsMobile]         = useState(false);
   const [cornerRadius, setCornerRadius] = useState(0);
 
   useEffect(() => {
@@ -53,17 +80,18 @@ export default function MockupEditor({
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  // Keep dragRef in sync so touch handlers (added via useEffect) always see current drag
-  useEffect(() => { dragRef.current = drag; }, [drag]);
+  // Keep refs in sync so touch handlers always see current values
+  useEffect(() => { dragRef.current   = drag;      }, [drag]);
+  useEffect(() => { moveRef.current   = moveState; }, [moveState]);
+  useEffect(() => { framesRef.current = frames;    }, [frames]);
 
   const scale = imgNatural.w > 0 ? displaySize.w / imgNatural.w : 1;
 
   // ── Redraw base canvas (mockup + committed frames) ──────────────────────────
-  // Synchronous: uses cached image so frame white-fills appear immediately.
   const redraw = useCallback(
-    (frameList: Frame[]) => {
+    (frameList: Frame[], selectedId?: string | null) => {
       const canvas = canvasRef.current;
-      const img = imgCacheRef.current;
+      const img    = imgCacheRef.current;
       if (!canvas || !img || !imgNatural.w) return;
       const ctx = canvas.getContext('2d')!;
 
@@ -75,11 +103,10 @@ export default function MockupEditor({
         const fy = frame.y * scale;
         const fw = frame.w * scale;
         const fh = frame.h * scale;
-        // In manual mode use the live slider value so the preview updates in real-time.
-        // In auto mode fall back to the value stored on the frame.
         const fr = (mode === 'manual' ? cornerRadius : (frame.cornerRadius ?? 0)) * scale;
+        const isSelected = frame.id === selectedId;
 
-        const framePathFn = () => {
+        const framePath = () => {
           ctx.beginPath();
           if (fr > 0 && ctx.roundRect) {
             ctx.roundRect(fx, fy, fw, fh, fr);
@@ -88,9 +115,9 @@ export default function MockupEditor({
           }
         };
 
-        // Solid white first — mockup must not show through the frame area
+        // Fill: white base then tinted overlay
         ctx.save();
-        framePathFn();
+        framePath();
         ctx.clip();
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(fx, fy, fw, fh);
@@ -98,33 +125,42 @@ export default function MockupEditor({
         ctx.fillRect(fx, fy, fw, fh);
         ctx.restore();
 
-        ctx.strokeStyle = frame.color.replace('0.50', '0.95');
-        ctx.lineWidth = 2;
-        framePathFn();
+        // Stroke: white halo behind colored border when selected
+        if (isSelected) {
+          ctx.strokeStyle = 'rgba(255,255,255,0.75)';
+          ctx.lineWidth   = 5;
+          framePath();
+          ctx.stroke();
+        }
+        ctx.strokeStyle = isSelected
+          ? frame.color.replace('0.50', '1.0')
+          : frame.color.replace('0.50', '0.95');
+        ctx.lineWidth = isSelected ? 2.5 : 2;
+        framePath();
         ctx.stroke();
 
+        // Label
         ctx.fillStyle = frame.color.replace('0.50', '0.95');
-        ctx.font = `bold 11px var(--font-mono, monospace)`;
+        ctx.font      = `bold 11px var(--font-mono, monospace)`;
         ctx.fillText(
           `F${frameList.indexOf(frame) + 1} ${frame.w}×${frame.h}`,
           fx + 6,
-          fy + 16
+          fy + 16,
         );
       }
 
-      // Save snapshot for drag-preview restoration
+      // Save snapshot for new-rect drag-preview restoration
       snapshotRef.current = ctx.getImageData(0, 0, canvas.width, canvas.height);
     },
-    [imgNatural.w, displaySize.w, displaySize.h, scale, mode, cornerRadius]
+    [imgNatural.w, displaySize.w, displaySize.h, scale, mode, cornerRadius],
   );
 
-  // ── Draw live drag-preview rect on top of snapshot ─────────────────────────
+  // ── Draw live new-rect drag-preview on top of snapshot ─────────────────────
   const drawPreview = useCallback((d: DragState) => {
     const canvas = canvasRef.current;
     if (!canvas || !snapshotRef.current) return;
     const ctx = canvas.getContext('2d')!;
 
-    // Restore clean base
     ctx.putImageData(snapshotRef.current, 0, 0);
 
     const x = Math.min(d.startX, d.curX);
@@ -144,25 +180,22 @@ export default function MockupEditor({
       }
     };
 
-    // Tinted fill
     previewPath();
     ctx.fillStyle = 'rgba(255,255,255,0.10)';
     ctx.fill();
 
-    // Dashed border
     ctx.save();
     previewPath();
     ctx.strokeStyle = 'rgba(255,255,255,0.85)';
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth   = 1.5;
     ctx.setLineDash([5, 4]);
     ctx.stroke();
     ctx.restore();
 
-    // Size label
     const imgW = Math.round(w / scale);
     const imgH = Math.round(h / scale);
     ctx.fillStyle = 'rgba(255,255,255,0.85)';
-    ctx.font = `bold 11px var(--font-mono, monospace)`;
+    ctx.font      = `bold 11px var(--font-mono, monospace)`;
     ctx.fillText(`${imgW}×${imgH}`, x + 5, y + 15);
   }, [scale, cornerRadius]);
 
@@ -172,33 +205,22 @@ export default function MockupEditor({
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => {
-      // Cache image so subsequent redraws are synchronous (no img.onload delay)
       imgCacheRef.current = img;
-
       const nw = img.naturalWidth;
       const nh = img.naturalHeight;
-
       const container = containerRef.current;
       if (!container) return;
-      // Clamp to 2048 to stay within iOS Safari canvas memory limits
       const MAX_CANVAS = 2048;
-      const maxW = container.clientWidth || 800; // fallback if container not yet laid out
+      const maxW = container.clientWidth || 800;
       const maxH = 820;
-      const s = Math.min(maxW / nw, maxH / nh, MAX_CANVAS / nw, MAX_CANVAS / nh, 1);
+      const s  = Math.min(maxW / nw, maxH / nh, MAX_CANVAS / nw, MAX_CANVAS / nh, 1);
       const dw = Math.round(nw * s);
       const dh = Math.round(nh * s);
-
       const canvas = canvasRef.current!;
-      canvas.width = dw;
+      canvas.width  = dw;
       canvas.height = dh;
-
-      // Draw immediately inside onload — don't wait for state update / re-render.
-      // Fixes iOS Safari where the canvas can stay blank if drawImage is deferred.
       const ctx = canvas.getContext('2d');
-      if (ctx && dw > 0 && dh > 0) {
-        ctx.drawImage(img, 0, 0, dw, dh);
-      }
-
+      if (ctx && dw > 0 && dh > 0) ctx.drawImage(img, 0, 0, dw, dh);
       setImgNatural({ w: nw, h: nh });
       setDisplaySize({ w: dw, h: dh });
     };
@@ -223,7 +245,6 @@ export default function MockupEditor({
       const { dx, dy } = getDisplayCoords(e);
       const imgX = Math.round(dx / scale);
       const imgY = Math.round(dy / scale);
-
       setIsProcessing(true);
       setWarning(null);
       try {
@@ -234,58 +255,99 @@ export default function MockupEditor({
         }
         const totalPixels = imgNatural.w * imgNatural.h;
         if (result.pixelCount > totalPixels * 0.65) {
-          setWarning(
-            'Detected region is very large — you may have clicked the background. Try a more targeted spot or lower tolerance.'
-          );
+          setWarning('Detected region is very large — you may have clicked the background. Try a more targeted spot or lower tolerance.');
           return;
         }
-        onAddFrame({
-          x: result.minX,
-          y: result.minY,
-          w: result.maxX - result.minX,
-          h: result.maxY - result.minY,
-        });
+        onAddFrame({ x: result.minX, y: result.minY, w: result.maxX - result.minX, h: result.maxY - result.minY });
       } finally {
         setIsProcessing(false);
       }
     },
-    [isProcessing, imgNatural.w, scale, mockupUrl, tolerance, onAddFrame]
+    [isProcessing, imgNatural.w, scale, mockupUrl, tolerance, onAddFrame],
   );
 
-  // ── Manual mode: drag → rectangle ───────────────────────────────────────────
+  // ── Manual mode: mousedown — hit-test first, then draw or move ──────────────
   const handleMouseDown = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
       if (mode !== 'manual' || !imgNatural.w) return;
       e.preventDefault();
       const { dx, dy } = getDisplayCoords(e);
+
+      const hit = hitTestFrame(dx, dy, frames, scale);
+      if (hit) {
+        // Start repositioning this frame
+        setMoveState({ frameId: hit.id, startCursorDx: dx, startCursorDy: dy, startFrameX: hit.x, startFrameY: hit.y });
+        setHoverOnFrame(false);
+        setWarning(null);
+        return;
+      }
+
+      // Start drawing a new frame
       setDrag({ startX: dx, startY: dy, curX: dx, curY: dy });
       setWarning(null);
     },
-    [mode, imgNatural.w]
+    [mode, imgNatural.w, frames, scale],
   );
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
-      if (mode !== 'manual' || !drag) return;
+      if (mode !== 'manual') return;
       const { dx, dy } = getDisplayCoords(e);
-      const updated = { ...drag, curX: dx, curY: dy };
-      setDrag(updated);
-      drawPreview(updated);
+
+      // ── Repositioning an existing frame ──────────────────────────────────
+      if (moveState) {
+        const frame = frames.find(f => f.id === moveState.frameId);
+        if (!frame) return;
+        const newX = Math.max(0, Math.min(imgNatural.w - frame.w,
+          moveState.startFrameX + Math.round((dx - moveState.startCursorDx) / scale)));
+        const newY = Math.max(0, Math.min(imgNatural.h - frame.h,
+          moveState.startFrameY + Math.round((dy - moveState.startCursorDy) / scale)));
+        const movedFrames = frames.map(f => f.id === moveState.frameId ? { ...f, x: newX, y: newY } : f);
+        redraw(movedFrames, moveState.frameId);
+        return;
+      }
+
+      // ── Drawing a new frame ───────────────────────────────────────────────
+      if (drag) {
+        const updated = { ...drag, curX: dx, curY: dy };
+        setDrag(updated);
+        drawPreview(updated);
+        return;
+      }
+
+      // ── Hover: update cursor based on whether we're over a frame ─────────
+      setHoverOnFrame(!!hitTestFrame(dx, dy, frames, scale));
     },
-    [mode, drag, drawPreview]
+    [mode, moveState, drag, frames, scale, imgNatural.w, imgNatural.h, redraw, drawPreview],
   );
 
   const handleMouseUp = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
-      if (mode !== 'manual' || !drag) return;
+      if (mode !== 'manual') return;
       const { dx, dy } = getDisplayCoords(e);
+
+      // ── Commit repositioned frame ─────────────────────────────────────────
+      if (moveState) {
+        const frame = frames.find(f => f.id === moveState.frameId);
+        if (frame) {
+          const newX = Math.max(0, Math.min(imgNatural.w - frame.w,
+            moveState.startFrameX + Math.round((dx - moveState.startCursorDx) / scale)));
+          const newY = Math.max(0, Math.min(imgNatural.h - frame.h,
+            moveState.startFrameY + Math.round((dy - moveState.startCursorDy) / scale)));
+          onUpdateFrame(moveState.frameId, { x: newX, y: newY });
+        }
+        setMoveState(null);
+        return;
+      }
+
+      // ── Commit drawn frame ────────────────────────────────────────────────
+      if (!drag) return;
 
       const dispX = Math.min(drag.startX, dx);
       const dispY = Math.min(drag.startY, dy);
       const dispW = Math.abs(dx - drag.startX);
       const dispH = Math.abs(dy - drag.startY);
 
-      // Convert to image coords
       const imgX = Math.round(dispX / scale);
       const imgY = Math.round(dispY / scale);
       const imgW = Math.round(dispW / scale);
@@ -294,30 +356,31 @@ export default function MockupEditor({
       setDrag(null);
 
       if (imgW < 8 || imgH < 8) {
-        // Restore clean canvas if the drag was too small
-        if (snapshotRef.current) {
-          canvasRef.current!.getContext('2d')!.putImageData(snapshotRef.current, 0, 0);
-        }
+        if (snapshotRef.current) canvasRef.current!.getContext('2d')!.putImageData(snapshotRef.current, 0, 0);
         return;
       }
 
       onAddFrame({ x: imgX, y: imgY, w: imgW, h: imgH, cornerRadius: cornerRadius > 0 ? cornerRadius : undefined });
     },
-    [mode, drag, scale, onAddFrame, cornerRadius]
+    [mode, moveState, drag, frames, scale, imgNatural.w, imgNatural.h, onUpdateFrame, onAddFrame, cornerRadius],
   );
 
   const handleMouseLeave = useCallback(() => {
-    if (mode !== 'manual' || !drag) return;
-    // Cancel drag, restore clean canvas
-    setDrag(null);
-    if (snapshotRef.current) {
-      canvasRef.current!.getContext('2d')!.putImageData(snapshotRef.current, 0, 0);
+    if (mode !== 'manual') return;
+    if (moveState) {
+      // Cancel move — restore committed state
+      setMoveState(null);
+      redraw(frames);
+      return;
     }
-  }, [mode, drag]);
+    if (drag) {
+      setDrag(null);
+      if (snapshotRef.current) canvasRef.current!.getContext('2d')!.putImageData(snapshotRef.current, 0, 0);
+    }
+    setHoverOnFrame(false);
+  }, [mode, moveState, drag, frames, redraw]);
 
   // ── Touch events (manual mode) ───────────────────────────────────────────────
-  // Added via useEffect with { passive: false } so preventDefault() stops page scroll.
-  // Uses dragRef instead of drag state to avoid stale closures.
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || mode !== 'manual') return;
@@ -331,6 +394,16 @@ export default function MockupEditor({
       if (!imgNatural.w) return;
       e.preventDefault();
       const { dx, dy } = getCoords(e.touches[0]);
+
+      const hit = hitTestFrame(dx, dy, framesRef.current, scale);
+      if (hit) {
+        const newMove: MoveState = { frameId: hit.id, startCursorDx: dx, startCursorDy: dy, startFrameX: hit.x, startFrameY: hit.y };
+        moveRef.current = newMove;
+        setMoveState(newMove);
+        setWarning(null);
+        return;
+      }
+
       const newDrag = { startX: dx, startY: dy, curX: dx, curY: dy };
       dragRef.current = newDrag;
       setDrag(newDrag);
@@ -338,10 +411,26 @@ export default function MockupEditor({
     };
 
     const onTouchMove = (e: TouchEvent) => {
-      const d = dragRef.current;
-      if (!d) return;
       e.preventDefault();
       const { dx, dy } = getCoords(e.touches[0]);
+
+      // Move
+      const mv = moveRef.current;
+      if (mv) {
+        const frame = framesRef.current.find(f => f.id === mv.frameId);
+        if (!frame) return;
+        const newX = Math.max(0, Math.min(imgNatural.w - frame.w,
+          mv.startFrameX + Math.round((dx - mv.startCursorDx) / scale)));
+        const newY = Math.max(0, Math.min(imgNatural.h - frame.h,
+          mv.startFrameY + Math.round((dy - mv.startCursorDy) / scale)));
+        const movedFrames = framesRef.current.map(f => f.id === mv.frameId ? { ...f, x: newX, y: newY } : f);
+        redraw(movedFrames, mv.frameId);
+        return;
+      }
+
+      // Draw
+      const d = dragRef.current;
+      if (!d) return;
       const updated = { ...d, curX: dx, curY: dy };
       dragRef.current = updated;
       setDrag(updated);
@@ -349,10 +438,28 @@ export default function MockupEditor({
     };
 
     const onTouchEnd = (e: TouchEvent) => {
-      const d = dragRef.current;
-      if (!d) return;
       e.preventDefault();
       const { dx, dy } = getCoords(e.changedTouches[0]);
+
+      // Commit move
+      const mv = moveRef.current;
+      if (mv) {
+        const frame = framesRef.current.find(f => f.id === mv.frameId);
+        if (frame) {
+          const newX = Math.max(0, Math.min(imgNatural.w - frame.w,
+            mv.startFrameX + Math.round((dx - mv.startCursorDx) / scale)));
+          const newY = Math.max(0, Math.min(imgNatural.h - frame.h,
+            mv.startFrameY + Math.round((dy - mv.startCursorDy) / scale)));
+          onUpdateFrame(mv.frameId, { x: newX, y: newY });
+        }
+        moveRef.current = null;
+        setMoveState(null);
+        return;
+      }
+
+      // Commit draw
+      const d = dragRef.current;
+      if (!d) return;
 
       const dispX = Math.min(d.startX, dx);
       const dispY = Math.min(d.startY, dy);
@@ -368,9 +475,7 @@ export default function MockupEditor({
       setDrag(null);
 
       if (imgW < 8 || imgH < 8) {
-        if (snapshotRef.current) {
-          canvas.getContext('2d')!.putImageData(snapshotRef.current, 0, 0);
-        }
+        if (snapshotRef.current) canvas.getContext('2d')!.putImageData(snapshotRef.current, 0, 0);
         return;
       }
 
@@ -378,18 +483,18 @@ export default function MockupEditor({
     };
 
     canvas.addEventListener('touchstart', onTouchStart, { passive: false });
-    canvas.addEventListener('touchmove', onTouchMove, { passive: false });
-    canvas.addEventListener('touchend', onTouchEnd, { passive: false });
+    canvas.addEventListener('touchmove',  onTouchMove,  { passive: false });
+    canvas.addEventListener('touchend',   onTouchEnd,   { passive: false });
 
     return () => {
       canvas.removeEventListener('touchstart', onTouchStart);
-      canvas.removeEventListener('touchmove', onTouchMove);
-      canvas.removeEventListener('touchend', onTouchEnd);
+      canvas.removeEventListener('touchmove',  onTouchMove);
+      canvas.removeEventListener('touchend',   onTouchEnd);
     };
-  }, [mode, imgNatural.w, scale, drawPreview, onAddFrame, cornerRadius]);
+  }, [mode, imgNatural.w, imgNatural.h, scale, redraw, drawPreview, onAddFrame, onUpdateFrame, cornerRadius]);
 
   // Cursor logic
-  const cursor = isProcessing ? 'wait' : drag ? 'crosshair' : 'crosshair';
+  const cursor = isProcessing ? 'wait' : moveState ? 'grabbing' : hoverOnFrame ? 'grab' : 'crosshair';
 
   return (
     <div className="flex flex-col gap-4">
@@ -404,12 +509,12 @@ export default function MockupEditor({
           {(['auto', 'manual'] as Mode[]).map((m) => (
             <button
               key={m}
-              onClick={() => { setMode(m); setWarning(null); setDrag(null); }}
+              onClick={() => { setMode(m); setWarning(null); setDrag(null); setMoveState(null); setHoverOnFrame(false); }}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-medium transition-all"
               style={{
                 background: mode === m ? 'var(--surface-2)' : 'transparent',
-                color: mode === m ? 'var(--text)' : 'var(--text-2)',
-                border: mode === m ? '1px solid var(--border-2)' : '1px solid transparent',
+                color:      mode === m ? 'var(--text)'      : 'var(--text-2)',
+                border:     mode === m ? '1px solid var(--border-2)' : '1px solid transparent',
               }}
             >
               {m === 'auto' ? (
@@ -438,14 +543,19 @@ export default function MockupEditor({
           {mode === 'auto' && !isProcessing && (
             <span>Click white/light areas to detect frame</span>
           )}
-          {mode === 'manual' && !drag && (
-            <span>Click and drag to draw a frame rectangle</span>
+          {mode === 'manual' && !drag && !moveState && (
+            <span>
+              {hoverOnFrame ? 'Drag to reposition frame' : 'Click and drag to draw a frame rectangle'}
+            </span>
           )}
           {mode === 'manual' && drag && (
             <span style={{ color: 'var(--accent)' }}>
               {Math.round(Math.abs(drag.curX - drag.startX) / scale)}×
               {Math.round(Math.abs(drag.curY - drag.startY) / scale)}px — release to pin
             </span>
+          )}
+          {mode === 'manual' && moveState && (
+            <span style={{ color: 'var(--accent)' }}>Moving frame — release to place</span>
           )}
           {isProcessing && (
             <span className="flex items-center gap-1.5" style={{ color: 'var(--accent)' }}>
@@ -456,7 +566,7 @@ export default function MockupEditor({
               Detecting…
             </span>
           )}
-          {imgNatural.w > 0 && !drag && !isProcessing && (
+          {imgNatural.w > 0 && !drag && !moveState && !isProcessing && (
             <span style={{ color: 'var(--text-3)' }}>
               {imgNatural.w}×{imgNatural.h}px
             </span>
@@ -487,9 +597,9 @@ export default function MockupEditor({
         <div
           className="text-xs px-3 py-2 rounded-sm border"
           style={{
-            background: 'rgba(184,64,64,0.08)',
-            borderColor: 'var(--danger)',
-            color: 'var(--danger)',
+            background:   'rgba(184,64,64,0.08)',
+            borderColor:  'var(--danger)',
+            color:        'var(--danger)',
           }}
         >
           {warning}
@@ -509,9 +619,9 @@ export default function MockupEditor({
             className="rounded-sm block select-none"
             style={{
               cursor,
-              width: displaySize.w || '100%',
-              height: displaySize.h || 'auto',
-              border: `1px solid ${mode === 'manual' ? 'var(--border-2)' : 'var(--border)'}`,
+              width:      displaySize.w || '100%',
+              height:     displaySize.h || 'auto',
+              border:     `1px solid ${mode === 'manual' ? 'var(--border-2)' : 'var(--border)'}`,
               userSelect: 'none',
             }}
           />
@@ -533,16 +643,14 @@ export default function MockupEditor({
                 onMouseLeave={() => setHoveredFrame(null)}
                 className="flex items-center justify-between gap-2 px-2.5 py-2 rounded-sm transition-colors"
                 style={{
-                  background: hoveredFrame === frame.id ? 'var(--surface-3)' : 'var(--surface-2)',
-                  border: '1px solid var(--border)',
+                  background:      hoveredFrame === frame.id ? 'var(--surface-3)' : 'var(--surface-2)',
+                  border:          '1px solid var(--border)',
                   borderLeftColor: frame.color.replace('0.50', '0.9'),
                   borderLeftWidth: '3px',
                 }}
               >
                 <div>
-                  <p className="text-xs font-mono" style={{ color: 'var(--text)' }}>
-                    Frame {i + 1}
-                  </p>
+                  <p className="text-xs font-mono" style={{ color: 'var(--text)' }}>Frame {i + 1}</p>
                   <p className="text-[10px] font-mono mt-0.5" style={{ color: 'var(--text-2)' }}>
                     {frame.w}×{frame.h}
                   </p>
@@ -586,17 +694,15 @@ export default function MockupEditor({
                 key={frame.id}
                 className="flex-shrink-0 flex items-center gap-2 px-2.5 py-2 rounded-sm"
                 style={{
-                  background: 'var(--surface-2)',
-                  border: '1px solid var(--border)',
+                  background:      'var(--surface-2)',
+                  border:          '1px solid var(--border)',
                   borderLeftColor: frame.color.replace('0.50', '0.9'),
                   borderLeftWidth: '3px',
-                  minWidth: 100,
+                  minWidth:        100,
                 }}
               >
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-mono" style={{ color: 'var(--text)' }}>
-                    F{i + 1}
-                  </p>
+                  <p className="text-xs font-mono" style={{ color: 'var(--text)' }}>F{i + 1}</p>
                   <p className="text-[10px] font-mono mt-0.5" style={{ color: 'var(--text-2)' }}>
                     {frame.w}×{frame.h}
                   </p>

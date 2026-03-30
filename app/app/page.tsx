@@ -255,6 +255,16 @@ export default function Home() {
     );
   }, [activeMockupId]);
 
+  const handleUpdateFrame = useCallback((frameId: string, changes: Pick<import('@/app/utils/types').Frame, 'x' | 'y'>) => {
+    if (!activeMockupId) return;
+    setMockups((prev) =>
+      prev.map((m) => m.id !== activeMockupId ? m : {
+        ...m,
+        frames: m.frames.map((f) => f.id === frameId ? { ...f, ...changes } : f),
+      })
+    );
+  }, [activeMockupId]);
+
   const clearAllFrames = useCallback(() => {
     if (!activeMockupId) return;
     setMockups((prev) => prev.map((m) => m.id === activeMockupId ? { ...m, frames: [] } : m));
@@ -653,6 +663,7 @@ export default function Home() {
                     tolerance={tolerance}
                     onAddFrame={handleAddFrame}
                     onRemoveFrame={handleRemoveFrame}
+                    onUpdateFrame={handleUpdateFrame}
                   />
                 ) : (
                   <div style={{
