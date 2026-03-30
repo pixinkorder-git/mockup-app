@@ -196,8 +196,7 @@ export default function MockupEditor({
         const fy = frame.y * scale;
         const fw = frame.w * scale;
         const fh = frame.h * scale;
-        // Manual mode: live slider value. Auto mode: value frozen into frame.
-        const fr = (mode === 'manual' ? cornerRadius : (frame.cornerRadius ?? 0)) * scale;
+        const fr = cornerRadius * scale;
         const isHighlighted = frame.id === highlightId;
 
         const framePath = () => {
@@ -245,7 +244,7 @@ export default function MockupEditor({
 
       snapshotRef.current = ctx.getImageData(0, 0, canvas.width, canvas.height);
     },
-    [imgNatural.w, displaySize.w, displaySize.h, scale, mode, cornerRadius],
+    [imgNatural.w, displaySize.w, displaySize.h, scale, cornerRadius],
   );
 
   // ── Draw new-rect drag preview on top of snapshot ────────────────────────────
@@ -334,10 +333,10 @@ export default function MockupEditor({
         const result = await floodFillImage(mockupUrl, imgX, imgY, tolerance);
         if (!result) { setWarning('No distinct region found. Try clicking on a lighter area or increase tolerance.'); return; }
         if (result.pixelCount > imgNatural.w * imgNatural.h * 0.65) { setWarning('Detected region is very large — you may have clicked the background. Try a more targeted spot or lower tolerance.'); return; }
-        onAddFrame({ x: result.minX, y: result.minY, w: result.maxX - result.minX, h: result.maxY - result.minY });
+        onAddFrame({ x: result.minX, y: result.minY, w: result.maxX - result.minX, h: result.maxY - result.minY, cornerRadius: cornerRadius > 0 ? cornerRadius : undefined });
       } finally { setIsProcessing(false); }
     },
-    [isProcessing, imgNatural.w, scale, mockupUrl, tolerance, onAddFrame],
+    [isProcessing, imgNatural.w, scale, mockupUrl, tolerance, onAddFrame, cornerRadius],
   );
 
   // Ref so touch handlers can call flood fill without stale closures
@@ -350,10 +349,10 @@ export default function MockupEditor({
         const result = await floodFillImage(mockupUrl, imgX, imgY, tolerance);
         if (!result) { setWarning('No distinct region found. Try clicking on a lighter area or increase tolerance.'); return; }
         if (result.pixelCount > imgNatural.w * imgNatural.h * 0.65) { setWarning('Detected region is very large — you may have clicked the background. Try a more targeted spot or lower tolerance.'); return; }
-        onAddFrame({ x: result.minX, y: result.minY, w: result.maxX - result.minX, h: result.maxY - result.minY });
+        onAddFrame({ x: result.minX, y: result.minY, w: result.maxX - result.minX, h: result.maxY - result.minY, cornerRadius: cornerRadius > 0 ? cornerRadius : undefined });
       } finally { setIsProcessing(false); }
     };
-  }, [isProcessing, imgNatural.w, mockupUrl, tolerance, onAddFrame]);
+  }, [isProcessing, imgNatural.w, mockupUrl, tolerance, onAddFrame, cornerRadius]);
 
   // ── Unified mousedown ────────────────────────────────────────────────────────
   const handleMouseDown = useCallback(
@@ -648,15 +647,19 @@ export default function MockupEditor({
         : hoverCursor;
 
   // ── Status text ───────────────────────────────────────────────────────────────
-  const statusText = (() => {
-    if (resizeState) return 'Resizing — release to confirm';
-    if (moveState)   return 'Moving frame — release to place';
-    if (drag) return `${Math.round(Math.abs(drag.curX - drag.startX) / scale)}×${Math.round(Math.abs(drag.curY - drag.startY) / scale)}px — release to pin`;
-    if (hoverCursor === 'grab')          return 'Drag to move — or drag an edge/corner to resize';
-    if (hoverCursor.includes('resize'))  return 'Drag to resize frame';
-    if (mode === 'auto')   return 'Click white/light areas to detect frame';
-    return 'Click and drag to draw a frame rectangle';
-  })();
+  // Active-operation text (shown in accent color while something is happening)
+  const activeText = resizeState
+    ? 'Resizing — release to confirm'
+    : moveState
+      ? 'Moving — release to place'
+      : drag
+        ? `${Math.round(Math.abs(drag.curX - drag.startX) / scale)}×${Math.round(Math.abs(drag.curY - drag.startY) / scale)}px — release to pin`
+        : null;
+
+  // Static hint — one fixed string per mode, never changes on hover
+  const idleHint = mode === 'auto'
+    ? 'Click to add frame • Drag frame to move • Drag edge/corner to resize'
+    : 'Drag to draw frame • Drag frame to move • Drag edge/corner to resize';
 
   return (
     <div className="flex flex-col gap-4">
@@ -705,30 +708,28 @@ export default function MockupEditor({
               <span className="w-3 h-3 rounded-full border border-t-transparent animate-spin inline-block" style={{ borderColor: 'var(--accent)', borderTopColor: 'transparent' }} />
               Detecting…
             </span>
-          ) : (resizeState || moveState || drag) ? (
-            <span style={{ color: 'var(--accent)' }}>{statusText}</span>
+          ) : activeText ? (
+            <span style={{ color: 'var(--accent)' }}>{activeText}</span>
           ) : (
-            <span>{statusText}</span>
+            <span>{idleHint}</span>
           )}
-          {imgNatural.w > 0 && !drag && !moveState && !resizeState && !isProcessing && (
+          {imgNatural.w > 0 && !activeText && !isProcessing && (
             <span style={{ color: 'var(--text-3)' }}>{imgNatural.w}×{imgNatural.h}px</span>
           )}
         </div>
       </div>
 
-      {/* ── Corner Radius slider (manual mode only) ──────────────────────── */}
-      {mode === 'manual' && (
-        <div className="flex items-center gap-3">
-          <label className="text-xs font-mono flex-shrink-0" style={{ color: 'var(--text-2)', minWidth: 156 }}>
-            Corner Radius: {cornerRadius}px
-          </label>
-          <input
-            type="range" min={0} max={50} step={1} value={cornerRadius}
-            onChange={(e) => setCornerRadius(Number(e.target.value))}
-            style={{ flex: 1, accentColor: 'var(--accent)' } as React.CSSProperties}
-          />
-        </div>
-      )}
+      {/* ── Corner Radius slider ─────────────────────────────────────────── */}
+      <div className="flex items-center gap-3">
+        <label className="text-xs font-mono flex-shrink-0" style={{ color: 'var(--text-2)', minWidth: 156 }}>
+          Corner Radius: {cornerRadius}px
+        </label>
+        <input
+          type="range" min={0} max={50} step={1} value={cornerRadius}
+          onChange={(e) => setCornerRadius(Number(e.target.value))}
+          style={{ flex: 1, accentColor: 'var(--accent)' } as React.CSSProperties}
+        />
+      </div>
 
       {/* ── Warning ───────────────────────────────────────────────────────── */}
       {warning && (
