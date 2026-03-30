@@ -43,6 +43,14 @@ export default function MockupEditor({
   const [warning, setWarning] = useState<string | null>(null);
   const [mode, setMode] = useState<Mode>('auto');
   const [drag, setDrag] = useState<DragState | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 700);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   // Keep dragRef in sync so touch handlers (added via useEffect) always see current drag
   useEffect(() => { dragRef.current = drag; }, [drag]);
@@ -462,8 +470,8 @@ export default function MockupEditor({
           />
         </div>
 
-        {/* Frame list */}
-        {frames.length > 0 && (
+        {/* Frame list — desktop: vertical sidebar beside canvas */}
+        {frames.length > 0 && !isMobile && (
           <div className="w-48 flex-shrink-0 flex flex-col gap-2">
             <p
               className="text-xs uppercase tracking-widest font-mono"
@@ -497,15 +505,7 @@ export default function MockupEditor({
                   className="w-5 h-5 flex items-center justify-center rounded-sm transition-colors hover:bg-[rgba(184,64,64,0.2)]"
                   title="Remove frame"
                 >
-                  <svg
-                    width="10"
-                    height="10"
-                    viewBox="0 0 10 10"
-                    fill="none"
-                    stroke="var(--text-2)"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  >
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--text-2)" strokeWidth="1.5" strokeLinecap="round">
                     <line x1="2" y1="2" x2="8" y2="8" />
                     <line x1="8" y1="2" x2="2" y2="8" />
                   </svg>
@@ -515,6 +515,61 @@ export default function MockupEditor({
           </div>
         )}
       </div>
+
+      {/* Frame list — mobile: horizontal scroll strip below canvas */}
+      {frames.length > 0 && isMobile && (
+        <div>
+          <p
+            className="text-xs uppercase tracking-widest font-mono mb-2"
+            style={{ color: 'var(--text-2)' }}
+          >
+            Frames ({frames.length})
+          </p>
+          <div
+            style={{
+              display: 'flex',
+              gap: 8,
+              overflowX: 'auto',
+              paddingBottom: 4,
+              WebkitOverflowScrolling: 'touch',
+            }}
+          >
+            {frames.map((frame, i) => (
+              <div
+                key={frame.id}
+                className="flex-shrink-0 flex items-center gap-2 px-2.5 py-2 rounded-sm"
+                style={{
+                  background: 'var(--surface-2)',
+                  border: '1px solid var(--border)',
+                  borderLeftColor: frame.color.replace('0.50', '0.9'),
+                  borderLeftWidth: '3px',
+                  minWidth: 100,
+                }}
+              >
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-mono" style={{ color: 'var(--text)' }}>
+                    F{i + 1}
+                  </p>
+                  <p className="text-[10px] font-mono mt-0.5" style={{ color: 'var(--text-2)' }}>
+                    {frame.w}×{frame.h}
+                  </p>
+                </div>
+                <button
+                  onClick={() => onRemoveFrame(frame.id)}
+                  className="w-5 h-5 flex items-center justify-center rounded-sm"
+                  style={{ flexShrink: 0 }}
+                  title="Remove frame"
+                >
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--text-2)" strokeWidth="1.5" strokeLinecap="round">
+                    <line x1="2" y1="2" x2="8" y2="8" />
+                    <line x1="8" y1="2" x2="2" y2="8" />
+                  </svg>
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {frames.length === 0 && !isProcessing && (
         <p className="text-xs text-center py-2" style={{ color: 'var(--text-3)' }}>
