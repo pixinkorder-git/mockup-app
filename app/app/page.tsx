@@ -478,7 +478,7 @@ export default function Home() {
                     fontFamily: "'Clash Display', sans-serif",
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
                     background: canGenerate ? '#FF6B35' : 'rgba(255,107,53,0.4)',
-                    color: canGenerate ? '#fff' : 'rgba(255,255,255,0.6)',
+                    color: '#fff',
                     border: 'none', cursor: canGenerate ? 'pointer' : 'not-allowed',
                     transition: 'background 0.2s, transform 0.15s, box-shadow 0.2s',
                     boxShadow: canGenerate ? '0 4px 20px rgba(255,107,53,0.3)' : 'none',

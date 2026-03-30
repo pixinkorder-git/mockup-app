@@ -62,6 +62,24 @@ Geist Sans and Geist Mono are loaded via `next/font/google` in `app/layout.tsx` 
 
 ---
 
+## Design System
+
+- Theme: Light/white background (#FFFFFF), warm white surfaces (#FDFCFB)
+- Accent color: #FF6B35 (hover: #E85A28)
+- Fonts: Clash Display (titles, from fontshare CDN), Satoshi (body, from fontshare CDN)
+- Logo: public/1logo.png, already contains "MockPlacer" text, never add separate text next to it
+- Buttons: #FF6B35 background, white text, border-radius 12px, box-shadow 0 4px 20px rgba(255,107,53,0.3)
+- Disabled buttons: same color at 40% opacity
+- Section titles: Clash Display, title case (not UPPERCASE), orange left border 3px solid #FF6B35 with padding-left 10px
+- Drop zones: dashed border rgba(255,107,53,0.3), on hover border-color #FF6B35
+- Cards: white bg, border-radius 20px, border 1px solid #E5E5E5, shadow 0 1px 3px rgba(0,0,0,0.04) 0 8px 32px rgba(0,0,0,0.06)
+- Nav: white bg, backdrop-filter blur(20px), border-bottom 1px solid rgba(0,0,0,0.05)
+- No dark theme
+- No dashes (em dash, en dash) in any text content
+- No uppercase section titles
+
+---
+
 ## 📍 Proje Linkleri & Deployment
 
 - **GitHub:** https://github.com/pixinkorder-git/mockup-app
