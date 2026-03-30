@@ -115,3 +115,15 @@ body {
 .font-mono {
   font-family: var(--font-mono), monospace;
 }
+
+/* Tool page responsive layout */
+@media (max-width: 700px) {
+  .tool-layout {
+    flex-direction: column !important;
+  }
+  .tool-sidebar {
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border);
+  }
+}
