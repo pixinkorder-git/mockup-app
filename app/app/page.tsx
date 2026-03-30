@@ -255,7 +255,7 @@ export default function Home() {
     );
   }, [activeMockupId]);
 
-  const handleUpdateFrame = useCallback((frameId: string, changes: Pick<import('@/app/utils/types').Frame, 'x' | 'y'>) => {
+  const handleUpdateFrame = useCallback((frameId: string, changes: Partial<Pick<import('@/app/utils/types').Frame, 'x' | 'y' | 'w' | 'h'>>) => {
     if (!activeMockupId) return;
     setMockups((prev) =>
       prev.map((m) => m.id !== activeMockupId ? m : {
