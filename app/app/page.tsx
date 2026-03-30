@@ -95,53 +95,30 @@ function AssetThumb({
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={url} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
 
-      {isMobile ? (
-        /* Mobile: always-visible circular X at top-right */
-        <button
-          onClick={(e) => { e.stopPropagation(); onRemove(); }}
-          title="Remove"
-          style={{
-            position: 'absolute', top: 4, right: 4,
-            width: 20, height: 20, borderRadius: '50%',
-            background: 'rgba(0,0,0,0.65)', border: 'none', cursor: 'pointer',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            zIndex: 2,
-          }}
-        >
-          <svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round">
-            <line x1="1" y1="1" x2="7" y2="7" /><line x1="7" y1="1" x2="1" y2="7" />
-          </svg>
-        </button>
-      ) : (
-        /* Desktop: hover overlay with X at bottom-right */
-        <div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
-          style={{ background: 'rgba(0,0,0,0.60)', display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end', padding: 5 }}
-        >
-          <button
-            onClick={(e) => { e.stopPropagation(); onRemove(); }}
-            title="Remove"
-            style={{
-              width: 22, height: 22, borderRadius: 4,
-              background: 'var(--danger)', border: 'none', cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}
-          >
-            <svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round">
-              <line x1="1" y1="1" x2="7" y2="7" /><line x1="7" y1="1" x2="1" y2="7" />
-            </svg>
-          </button>
-        </div>
-      )}
+      {/* X button — top-right, circular; always visible on mobile, hover on desktop */}
+      <button
+        onClick={(e) => { e.stopPropagation(); onRemove(); }}
+        title="Remove"
+        className={isMobile ? '' : 'opacity-0 group-hover:opacity-100 transition-opacity'}
+        style={{
+          position: 'absolute', top: 4, right: 4,
+          width: 20, height: 20, borderRadius: '50%',
+          background: 'rgba(0,0,0,0.65)', border: 'none', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          zIndex: 2,
+        }}
+      >
+        <svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round">
+          <line x1="1" y1="1" x2="7" y2="7" /><line x1="7" y1="1" x2="1" y2="7" />
+        </svg>
+      </button>
 
-      {!isMobile && (
-        <div
-          className="absolute bottom-0 left-0 right-0 truncate opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-          style={{ background: 'rgba(0,0,0,0.80)', color: '#fff', fontSize: 9, padding: '3px 5px' }}
-        >
-          {name}
-        </div>
-      )}
+      <div
+        className="absolute bottom-0 left-0 right-0 truncate opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+        style={{ background: 'rgba(0,0,0,0.80)', color: '#fff', fontSize: 9, padding: '3px 5px' }}
+      >
+        {name}
+      </div>
       {badge && (
         <div
           className="absolute top-1 left-1"
