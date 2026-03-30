@@ -75,7 +75,9 @@ export default function MockupEditor({
         const fy = frame.y * scale;
         const fw = frame.w * scale;
         const fh = frame.h * scale;
-        const fr = (frame.cornerRadius ?? 0) * scale;
+        // In manual mode use the live slider value so the preview updates in real-time.
+        // In auto mode fall back to the value stored on the frame.
+        const fr = (mode === 'manual' ? cornerRadius : (frame.cornerRadius ?? 0)) * scale;
 
         const framePathFn = () => {
           ctx.beginPath();
@@ -113,7 +115,7 @@ export default function MockupEditor({
       // Save snapshot for drag-preview restoration
       snapshotRef.current = ctx.getImageData(0, 0, canvas.width, canvas.height);
     },
-    [imgNatural.w, displaySize.w, displaySize.h, scale]
+    [imgNatural.w, displaySize.w, displaySize.h, scale, mode, cornerRadius]
   );
 
   // ── Draw live drag-preview rect on top of snapshot ─────────────────────────
@@ -132,16 +134,28 @@ export default function MockupEditor({
 
     if (w < 2 || h < 2) return;
 
+    const r = cornerRadius * scale;
+    const previewPath = () => {
+      ctx.beginPath();
+      if (r > 0 && ctx.roundRect) {
+        ctx.roundRect(x, y, w, h, r);
+      } else {
+        ctx.rect(x, y, w, h);
+      }
+    };
+
     // Tinted fill
+    previewPath();
     ctx.fillStyle = 'rgba(255,255,255,0.10)';
-    ctx.fillRect(x, y, w, h);
+    ctx.fill();
 
     // Dashed border
     ctx.save();
+    previewPath();
     ctx.strokeStyle = 'rgba(255,255,255,0.85)';
     ctx.lineWidth = 1.5;
     ctx.setLineDash([5, 4]);
-    ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
+    ctx.stroke();
     ctx.restore();
 
     // Size label
@@ -150,7 +164,7 @@ export default function MockupEditor({
     ctx.fillStyle = 'rgba(255,255,255,0.85)';
     ctx.font = `bold 11px var(--font-mono, monospace)`;
     ctx.fillText(`${imgW}×${imgH}`, x + 5, y + 15);
-  }, [scale]);
+  }, [scale, cornerRadius]);
 
   // ── Initial load ────────────────────────────────────────────────────────────
   useEffect(() => {
