@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import JSZip from 'jszip';
 import { GeneratedResult } from '@/app/utils/types';
 
@@ -27,6 +27,14 @@ function dataUrlToBytes(dataUrl: string): Uint8Array {
 export default function ResultsGrid({ results }: Props) {
   const [downloadingAll, setDownloadingAll] = useState(false);
   const [downloadingZip, setDownloadingZip] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 700);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const handleDownloadAll = async () => {
     setDownloadingAll(true);
@@ -66,7 +74,15 @@ export default function ResultsGrid({ results }: Props) {
 
   return (
     <section className="animate-fade-up">
-      <div className="flex items-center justify-between mb-5">
+      <div
+        className="flex mb-5"
+        style={{
+          flexDirection: isMobile ? 'column' : 'row',
+          alignItems: isMobile ? 'flex-start' : 'center',
+          justifyContent: isMobile ? 'flex-start' : 'space-between',
+          gap: isMobile ? 12 : 0,
+        }}
+      >
         <div className="flex items-center gap-3">
           {/* Section header decoration */}
           <div className="flex flex-col gap-0.5">
@@ -84,14 +100,23 @@ export default function ResultsGrid({ results }: Props) {
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div
+          className="flex gap-2"
+          style={{
+            flexDirection: isMobile ? 'column' : 'row',
+            width: isMobile ? '100%' : undefined,
+          }}
+        >
           {/* Download ZIP */}
           <button
             onClick={handleDownloadZip}
             disabled={busy}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-sm font-medium transition-all"
+            className="flex items-center justify-center gap-2 rounded-sm font-medium transition-all"
             style={{
               fontSize: 15,
+              padding: '10px 20px',
+              height: 44,
+              width: isMobile ? '100%' : undefined,
               background: 'var(--surface-2)',
               border: '1px solid var(--border-2)',
               color: busy ? 'var(--text-2)' : 'var(--text)',
@@ -122,9 +147,12 @@ export default function ResultsGrid({ results }: Props) {
           <button
             onClick={handleDownloadAll}
             disabled={busy}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-sm font-medium transition-all"
+            className="flex items-center justify-center gap-2 rounded-sm font-medium transition-all"
             style={{
               fontSize: 15,
+              padding: '10px 20px',
+              height: 44,
+              width: isMobile ? '100%' : undefined,
               background: 'var(--surface-2)',
               border: '1px solid var(--border-2)',
               color: busy ? 'var(--text-2)' : 'var(--text)',

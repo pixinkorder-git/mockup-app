@@ -33,6 +33,8 @@ export default function MockupEditor({
   const snapshotRef = useRef<ImageData | null>(null);
   // Cached image so redraw is synchronous — no flicker after frame confirm
   const imgCacheRef = useRef<HTMLImageElement | null>(null);
+  // Mirror of drag state for touch handlers (useEffect closures would otherwise go stale)
+  const dragRef = useRef<DragState | null>(null);
 
   const [imgNatural, setImgNatural] = useState({ w: 0, h: 0 });
   const [displaySize, setDisplaySize] = useState({ w: 0, h: 0 });
@@ -41,6 +43,9 @@ export default function MockupEditor({
   const [warning, setWarning] = useState<string | null>(null);
   const [mode, setMode] = useState<Mode>('auto');
   const [drag, setDrag] = useState<DragState | null>(null);
+
+  // Keep dragRef in sync so touch handlers (added via useEffect) always see current drag
+  useEffect(() => { dragRef.current = drag; }, [drag]);
 
   const scale = imgNatural.w > 0 ? displaySize.w / imgNatural.w : 1;
 
@@ -272,6 +277,79 @@ export default function MockupEditor({
       canvasRef.current!.getContext('2d')!.putImageData(snapshotRef.current, 0, 0);
     }
   }, [mode, drag]);
+
+  // ── Touch events (manual mode) ───────────────────────────────────────────────
+  // Added via useEffect with { passive: false } so preventDefault() stops page scroll.
+  // Uses dragRef instead of drag state to avoid stale closures.
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || mode !== 'manual') return;
+
+    const getCoords = (touch: Touch) => {
+      const rect = canvas.getBoundingClientRect();
+      return { dx: touch.clientX - rect.left, dy: touch.clientY - rect.top };
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (!imgNatural.w) return;
+      e.preventDefault();
+      const { dx, dy } = getCoords(e.touches[0]);
+      const newDrag = { startX: dx, startY: dy, curX: dx, curY: dy };
+      dragRef.current = newDrag;
+      setDrag(newDrag);
+      setWarning(null);
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      const d = dragRef.current;
+      if (!d) return;
+      e.preventDefault();
+      const { dx, dy } = getCoords(e.touches[0]);
+      const updated = { ...d, curX: dx, curY: dy };
+      dragRef.current = updated;
+      setDrag(updated);
+      drawPreview(updated);
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      const d = dragRef.current;
+      if (!d) return;
+      e.preventDefault();
+      const { dx, dy } = getCoords(e.changedTouches[0]);
+
+      const dispX = Math.min(d.startX, dx);
+      const dispY = Math.min(d.startY, dy);
+      const dispW = Math.abs(dx - d.startX);
+      const dispH = Math.abs(dy - d.startY);
+
+      const imgX = Math.round(dispX / scale);
+      const imgY = Math.round(dispY / scale);
+      const imgW = Math.round(dispW / scale);
+      const imgH = Math.round(dispH / scale);
+
+      dragRef.current = null;
+      setDrag(null);
+
+      if (imgW < 8 || imgH < 8) {
+        if (snapshotRef.current) {
+          canvas.getContext('2d')!.putImageData(snapshotRef.current, 0, 0);
+        }
+        return;
+      }
+
+      onAddFrame({ x: imgX, y: imgY, w: imgW, h: imgH });
+    };
+
+    canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+    canvas.addEventListener('touchmove', onTouchMove, { passive: false });
+    canvas.addEventListener('touchend', onTouchEnd, { passive: false });
+
+    return () => {
+      canvas.removeEventListener('touchstart', onTouchStart);
+      canvas.removeEventListener('touchmove', onTouchMove);
+      canvas.removeEventListener('touchend', onTouchEnd);
+    };
+  }, [mode, imgNatural.w, scale, drawPreview, onAddFrame]);
 
   // Cursor logic
   const cursor = isProcessing ? 'wait' : drag ? 'crosshair' : 'crosshair';

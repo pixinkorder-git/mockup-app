@@ -74,10 +74,10 @@ function Divider() {
 
 // ─── Asset thumbnail ──────────────────────────────────────────────────────────
 function AssetThumb({
-  url, name, onRemove, isActive, onClick, badge,
+  url, name, onRemove, isActive, onClick, badge, isMobile,
 }: {
   url: string; name: string; onRemove: () => void;
-  isActive?: boolean; onClick?: () => void; badge?: string;
+  isActive?: boolean; onClick?: () => void; badge?: string; isMobile?: boolean;
 }) {
   return (
     <div
@@ -94,30 +94,54 @@ function AssetThumb({
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={url} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-      <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
-        style={{ background: 'rgba(0,0,0,0.60)', display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end', padding: 5 }}
-      >
+
+      {isMobile ? (
+        /* Mobile: always-visible circular X at top-right */
         <button
           onClick={(e) => { e.stopPropagation(); onRemove(); }}
           title="Remove"
           style={{
-            width: 22, height: 22, borderRadius: 4,
-            background: 'var(--danger)', border: 'none', cursor: 'pointer',
+            position: 'absolute', top: 4, right: 4,
+            width: 20, height: 20, borderRadius: '50%',
+            background: 'rgba(0,0,0,0.65)', border: 'none', cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
+            zIndex: 2,
           }}
         >
           <svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round">
             <line x1="1" y1="1" x2="7" y2="7" /><line x1="7" y1="1" x2="1" y2="7" />
           </svg>
         </button>
-      </div>
-      <div
-        className="absolute bottom-0 left-0 right-0 truncate opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-        style={{ background: 'rgba(0,0,0,0.80)', color: '#fff', fontSize: 9, padding: '3px 5px' }}
-      >
-        {name}
-      </div>
+      ) : (
+        /* Desktop: hover overlay with X at bottom-right */
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
+          style={{ background: 'rgba(0,0,0,0.60)', display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end', padding: 5 }}
+        >
+          <button
+            onClick={(e) => { e.stopPropagation(); onRemove(); }}
+            title="Remove"
+            style={{
+              width: 22, height: 22, borderRadius: 4,
+              background: 'var(--danger)', border: 'none', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round">
+              <line x1="1" y1="1" x2="7" y2="7" /><line x1="7" y1="1" x2="1" y2="7" />
+            </svg>
+          </button>
+        </div>
+      )}
+
+      {!isMobile && (
+        <div
+          className="absolute bottom-0 left-0 right-0 truncate opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+          style={{ background: 'rgba(0,0,0,0.80)', color: '#fff', fontSize: 9, padding: '3px 5px' }}
+        >
+          {name}
+        </div>
+      )}
       {badge && (
         <div
           className="absolute top-1 left-1"
@@ -507,7 +531,7 @@ export default function Home() {
                 {artImages.length > 0 && (
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 12 }}>
                     {artImages.map((art) => (
-                      <AssetThumb key={art.id} url={art.url} name={art.name} onRemove={() => removeArt(art.id)} />
+                      <AssetThumb key={art.id} url={art.url} name={art.name} onRemove={() => removeArt(art.id)} isMobile={isMobile} />
                     ))}
                   </div>
                 )}
@@ -545,6 +569,7 @@ export default function Home() {
                         isActive={m.id === activeMockupId}
                         onClick={() => setActiveMockupId(m.id)}
                         badge={m.frames.length > 0 ? `${m.frames.length}f` : undefined}
+                        isMobile={isMobile}
                       />
                     ))}
                   </div>
