@@ -13,6 +13,7 @@ export interface Frame {
   w: number;
   h: number;
   color: string; // overlay color
+  cornerRadius?: number; // px, applied when compositing art into frame
 }
 
 export interface MockupTemplate {

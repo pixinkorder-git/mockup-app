@@ -235,9 +235,14 @@ async function compositeCombination(
     const artImg = artImgs[j];
     const { sx, sy, sw, sh } = coverCrop(artImg.naturalWidth, artImg.naturalHeight, frame.w, frame.h);
 
+    const r = frame.cornerRadius ?? 0;
     ctx.save();
     ctx.beginPath();
-    ctx.rect(frame.x, frame.y, frame.w, frame.h);
+    if (r > 0 && ctx.roundRect) {
+      ctx.roundRect(frame.x, frame.y, frame.w, frame.h, r);
+    } else {
+      ctx.rect(frame.x, frame.y, frame.w, frame.h);
+    }
     ctx.clip();
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = '#ffffff';

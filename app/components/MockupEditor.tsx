@@ -44,6 +44,7 @@ export default function MockupEditor({
   const [mode, setMode] = useState<Mode>('auto');
   const [drag, setDrag] = useState<DragState | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [cornerRadius, setCornerRadius] = useState(0);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth <= 700);
@@ -74,17 +75,31 @@ export default function MockupEditor({
         const fy = frame.y * scale;
         const fw = frame.w * scale;
         const fh = frame.h * scale;
+        const fr = (frame.cornerRadius ?? 0) * scale;
+
+        const framePathFn = () => {
+          ctx.beginPath();
+          if (fr > 0 && ctx.roundRect) {
+            ctx.roundRect(fx, fy, fw, fh, fr);
+          } else {
+            ctx.rect(fx, fy, fw, fh);
+          }
+        };
 
         // Solid white first — mockup must not show through the frame area
+        ctx.save();
+        framePathFn();
+        ctx.clip();
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(fx, fy, fw, fh);
-
         ctx.fillStyle = frame.color;
         ctx.fillRect(fx, fy, fw, fh);
+        ctx.restore();
 
         ctx.strokeStyle = frame.color.replace('0.50', '0.95');
         ctx.lineWidth = 2;
-        ctx.strokeRect(fx, fy, fw, fh);
+        framePathFn();
+        ctx.stroke();
 
         ctx.fillStyle = frame.color.replace('0.50', '0.95');
         ctx.font = `bold 11px var(--font-mono, monospace)`;
@@ -272,9 +287,9 @@ export default function MockupEditor({
         return;
       }
 
-      onAddFrame({ x: imgX, y: imgY, w: imgW, h: imgH });
+      onAddFrame({ x: imgX, y: imgY, w: imgW, h: imgH, cornerRadius: cornerRadius > 0 ? cornerRadius : undefined });
     },
-    [mode, drag, scale, onAddFrame]
+    [mode, drag, scale, onAddFrame, cornerRadius]
   );
 
   const handleMouseLeave = useCallback(() => {
@@ -345,7 +360,7 @@ export default function MockupEditor({
         return;
       }
 
-      onAddFrame({ x: imgX, y: imgY, w: imgW, h: imgH });
+      onAddFrame({ x: imgX, y: imgY, w: imgW, h: imgH, cornerRadius: cornerRadius > 0 ? cornerRadius : undefined });
     };
 
     canvas.addEventListener('touchstart', onTouchStart, { passive: false });
@@ -357,7 +372,7 @@ export default function MockupEditor({
       canvas.removeEventListener('touchmove', onTouchMove);
       canvas.removeEventListener('touchend', onTouchEnd);
     };
-  }, [mode, imgNatural.w, scale, drawPreview, onAddFrame]);
+  }, [mode, imgNatural.w, scale, drawPreview, onAddFrame, cornerRadius]);
 
   // Cursor logic
   const cursor = isProcessing ? 'wait' : drag ? 'crosshair' : 'crosshair';
@@ -434,6 +449,24 @@ export default function MockupEditor({
           )}
         </div>
       </div>
+
+      {/* ── Corner Radius slider (manual mode only) ──────────────────────── */}
+      {mode === 'manual' && (
+        <div className="flex items-center gap-3">
+          <label className="text-xs font-mono flex-shrink-0" style={{ color: 'var(--text-2)', minWidth: 156 }}>
+            Corner Radius: {cornerRadius}px
+          </label>
+          <input
+            type="range"
+            min={0}
+            max={50}
+            step={1}
+            value={cornerRadius}
+            onChange={(e) => setCornerRadius(Number(e.target.value))}
+            style={{ flex: 1, accentColor: 'var(--accent)' } as React.CSSProperties}
+          />
+        </div>
+      )}
 
       {/* ── Warning ───────────────────────────────────────────────────────── */}
       {warning && (
