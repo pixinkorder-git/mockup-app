@@ -128,26 +128,37 @@ export default function MockupEditor({
   useEffect(() => {
     if (!mockupUrl) return;
     const img = new Image();
+    img.crossOrigin = 'anonymous';
     img.onload = () => {
       // Cache image so subsequent redraws are synchronous (no img.onload delay)
       imgCacheRef.current = img;
 
       const nw = img.naturalWidth;
       const nh = img.naturalHeight;
-      setImgNatural({ w: nw, h: nh });
 
       const container = containerRef.current;
       if (!container) return;
-      const maxW = container.clientWidth;
+      // Clamp to 2048 to stay within iOS Safari canvas memory limits
+      const MAX_CANVAS = 2048;
+      const maxW = container.clientWidth || 800; // fallback if container not yet laid out
       const maxH = 820;
-      const s = Math.min(maxW / nw, maxH / nh, 1);
+      const s = Math.min(maxW / nw, maxH / nh, MAX_CANVAS / nw, MAX_CANVAS / nh, 1);
       const dw = Math.round(nw * s);
       const dh = Math.round(nh * s);
-      setDisplaySize({ w: dw, h: dh });
 
       const canvas = canvasRef.current!;
       canvas.width = dw;
       canvas.height = dh;
+
+      // Draw immediately inside onload — don't wait for state update / re-render.
+      // Fixes iOS Safari where the canvas can stay blank if drawImage is deferred.
+      const ctx = canvas.getContext('2d');
+      if (ctx && dw > 0 && dh > 0) {
+        ctx.drawImage(img, 0, 0, dw, dh);
+      }
+
+      setImgNatural({ w: nw, h: nh });
+      setDisplaySize({ w: dw, h: dh });
     };
     img.src = mockupUrl;
   }, [mockupUrl]);

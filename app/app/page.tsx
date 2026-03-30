@@ -140,6 +140,14 @@ export default function Home() {
   const [isGenerating, setIsGenerating]     = useState(false);
   const [progress, setProgress]             = useState({ done: 0, total: 0 });
   const [tolerance, setTolerance]           = useState(60);
+  const [isMobile, setIsMobile]             = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 700);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   // Reset results only when the file set actually changes
   const artKey    = artImages.map((a) => a.id).join(',');
@@ -277,6 +285,141 @@ export default function Home() {
     setGeneratedIds(new Set());
   }, []);
 
+  // ── Generate section (combo info + generate button + clear) ──────────────
+  const generateSection = (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {/* Combination info */}
+      {(artImages.length > 0 || mockups.length > 0) && (
+        <div style={{
+          padding: '12px 14px', borderRadius: 10,
+          background: '#fff',
+          border: '1px solid var(--border)',
+          display: 'flex', flexDirection: 'column', gap: 8,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, flexWrap: 'wrap' }}>
+            <ComboChip value={artImages.length} label="art" />
+            <span style={{ fontSize: 13, color: 'var(--text-3)', fontFamily: 'monospace' }}>×</span>
+            <ComboChip value={mockups.filter((m) => m.frames.length > 0).length} label="templates" />
+            <span style={{ fontSize: 13, color: 'var(--text-3)', fontFamily: 'monospace' }}>=</span>
+            <ComboChip value={allCombinations.length} label="combos" accent />
+          </div>
+
+          {isGenerating && progress.total > 0 && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ flex: 1, height: 3, borderRadius: 2, background: 'var(--border)', overflow: 'hidden' }}>
+                <div style={{
+                  height: '100%', borderRadius: 2, background: 'var(--accent)',
+                  width: `${(progress.done / progress.total) * 100}%`,
+                  transition: 'width 0.3s',
+                }} />
+              </div>
+              <span style={{ fontSize: 11, color: 'var(--text-2)', flexShrink: 0, fontFamily: 'monospace' }}>
+                {progress.done}/{progress.total}
+              </span>
+            </div>
+          )}
+
+          {hasNoCombinations && (
+            <p style={{ fontSize: 12, color: 'var(--danger)', fontFamily: 'monospace' }}>
+              No orientation matches between art and frames.
+            </p>
+          )}
+          {artImages.length > 0 && mockups.length > 0 && !mockups.some((m) => m.frames.length > 0) && (
+            <p style={{ fontSize: 12, color: 'var(--text-2)', fontFamily: 'monospace' }}>
+              Pin frames on a template to enable generation.
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Generate / exhausted button */}
+      {isExhausted ? (
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          gap: 8, height: 50, borderRadius: 12,
+          background: '#F0FBF0', border: '1px solid #B7DFB7',
+        }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          <span style={{ fontSize: 13, color: 'var(--success)', fontFamily: "'Clash Display', sans-serif", fontWeight: 600, letterSpacing: '0.04em' }}>
+            All {results.length} generated
+          </span>
+        </div>
+      ) : (
+        <button
+          onClick={handleGenerate}
+          disabled={!canGenerate}
+          style={{
+            width: '100%', height: 56, borderRadius: 12,
+            fontSize: 16, fontWeight: 700, letterSpacing: '0.04em',
+            fontFamily: "'Clash Display', sans-serif",
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+            background: canGenerate ? '#FF6B35' : 'rgba(255,107,53,0.4)',
+            color: '#fff',
+            border: 'none', cursor: canGenerate ? 'pointer' : 'not-allowed',
+            transition: 'background 0.2s, transform 0.15s, box-shadow 0.2s',
+            boxShadow: canGenerate ? '0 4px 20px rgba(255,107,53,0.3)' : 'none',
+            flexShrink: 0,
+          }}
+          onMouseEnter={(e) => {
+            if (canGenerate) {
+              e.currentTarget.style.transform = 'translateY(-1px)';
+              e.currentTarget.style.boxShadow = '0 8px 28px rgba(255,107,53,0.40)';
+              e.currentTarget.style.background = '#E85A28';
+            }
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'none';
+            e.currentTarget.style.boxShadow = canGenerate ? '0 4px 20px rgba(255,107,53,0.3)' : 'none';
+            e.currentTarget.style.background = canGenerate ? '#FF6B35' : 'rgba(255,107,53,0.4)';
+          }}
+        >
+          {isGenerating ? (
+            <>
+              <span style={{
+                width: 15, height: 15, display: 'inline-block', borderRadius: '50%',
+                border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff',
+                animation: 'spin 0.8s linear infinite',
+              }} />
+              Generating…
+            </>
+          ) : (
+            <>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg>
+              {results.length === 0 ? 'Generate' : `Generate More (${remainingCount})`}
+            </>
+          )}
+        </button>
+      )}
+
+      {results.length > 0 && (
+        <button
+          onClick={handleClearResults}
+          style={{
+            width: '100%', height: 36, borderRadius: 8, fontSize: 13,
+            border: '1px solid var(--border)',
+            color: 'var(--text-2)', background: 'transparent',
+            cursor: 'pointer', transition: 'all 0.15s',
+            fontFamily: 'var(--font-body)',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = 'var(--danger)';
+            e.currentTarget.style.color = 'var(--danger)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = 'var(--border)';
+            e.currentTarget.style.color = 'var(--text-2)';
+          }}
+        >
+          Clear {results.length} results
+        </button>
+      )}
+    </div>
+  );
+
   return (
     <div style={{ minHeight: '100vh', background: '#FFFFFF', paddingTop: NAV_H }}>
 
@@ -330,15 +473,16 @@ export default function Home() {
           overflow: 'hidden',
           boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.06)',
         }}>
-          <div style={{ display: 'flex', minHeight: 600 }}>
+          <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', minHeight: isMobile ? undefined : 600 }}>
 
             {/* ── LEFT SIDEBAR ─────────────────────────────────────────── */}
             <div style={{
-              width: COL_LEFT, flexShrink: 0,
+              width: isMobile ? '100%' : COL_LEFT, flexShrink: 0,
               display: 'flex', flexDirection: 'column',
               padding: CARD_PAD, gap: 24,
               background: 'var(--surface-2)',
-              borderRight: '1px solid var(--border)',
+              borderRight: isMobile ? 'none' : '1px solid var(--border)',
+              borderBottom: isMobile ? '1px solid var(--border)' : 'none',
             }}>
 
               {/* ART IMAGES */}
@@ -407,138 +551,11 @@ export default function Home() {
                 )}
               </div>
 
-              {/* Spacer */}
-              <div style={{ flex: 1 }} />
+              {/* Spacer — desktop only */}
+              {!isMobile && <div style={{ flex: 1 }} />}
 
-              {/* Combination info */}
-              {(artImages.length > 0 || mockups.length > 0) && (
-                <div style={{
-                  padding: '12px 14px', borderRadius: 10,
-                  background: '#fff',
-                  border: '1px solid var(--border)',
-                  display: 'flex', flexDirection: 'column', gap: 8,
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, flexWrap: 'wrap' }}>
-                    <ComboChip value={artImages.length} label="art" />
-                    <span style={{ fontSize: 13, color: 'var(--text-3)', fontFamily: 'monospace' }}>×</span>
-                    <ComboChip value={mockups.filter((m) => m.frames.length > 0).length} label="templates" />
-                    <span style={{ fontSize: 13, color: 'var(--text-3)', fontFamily: 'monospace' }}>=</span>
-                    <ComboChip value={allCombinations.length} label="combos" accent />
-                  </div>
-
-                  {isGenerating && progress.total > 0 && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <div style={{ flex: 1, height: 3, borderRadius: 2, background: 'var(--border)', overflow: 'hidden' }}>
-                        <div style={{
-                          height: '100%', borderRadius: 2, background: 'var(--accent)',
-                          width: `${(progress.done / progress.total) * 100}%`,
-                          transition: 'width 0.3s',
-                        }} />
-                      </div>
-                      <span style={{ fontSize: 11, color: 'var(--text-2)', flexShrink: 0, fontFamily: 'monospace' }}>
-                        {progress.done}/{progress.total}
-                      </span>
-                    </div>
-                  )}
-
-                  {hasNoCombinations && (
-                    <p style={{ fontSize: 12, color: 'var(--danger)', fontFamily: 'monospace' }}>
-                      No orientation matches between art and frames.
-                    </p>
-                  )}
-                  {artImages.length > 0 && mockups.length > 0 && !mockups.some((m) => m.frames.length > 0) && (
-                    <p style={{ fontSize: 12, color: 'var(--text-2)', fontFamily: 'monospace' }}>
-                      Pin frames on a template to enable generation.
-                    </p>
-                  )}
-                </div>
-              )}
-
-              {/* Generate / exhausted button */}
-              {isExhausted ? (
-                <div style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  gap: 8, height: 50, borderRadius: 12,
-                  background: '#F0FBF0', border: '1px solid #B7DFB7',
-                }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                  <span style={{ fontSize: 13, color: 'var(--success)', fontFamily: "'Clash Display', sans-serif", fontWeight: 600, letterSpacing: '0.04em' }}>
-                    All {results.length} generated
-                  </span>
-                </div>
-              ) : (
-                <button
-                  onClick={handleGenerate}
-                  disabled={!canGenerate}
-                  style={{
-                    width: '100%', height: 56, borderRadius: 12,
-                    fontSize: 16, fontWeight: 700, letterSpacing: '0.04em',
-                    fontFamily: "'Clash Display', sans-serif",
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                    background: canGenerate ? '#FF6B35' : 'rgba(255,107,53,0.4)',
-                    color: '#fff',
-                    border: 'none', cursor: canGenerate ? 'pointer' : 'not-allowed',
-                    transition: 'background 0.2s, transform 0.15s, box-shadow 0.2s',
-                    boxShadow: canGenerate ? '0 4px 20px rgba(255,107,53,0.3)' : 'none',
-                    flexShrink: 0,
-                  }}
-                  onMouseEnter={(e) => {
-                    if (canGenerate) {
-                      e.currentTarget.style.transform = 'translateY(-1px)';
-                      e.currentTarget.style.boxShadow = '0 8px 28px rgba(255,107,53,0.40)';
-                      e.currentTarget.style.background = '#E85A28';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'none';
-                    e.currentTarget.style.boxShadow = canGenerate ? '0 4px 20px rgba(255,107,53,0.3)' : 'none';
-                    e.currentTarget.style.background = canGenerate ? '#FF6B35' : 'rgba(255,107,53,0.4)';
-                  }}
-                >
-                  {isGenerating ? (
-                    <>
-                      <span style={{
-                        width: 15, height: 15, display: 'inline-block', borderRadius: '50%',
-                        border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff',
-                        animation: 'spin 0.8s linear infinite',
-                      }} />
-                      Generating…
-                    </>
-                  ) : (
-                    <>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <polygon points="5 3 19 12 5 21 5 3" />
-                      </svg>
-                      {results.length === 0 ? 'Generate' : `Generate More (${remainingCount})`}
-                    </>
-                  )}
-                </button>
-              )}
-
-              {results.length > 0 && (
-                <button
-                  onClick={handleClearResults}
-                  style={{
-                    width: '100%', height: 36, borderRadius: 8, fontSize: 13,
-                    border: '1px solid var(--border)',
-                    color: 'var(--text-2)', background: 'transparent',
-                    cursor: 'pointer', transition: 'all 0.15s',
-                    fontFamily: 'var(--font-body)',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--danger)';
-                    e.currentTarget.style.color = 'var(--danger)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--border)';
-                    e.currentTarget.style.color = 'var(--text-2)';
-                  }}
-                >
-                  Clear {results.length} results
-                </button>
-              )}
+              {/* Generate section — desktop: render inline in sidebar */}
+              {!isMobile && generateSection}
             </div>
 
             {/* ── RIGHT COLUMN: frame editor ──────────────────────────── */}
@@ -657,6 +674,13 @@ export default function Home() {
                 )}
               </div>
             </div>
+
+            {/* ── MOBILE: Generate section below Frame Editor ──────────── */}
+            {isMobile && (
+              <div style={{ padding: CARD_PAD, borderTop: '1px solid var(--border)' }}>
+                {generateSection}
+              </div>
+            )}
 
           </div>
         </div>
