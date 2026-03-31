@@ -1293,42 +1293,64 @@ footer {
 .testimonials { background: var(--bg-section); }
 .testi-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
   margin-top: 48px;
 }
-@media (max-width: 860px) { .testi-grid { grid-template-columns: 1fr; gap: 16px; } }
+@media (max-width: 960px) { .testi-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
+@media (max-width: 540px) { .testi-grid { grid-template-columns: 1fr; gap: 14px; } }
 .testi-card {
   background: #fff;
-  border-radius: 20px;
+  border-radius: 12px;
   border: 1px solid #E5E5E5;
   box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.06);
-  padding: 28px 28px 24px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
-.testi-stars { display: flex; gap: 4px; }
-.testi-stars svg { color: var(--accent); }
-.testi-quote {
-  font-family: 'Satoshi', sans-serif;
-  font-size: 0.97rem;
-  line-height: 1.65;
-  color: var(--text);
-  flex: 1;
+.testi-more { display: none; }
+.testi-header { display: flex; align-items: center; gap: 12px; }
+.testi-avatar {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
 }
-.testi-author { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
-.testi-name {
+.testi-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.testi-initials {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: 'Satoshi', sans-serif;
   font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--text);
+  font-size: 14px;
+  color: #fff;
 }
-.testi-role {
-  font-family: 'Satoshi', sans-serif;
-  font-size: 0.85rem;
-  color: var(--text-muted, #888);
+.testi-author { display: flex; flex-direction: column; gap: 1px; }
+.testi-name { font-family: 'Satoshi', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--text); }
+.testi-role { font-family: 'Satoshi', sans-serif; font-size: 0.78rem; color: var(--text-muted, #888); }
+.testi-stars { display: flex; gap: 3px; }
+.testi-quote { font-family: 'Satoshi', sans-serif; font-size: 0.88rem; line-height: 1.6; color: var(--text); flex: 1; }
+.testi-more-btn {
+  display: flex;
+  margin: 36px auto 0;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(255,107,53,0.3);
+  transition: background 0.2s, transform 0.2s;
 }
+.testi-more-btn:hover { background: #E85A28; transform: translateY(-1px); }
 
 /* ── Sample Mockups Gallery ── */
 .samples { background: var(--bg-section); }
@@ -1892,49 +1914,153 @@ footer {
       <h2 class="section-title mx-auto" data-i18n="testi_title">Kullanıcılar Ne Diyor</h2>
     </div>
     <div class="testi-grid reveal">
+
+      <!-- 1 Sarah M. ★★★★★ avatar1 -->
       <div class="testi-card">
+        <div class="testi-header">
+          <div class="testi-avatar"><img src="/avatars/avatar1.png" alt="Sarah M." loading="lazy"></div>
+          <div class="testi-author"><span class="testi-name">Sarah M.</span><span class="testi-role">Etsy Seller</span></div>
+        </div>
         <div class="testi-stars">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
         </div>
-        <p class="testi-quote" data-i18n="testi1_q">MockPlacer bana saatlerce zaman kazandırdı. Eskiden mockup başına 2 saat harcıyordum, şimdi 30 saniye sürüyor!</p>
-        <div class="testi-author">
-          <span class="testi-name">Sarah M.</span>
-          <span class="testi-role" data-i18n="testi1_role">Etsy Satıcısı</span>
-        </div>
+        <p class="testi-quote">"MockPlacer saved me hours of work. I used to spend 2 hours per mockup, now it takes 30 seconds!"</p>
       </div>
+
+      <!-- 2 François D. ★★★★★ initials -->
       <div class="testi-card">
+        <div class="testi-header">
+          <div class="testi-initials" style="background:#5B7FFF">FD</div>
+          <div class="testi-author"><span class="testi-name">François D.</span><span class="testi-role">Graphic Designer</span></div>
+        </div>
         <div class="testi-stars">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
         </div>
-        <p class="testi-quote" data-i18n="testi2_q">Toplu oluşturma özelliği oyunun kurallarını değiştirdi. Tek tıkla 30 mockup!</p>
-        <div class="testi-author">
-          <span class="testi-name">Alex K.</span>
-          <span class="testi-role" data-i18n="testi2_role">Grafik Tasarımcı</span>
-        </div>
+        <p class="testi-quote">"The bulk generation feature is a game changer. 30 mockups in one click!"</p>
       </div>
+
+      <!-- 3 Mehmet Y. ★★★★☆ avatar3 -->
       <div class="testi-card">
+        <div class="testi-header">
+          <div class="testi-avatar"><img src="/avatars/avatar3.png" alt="Mehmet Y." loading="lazy"></div>
+          <div class="testi-author"><span class="testi-name">Mehmet Y.</span><span class="testi-role">POD Seller</span></div>
+        </div>
         <div class="testi-stars">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg>
         </div>
-        <p class="testi-quote" data-i18n="testi3_q">Sonunda gerçekten ücretsiz ve kullanımı kolay bir mockup aracı. Abonelik yok, limit yok.</p>
-        <div class="testi-author">
-          <span class="testi-name">Mike R.</span>
-          <span class="testi-role" data-i18n="testi3_role">POD Satıcısı</span>
-        </div>
+        <p class="testi-quote">"Great tool! Would love more ready-made templates. Please add more!"</p>
       </div>
+
+      <!-- 4 Emma L. ★★★★★ initials -->
+      <div class="testi-card">
+        <div class="testi-header">
+          <div class="testi-initials" style="background:#EC4899">EL</div>
+          <div class="testi-author"><span class="testi-name">Emma L.</span><span class="testi-role">Artist</span></div>
+        </div>
+        <div class="testi-stars">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
+        </div>
+        <p class="testi-quote">"Finally a free mockup tool that actually works. No subscriptions needed."</p>
+      </div>
+
+      <!-- 5 Ayşe K. ★★★☆☆ avatar4 — hidden -->
+      <div class="testi-card testi-more">
+        <div class="testi-header">
+          <div class="testi-avatar"><img src="/avatars/avatar4.png" alt="Ayşe K." loading="lazy"></div>
+          <div class="testi-author"><span class="testi-name">Ayşe K.</span><span class="testi-role">Tablet User</span></div>
+        </div>
+        <div class="testi-stars">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg>
+        </div>
+        <p class="testi-quote">"Please make an iOS app! I use my tablet more than computer."</p>
+      </div>
+
+      <!-- 6 Hans W. ★★★★★ avatar5 — hidden -->
+      <div class="testi-card testi-more">
+        <div class="testi-header">
+          <div class="testi-avatar"><img src="/avatars/avatar5.png" alt="Hans W." loading="lazy"></div>
+          <div class="testi-author"><span class="testi-name">Hans W.</span><span class="testi-role">Freelancer</span></div>
+        </div>
+        <div class="testi-stars">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
+        </div>
+        <p class="testi-quote">"Simple, fast, exactly what I need. Highly recommend!"</p>
+      </div>
+
+      <!-- 7 Zeynep A. ★★★★☆ initials — hidden -->
+      <div class="testi-card testi-more">
+        <div class="testi-header">
+          <div class="testi-initials" style="background:#22C55E">ZA</div>
+          <div class="testi-author"><span class="testi-name">Zeynep A.</span><span class="testi-role">E-commerce</span></div>
+        </div>
+        <div class="testi-stars">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg>
+        </div>
+        <p class="testi-quote">"Very useful for my online store. Wish there were more frame styles."</p>
+      </div>
+
+      <!-- 8 Marie C. ★★★★★ initials — hidden -->
+      <div class="testi-card testi-more">
+        <div class="testi-header">
+          <div class="testi-initials" style="background:#8B5CF6">MC</div>
+          <div class="testi-author"><span class="testi-name">Marie C.</span><span class="testi-role">Photographer</span></div>
+        </div>
+        <div class="testi-stars">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
+        </div>
+        <p class="testi-quote">"Perfect for showcasing my prints. Clean interface, fast results."</p>
+      </div>
+
+      <!-- 9 Elif T. ★★★★☆ avatar2 — hidden -->
+      <div class="testi-card testi-more">
+        <div class="testi-header">
+          <div class="testi-avatar"><img src="/avatars/avatar2.png" alt="Elif T." loading="lazy"></div>
+          <div class="testi-author"><span class="testi-name">Elif T.</span><span class="testi-role">Interior Designer</span></div>
+        </div>
+        <div class="testi-stars">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg>
+        </div>
+        <p class="testi-quote">"Great for client presentations. Would love more wall color options."</p>
+      </div>
+
+      <!-- 10 Stefan B. ★★★★★ initials — hidden -->
+      <div class="testi-card testi-more">
+        <div class="testi-header">
+          <div class="testi-initials" style="background:#F59E0B">SB</div>
+          <div class="testi-author"><span class="testi-name">Stefan B.</span><span class="testi-role">Marketing</span></div>
+        </div>
+        <div class="testi-stars">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
+        </div>
+        <p class="testi-quote">"We use this for all our social media mockups. Huge time saver!"</p>
+      </div>
+
+      <!-- 11 Burak S. ★★★☆☆ initials — hidden -->
+      <div class="testi-card testi-more">
+        <div class="testi-header">
+          <div class="testi-initials" style="background:#14B8A6">BS</div>
+          <div class="testi-author"><span class="testi-name">Burak S.</span><span class="testi-role">Student</span></div>
+        </div>
+        <div class="testi-stars">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg>
+        </div>
+        <p class="testi-quote">"Good for basic mockups. Android app would be nice for mobile users."</p>
+      </div>
+
+      <!-- 12 Lisa H. ★★★★★ initials — hidden -->
+      <div class="testi-card testi-more">
+        <div class="testi-header">
+          <div class="testi-initials" style="background:#EF4444">LH</div>
+          <div class="testi-author"><span class="testi-name">Lisa H.</span><span class="testi-role">Small Business</span></div>
+        </div>
+        <div class="testi-stars">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
+        </div>
+        <p class="testi-quote">"Been looking for something like this for months. Finally found it!"</p>
+      </div>
+
     </div>
+    <button class="testi-more-btn" id="testiToggleBtn" onclick="toggleTestis()" data-i18n="testi_more">Daha Fazla Gör</button>
   </div>
 </section>
 
@@ -2126,10 +2252,7 @@ const translations = {
     f5_title: 'Oryantasyon Eşleştirme', f5_desc: 'Dikey sanat dikey çerçeveye, yatay sanat yatay çerçeveye gider. Yanlış eşleşme olmaz, her kombinasyon anlamlı.',
     samples_label: 'Galeri', samples_title: "Örnek Mockup'lar", samples_desc: "Bunlar gibi profesyonel mockup'ları saniyeler içinde oluşturun", samples_more: 'Daha Fazla Gör', samples_less: 'Daha Az Gör',
     ba_label: 'Dönüşüm', ba_title: 'Dönüşümü Gör', ba_desc: 'Sanat görseliniz bir mockup içinde nasıl hayat buluyor',
-    testi_label: 'Yorumlar', testi_title: 'Kullanıcılar Ne Diyor',
-    testi1_q: 'MockPlacer bana saatlerce zaman kazandırdı. Eskiden mockup başına 2 saat harcıyordum, şimdi 30 saniye sürüyor!', testi1_role: 'Etsy Satıcısı',
-    testi2_q: 'Toplu oluşturma özelliği oyunun kurallarını değiştirdi. Tek tıkla 30 mockup!', testi2_role: 'Grafik Tasarımcı',
-    testi3_q: 'Sonunda gerçekten ücretsiz ve kullanımı kolay bir mockup aracı. Abonelik yok, limit yok.', testi3_role: 'POD Satıcısı',
+    testi_label: 'Yorumlar', testi_title: 'Kullanıcılar Ne Diyor', testi_more: 'Daha Fazla Gör', testi_less: 'Daha Az Gör',
     faq_label: 'SSS', faq_title: 'Sıkça Sorulan Sorular',
     faq1_q: 'MockPlacer gerçekten ücretsiz mi?', faq1_a: 'Evet! Günde 1 generate hakkın var, her generate\'de 30 görsele kadar üretebilirsin. Daha fazlası için Pro planımız yakında geliyor.',
     faq2_q: 'Hangi dosya formatını destekliyorsunuz?', faq2_a: 'PNG ve JPG yükleyebilirsin. Çıktılar yüksek çözünürlüklü PNG olarak gelir. Etsy, Shopify veya sosyal medya için hazır.',
@@ -2169,10 +2292,7 @@ const translations = {
     f5_title: 'Orientation Matching', f5_desc: 'Portrait art goes to portrait frames, landscape to landscape. No mismatches, every combination makes sense.',
     samples_label: 'Gallery', samples_title: 'Sample Mockups', samples_desc: 'Create professional mockups like these in seconds', samples_more: 'Show More', samples_less: 'Show Less',
     ba_label: 'Transformation', ba_title: 'See the Transformation', ba_desc: 'See how your artwork comes to life inside a mockup',
-    testi_label: 'Reviews', testi_title: 'What Users Say',
-    testi1_q: 'MockPlacer saved me hours of work. I used to spend 2 hours per mockup, now it takes 30 seconds!', testi1_role: 'Etsy Seller',
-    testi2_q: 'The bulk generation feature is a game changer. 30 mockups in one click!', testi2_role: 'Graphic Designer',
-    testi3_q: 'Finally a mockup tool that\'s actually free and easy to use. No subscriptions, no limits.', testi3_role: 'Print on Demand Seller',
+    testi_label: 'Reviews', testi_title: 'What Users Say', testi_more: 'Show More', testi_less: 'Show Less',
     faq_label: 'FAQ', faq_title: 'Frequently Asked Questions',
     faq1_q: 'Is MockPlacer really free?', faq1_a: 'Yes! You get 1 free generate per day, with up to 30 images per generate. Pro plan is coming soon for more.',
     faq2_q: 'What file formats do you support?', faq2_a: 'You can upload PNG and JPG files. All outputs come as high resolution PNGs. Ready for Etsy, Shopify or social media.',
@@ -2189,6 +2309,15 @@ const translations = {
     demo_dot4: 'Manual Mode', demo_dot5: 'Corner Radius', demo_dot6: 'Drag & Resize', demo_dot7: 'Generate'
   }
 };
+
+function toggleTestis() {
+  const more = document.querySelectorAll('.testi-more');
+  const btn = document.getElementById('testiToggleBtn');
+  const expanded = more[0].style.display === 'block';
+  more.forEach(el => el.style.display = expanded ? 'none' : 'block');
+  btn.setAttribute('data-i18n', expanded ? 'testi_more' : 'testi_less');
+  btn.textContent = translations[currentLang][expanded ? 'testi_more' : 'testi_less'];
+}
 
 function toggleSamples() {
   const more = document.querySelectorAll('.sample-more');
