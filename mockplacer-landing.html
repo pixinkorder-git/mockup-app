@@ -1309,7 +1309,6 @@ footer {
   flex-direction: column;
   gap: 12px;
 }
-.testi-more { display: none; }
 .testi-header { display: flex; align-items: center; gap: 12px; }
 .testi-avatar {
   width: 48px; height: 48px;
@@ -1335,6 +1334,65 @@ footer {
 .testi-role { font-family: 'Satoshi', sans-serif; font-size: 0.78rem; color: var(--text-muted, #888); }
 .testi-stars { display: flex; gap: 3px; }
 .testi-quote { font-family: 'Satoshi', sans-serif; font-size: 0.88rem; line-height: 1.6; color: var(--text); flex: 1; }
+/* ── Testimonials list (paginated single-column) ── */
+.testi-list {
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 24px;
+}
+.testi-list-page { display: flex; flex-direction: column; gap: 10px; }
+.testi-list-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #E5E5E5;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.testi-list-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  width: 230px;
+}
+.testi-list-meta { display: flex; flex-direction: column; gap: 3px; }
+.testi-list-stars { display: flex; gap: 2px; margin-top: 2px; }
+.testi-list-quote {
+  flex: 1;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--text);
+  border-left: 2px solid rgba(255,107,53,0.2);
+  padding-left: 18px;
+  margin-left: 4px;
+}
+@media (max-width: 768px) {
+  .testi-list-card { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .testi-list-left { width: 100%; }
+  .testi-list-quote { border-left: none; padding-left: 0; margin-left: 0; border-top: 1px solid rgba(255,107,53,0.15); padding-top: 10px; }
+}
+.testi-pagination { display: flex; justify-content: center; gap: 8px; margin-top: 24px; }
+.testi-page-btn {
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  border: 1px solid #E5E5E5;
+  background: #fff;
+  color: #888;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: 'Satoshi', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.testi-page-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.testi-page-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
 .testi-more-btn {
   display: flex;
   margin: 36px auto 0;
@@ -1915,7 +1973,6 @@ footer {
     </div>
     <div class="testi-grid reveal">
 
-      <!-- 1 Sarah M. ★★★★★ avatar1 -->
       <div class="testi-card">
         <div class="testi-header">
           <div class="testi-avatar"><img src="/avatars/avatar1.png" alt="Sarah M." loading="lazy"></div>
@@ -1927,10 +1984,9 @@ footer {
         <p class="testi-quote">"MockPlacer saved me hours of work. 30 seconds instead of 2 hours per mockup!"</p>
       </div>
 
-      <!-- 2 François D. ★★★★★ initials -->
       <div class="testi-card">
         <div class="testi-header">
-          <div class="testi-initials" style="background:#5B7FFF">FD</div>
+          <div class="testi-avatar"><img src="/avatars/avatar2.png" alt="François D." loading="lazy"></div>
           <div class="testi-author"><span class="testi-name">François D.</span><span class="testi-role">Graphic Designer</span></div>
         </div>
         <div class="testi-stars">
@@ -1939,7 +1995,6 @@ footer {
         <p class="testi-quote">"The bulk generation feature is a game changer!"</p>
       </div>
 
-      <!-- 3 Mehmet Y. ★★★★☆ avatar3 -->
       <div class="testi-card">
         <div class="testi-header">
           <div class="testi-avatar"><img src="/avatars/avatar3.png" alt="Mehmet Y." loading="lazy"></div>
@@ -1951,10 +2006,9 @@ footer {
         <p class="testi-quote">"Great tool! Would love more templates."</p>
       </div>
 
-      <!-- 4 Emma L. ★★★★★ initials -->
       <div class="testi-card">
         <div class="testi-header">
-          <div class="testi-initials" style="background:#EC4899">EL</div>
+          <div class="testi-avatar"><img src="/avatars/avatar4.png" alt="Emma L." loading="lazy"></div>
           <div class="testi-author"><span class="testi-name">Emma L.</span><span class="testi-role">Artist</span></div>
         </div>
         <div class="testi-stars">
@@ -1963,10 +2017,9 @@ footer {
         <p class="testi-quote">"Finally a free mockup tool that works."</p>
       </div>
 
-      <!-- 5 Ayşe K. ★★★☆☆ avatar4 — row 1 -->
-      <div class="testi-card testi-more" data-testi-row="1">
+      <div class="testi-card">
         <div class="testi-header">
-          <div class="testi-avatar"><img src="/avatars/avatar4.png" alt="Ayşe K." loading="lazy"></div>
+          <div class="testi-avatar"><img src="/avatars/avatar5.png" alt="Ayşe K." loading="lazy"></div>
           <div class="testi-author"><span class="testi-name">Ayşe K.</span><span class="testi-role">Tablet User</span></div>
         </div>
         <div class="testi-stars">
@@ -1975,10 +2028,9 @@ footer {
         <p class="testi-quote">"Please make an iOS app!"</p>
       </div>
 
-      <!-- 6 Hans W. ★★★★★ avatar5 — row 1 -->
-      <div class="testi-card testi-more" data-testi-row="1">
+      <div class="testi-card">
         <div class="testi-header">
-          <div class="testi-avatar"><img src="/avatars/avatar5.png" alt="Hans W." loading="lazy"></div>
+          <div class="testi-avatar"><img src="/avatars/avatar1.png" alt="Hans W." loading="lazy"></div>
           <div class="testi-author"><span class="testi-name">Hans W.</span><span class="testi-role">Etsy Seller</span></div>
         </div>
         <div class="testi-stars">
@@ -1987,8 +2039,7 @@ footer {
         <p class="testi-quote">"Simple, fast, highly recommend!"</p>
       </div>
 
-      <!-- 7 Zeynep A. ★★★★☆ initials — row 1 -->
-      <div class="testi-card testi-more" data-testi-row="1">
+      <div class="testi-card">
         <div class="testi-header">
           <div class="testi-initials" style="background:#22C55E">ZA</div>
           <div class="testi-author"><span class="testi-name">Zeynep A.</span><span class="testi-role">E-commerce</span></div>
@@ -1999,10 +2050,9 @@ footer {
         <p class="testi-quote">"Very useful. More frame styles please."</p>
       </div>
 
-      <!-- 8 Marie C. ★★★★★ initials — row 1 -->
-      <div class="testi-card testi-more" data-testi-row="1">
+      <div class="testi-card">
         <div class="testi-header">
-          <div class="testi-initials" style="background:#8B5CF6">MC</div>
+          <div class="testi-avatar"><img src="/avatars/avatar2.png" alt="Marie C." loading="lazy"></div>
           <div class="testi-author"><span class="testi-name">Marie C.</span><span class="testi-role">Etsy Seller</span></div>
         </div>
         <div class="testi-stars">
@@ -2011,271 +2061,285 @@ footer {
         <p class="testi-quote">"Perfect for my print shop!"</p>
       </div>
 
-      <!-- 9 Elif T. ★★★★☆ avatar2 — row 2 -->
-      <div class="testi-card testi-more" data-testi-row="2">
-        <div class="testi-header">
-          <div class="testi-avatar"><img src="/avatars/avatar2.png" alt="Elif T." loading="lazy"></div>
-          <div class="testi-author"><span class="testi-name">Elif T.</span><span class="testi-role">Interior Designer</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg>
-        </div>
-        <p class="testi-quote">"Great for client presentations."</p>
-      </div>
-
-      <!-- 10 Stefan B. ★★★★★ initials — row 2 -->
-      <div class="testi-card testi-more" data-testi-row="2">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#F59E0B">SB</div>
-          <div class="testi-author"><span class="testi-name">Stefan B.</span><span class="testi-role">Etsy Seller</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
-        </div>
-        <p class="testi-quote">"Huge time saver for my store!"</p>
-      </div>
-
-      <!-- 11 Burak S. ★★★☆☆ initials — row 2 -->
-      <div class="testi-card testi-more" data-testi-row="2">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#14B8A6">BS</div>
-          <div class="testi-author"><span class="testi-name">Burak S.</span><span class="testi-role">Student</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg>
-        </div>
-        <p class="testi-quote">"Good but needs Android app."</p>
-      </div>
-
-      <!-- 12 Lisa H. ★★★★★ initials — row 2 -->
-      <div class="testi-card testi-more" data-testi-row="2">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#EF4444">LH</div>
-          <div class="testi-author"><span class="testi-name">Lisa H.</span><span class="testi-role">Etsy Seller</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
-        </div>
-        <p class="testi-quote">"Finally found what I was looking for!"</p>
-      </div>
-
-      <!-- 13 Chen W. ★★★★★ initials — row 3 -->
-      <div class="testi-card testi-more" data-testi-row="3">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#0EA5E9">CW</div>
-          <div class="testi-author"><span class="testi-name">Chen W.</span><span class="testi-role">POD Seller</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
-        </div>
-        <p class="testi-quote">"30 mockups in seconds. Amazing!"</p>
-      </div>
-
-      <!-- 14 Olivia R. ★★★★☆ initials — row 3 -->
-      <div class="testi-card testi-more" data-testi-row="3">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#F97316">OR</div>
-          <div class="testi-author"><span class="testi-name">Olivia R.</span><span class="testi-role">Etsy Seller</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg>
-        </div>
-        <p class="testi-quote">"Love it! Just need more wall colors."</p>
-      </div>
-
-      <!-- 15 Ahmed K. ★★★★★ initials — row 3 -->
-      <div class="testi-card testi-more" data-testi-row="3">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#10B981">AK</div>
-          <div class="testi-author"><span class="testi-name">Ahmed K.</span><span class="testi-role">Freelancer</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
-        </div>
-        <p class="testi-quote">"My clients love the mockups!"</p>
-      </div>
-
-      <!-- 16 Julia S. ★★★★★ initials — row 3 -->
-      <div class="testi-card testi-more" data-testi-row="3">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#6366F1">JS</div>
-          <div class="testi-author"><span class="testi-name">Julia S.</span><span class="testi-role">Etsy Seller</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
-        </div>
-        <p class="testi-quote">"Best free mockup tool ever!"</p>
-      </div>
-
-      <!-- 17 Marcus T. ★★★☆☆ initials — row 4 -->
-      <div class="testi-card testi-more" data-testi-row="4">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#64748B">MT</div>
-          <div class="testi-author"><span class="testi-name">Marcus T.</span><span class="testi-role">Designer</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg>
-        </div>
-        <p class="testi-quote">"Good start, waiting for more features."</p>
-      </div>
-
-      <!-- 18 Fatma Y. ★★★★★ initials — row 4 -->
-      <div class="testi-card testi-more" data-testi-row="4">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#DB2777">FY</div>
-          <div class="testi-author"><span class="testi-name">Fatma Y.</span><span class="testi-role">Etsy Seller</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
-        </div>
-        <p class="testi-quote">"So easy to use, saved my day!"</p>
-      </div>
-
-      <!-- 19 Pierre L. ★★★★☆ initials — row 4 -->
-      <div class="testi-card testi-more" data-testi-row="4">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#7C3AED">PL</div>
-          <div class="testi-author"><span class="testi-name">Pierre L.</span><span class="testi-role">Photographer</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg>
-        </div>
-        <p class="testi-quote">"Clean results, fast process."</p>
-      </div>
-
-      <!-- 20 Anna K. ★★★★★ initials — row 4 -->
-      <div class="testi-card testi-more" data-testi-row="4">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#059669">AK</div>
-          <div class="testi-author"><span class="testi-name">Anna K.</span><span class="testi-role">Etsy Seller</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
-        </div>
-        <p class="testi-quote">"Can't believe this is free!"</p>
-      </div>
-
-      <!-- 21 Kenji M. ★★★★★ initials — row 5 -->
-      <div class="testi-card testi-more" data-testi-row="5">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#D97706">KM</div>
-          <div class="testi-author"><span class="testi-name">Kenji M.</span><span class="testi-role">Artist</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
-        </div>
-        <p class="testi-quote">"Perfect for showcasing artwork."</p>
-      </div>
-
-      <!-- 22 Isabella G. ★★★★☆ initials — row 5 -->
-      <div class="testi-card testi-more" data-testi-row="5">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#4F46E5">IG</div>
-          <div class="testi-author"><span class="testi-name">Isabella G.</span><span class="testi-role">Etsy Seller</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg>
-        </div>
-        <p class="testi-quote">"Very helpful for my listings."</p>
-      </div>
-
-      <!-- 23 Dmitri V. ★★★★★ initials — row 5 -->
-      <div class="testi-card testi-more" data-testi-row="5">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#DC2626">DV</div>
-          <div class="testi-author"><span class="testi-name">Dmitri V.</span><span class="testi-role">Marketing</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
-        </div>
-        <p class="testi-quote">"Our whole team uses this now."</p>
-      </div>
-
-      <!-- 24 Sophie B. ★★★☆☆ initials — row 5 -->
-      <div class="testi-card testi-more" data-testi-row="5">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#0891B2">SB</div>
-          <div class="testi-author"><span class="testi-name">Sophie B.</span><span class="testi-role">Blogger</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg>
-        </div>
-        <p class="testi-quote">"Nice but needs more device mockups."</p>
-      </div>
-
-      <!-- 25 Mustafa A. ★★★★★ initials — row 6 -->
-      <div class="testi-card testi-more" data-testi-row="6">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#FF6B35">MA</div>
-          <div class="testi-author"><span class="testi-name">Mustafa A.</span><span class="testi-role">Etsy Seller</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
-        </div>
-        <p class="testi-quote">"Game changer for my business!"</p>
-      </div>
-
-      <!-- 26 Eva M. ★★★★★ initials — row 6 -->
-      <div class="testi-card testi-more" data-testi-row="6">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#7C3AED">EM</div>
-          <div class="testi-author"><span class="testi-name">Eva M.</span><span class="testi-role">Small Business</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
-        </div>
-        <p class="testi-quote">"Quick and professional results."</p>
-      </div>
-
-      <!-- 27 Lucas P. ★★★★☆ initials — row 6 -->
-      <div class="testi-card testi-more" data-testi-row="6">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#0284C7">LP</div>
-          <div class="testi-author"><span class="testi-name">Lucas P.</span><span class="testi-role">Etsy Seller</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg>
-        </div>
-        <p class="testi-quote">"Solid tool, use it daily."</p>
-      </div>
-
-      <!-- 28 Yuki T. ★★★★★ initials — row 6 -->
-      <div class="testi-card testi-more" data-testi-row="6">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#BE185D">YT</div>
-          <div class="testi-author"><span class="testi-name">Yuki T.</span><span class="testi-role">Illustrator</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
-        </div>
-        <p class="testi-quote">"My go-to for frame mockups!"</p>
-      </div>
-
-      <!-- 29 Rachel N. ★★★★★ initials — row 7 -->
-      <div class="testi-card testi-more" data-testi-row="7">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#16A34A">RN</div>
-          <div class="testi-author"><span class="testi-name">Rachel N.</span><span class="testi-role">Etsy Seller</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
-        </div>
-        <p class="testi-quote">"Saved me from expensive subscriptions!"</p>
-      </div>
-
-      <!-- 30 Ali R. ★★★★★ initials — row 7 -->
-      <div class="testi-card testi-more" data-testi-row="7">
-        <div class="testi-header">
-          <div class="testi-initials" style="background:#4338CA">AR</div>
-          <div class="testi-author"><span class="testi-name">Ali R.</span><span class="testi-role">E-commerce</span></div>
-        </div>
-        <div class="testi-stars">
-          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>
-        </div>
-        <p class="testi-quote">"Exactly what I needed. Thank you!"</p>
-      </div>
-
     </div>
+
+    <div class="testi-list reveal" id="testiList" style="display:none">
+      <div class="testi-list-page" id="testiPage1">
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-avatar"><img src="/avatars/avatar3.png" alt="Elif T." loading="lazy"></div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Elif T.</span>
+            <span class="testi-role">Interior Designer</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Great for client presentations."</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-avatar"><img src="/avatars/avatar4.png" alt="Stefan B." loading="lazy"></div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Stefan B.</span>
+            <span class="testi-role">Etsy Seller</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Huge time saver for my store!"</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-initials" style="background:#14B8A6">BS</div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Burak S.</span>
+            <span class="testi-role">Student</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Good but needs Android app."</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-avatar"><img src="/avatars/avatar5.png" alt="Lisa H." loading="lazy"></div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Lisa H.</span>
+            <span class="testi-role">Etsy Seller</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Finally found what I was looking for!"</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-avatar"><img src="/avatars/avatar1.png" alt="Chen W." loading="lazy"></div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Chen W.</span>
+            <span class="testi-role">POD Seller</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"30 mockups in seconds. Amazing!"</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-initials" style="background:#F97316">OR</div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Olivia R.</span>
+            <span class="testi-role">Etsy Seller</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Love it! Just need more wall colors."</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-avatar"><img src="/avatars/avatar2.png" alt="Ahmed K." loading="lazy"></div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Ahmed K.</span>
+            <span class="testi-role">Freelancer</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"My clients love the mockups!"</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-avatar"><img src="/avatars/avatar3.png" alt="Julia S." loading="lazy"></div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Julia S.</span>
+            <span class="testi-role">Etsy Seller</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Best free mockup tool ever!"</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-initials" style="background:#64748B">MT</div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Marcus T.</span>
+            <span class="testi-role">Designer</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Good start, waiting for more features."</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-avatar"><img src="/avatars/avatar4.png" alt="Fatma Y." loading="lazy"></div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Fatma Y.</span>
+            <span class="testi-role">Etsy Seller</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"So easy to use, saved my day!"</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-avatar"><img src="/avatars/avatar5.png" alt="Pierre L." loading="lazy"></div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Pierre L.</span>
+            <span class="testi-role">Photographer</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Clean results, fast process."</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-initials" style="background:#059669">AK</div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Anna K.</span>
+            <span class="testi-role">Etsy Seller</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Can't believe this is free!"</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-avatar"><img src="/avatars/avatar1.png" alt="Kenji M." loading="lazy"></div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Kenji M.</span>
+            <span class="testi-role">Artist</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Perfect for showcasing artwork."</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-initials" style="background:#4F46E5">IG</div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Isabella G.</span>
+            <span class="testi-role">Etsy Seller</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Very helpful for my listings."</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-avatar"><img src="/avatars/avatar2.png" alt="Dmitri V." loading="lazy"></div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Dmitri V.</span>
+            <span class="testi-role">Marketing</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Our whole team uses this now."</p>
+      </div>
+
+      </div>
+      <div class="testi-list-page" id="testiPage2" style="display:none">
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-initials" style="background:#0891B2">SB</div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Sophie B.</span>
+            <span class="testi-role">Blogger</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Nice but needs more device mockups."</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-avatar"><img src="/avatars/avatar3.png" alt="Mustafa A." loading="lazy"></div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Mustafa A.</span>
+            <span class="testi-role">Etsy Seller</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Game changer for my business!"</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-avatar"><img src="/avatars/avatar4.png" alt="Eva M." loading="lazy"></div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Eva M.</span>
+            <span class="testi-role">Small Business</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Quick and professional results."</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-initials" style="background:#0284C7">LP</div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Lucas P.</span>
+            <span class="testi-role">Etsy Seller</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Solid tool, use it daily."</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-avatar"><img src="/avatars/avatar5.png" alt="Yuki T." loading="lazy"></div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Yuki T.</span>
+            <span class="testi-role">Illustrator</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"My go-to for frame mockups!"</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-avatar"><img src="/avatars/avatar1.png" alt="Rachel N." loading="lazy"></div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Rachel N.</span>
+            <span class="testi-role">Etsy Seller</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Saved me from expensive subscriptions!"</p>
+      </div>
+
+      <div class="testi-list-card">
+        <div class="testi-list-left">
+          <div class="testi-initials" style="background:#4338CA">AR</div>
+          <div class="testi-list-meta">
+            <span class="testi-name">Ali R.</span>
+            <span class="testi-role">E-commerce</span>
+            <div class="testi-list-stars"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg><svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg></div>
+          </div>
+        </div>
+        <p class="testi-list-quote">"Exactly what I needed. Thank you!"</p>
+      </div>
+
+      </div>
+      <div class="testi-pagination">
+        <button class="testi-page-btn active" onclick="testiGoPage(1)">1</button>
+        <button class="testi-page-btn" onclick="testiGoPage(2)">2</button>
+      </div>
+    </div>
+
     <button class="testi-more-btn" id="testiToggleBtn" onclick="toggleTestis()" data-i18n="testi_more">Show More</button>
   </div>
 </section>
@@ -2526,23 +2590,33 @@ const translations = {
   }
 };
 
-let testiRowsShown = 0;
-const TESTI_TOTAL_ROWS = 7;
 function toggleTestis() {
+  const list = document.getElementById('testiList');
   const btn = document.getElementById('testiToggleBtn');
-  if (testiRowsShown >= TESTI_TOTAL_ROWS) {
-    document.querySelectorAll('.testi-more').forEach(el => el.style.display = 'none');
-    testiRowsShown = 0;
+  const isShown = list.style.display === 'flex';
+  if (isShown) {
+    list.style.display = 'none';
     btn.setAttribute('data-i18n', 'testi_more');
     btn.textContent = translations[currentLang]['testi_more'];
   } else {
-    testiRowsShown++;
-    document.querySelectorAll(`.testi-more[data-testi-row="${testiRowsShown}"]`).forEach(el => el.style.display = 'block');
-    if (testiRowsShown >= TESTI_TOTAL_ROWS) {
-      btn.setAttribute('data-i18n', 'testi_less');
-      btn.textContent = translations[currentLang]['testi_less'];
-    }
+    list.style.display = 'flex';
+    btn.setAttribute('data-i18n', 'testi_less');
+    btn.textContent = translations[currentLang]['testi_less'];
   }
+}
+
+let testiCurrentPage = 1;
+function testiGoPage(page) {
+  testiCurrentPage = page;
+  document.querySelectorAll('.testi-list-page').forEach((el, i) => {
+    el.style.display = (i + 1 === page) ? 'flex' : 'none';
+  });
+  document.querySelectorAll('.testi-page-btn').forEach((b, i) => {
+    b.classList.toggle('active', i + 1 === page);
+  });
+  document.getElementById('testiList').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 }
 
 function toggleSamples() {
