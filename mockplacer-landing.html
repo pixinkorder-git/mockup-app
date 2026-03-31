@@ -1238,7 +1238,7 @@ footer {
   position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);
   font-size: 10px; color: #999; white-space: nowrap; font-weight: 500;
 }
-.demo-dot-line { flex: 1; height: 1px; background: rgba(255,107,53,0.12); max-width: 100px; min-width: 16px; }
+.demo-dot-line { flex: 1; height: 1px; background: rgba(255,107,53,0.12); max-width: 44px; min-width: 6px; }
 @media (max-width: 600px) {
   .demo-sidebar { width: 150px; }
   .demo-dot-label { font-size: 9px; }
@@ -1534,8 +1534,61 @@ footer {
                   <rect id="dArt1" x="36" y="28" width="60" height="96" rx="1" fill="#e85d5d" opacity="0" style="transition:opacity 0.4s"/>
                   <rect id="dArt2" x="140" y="28" width="60" height="96" rx="1" fill="#5d9ee8" opacity="0" style="transition:opacity 0.4s"/>
                   <rect id="dArt3" x="244" y="28" width="60" height="96" rx="1" fill="#5de878" opacity="0" style="transition:opacity 0.4s"/>
+                  <!-- Step 5: Corner radius – selection on frame 3 -->
+                  <rect id="dSel3" x="237" y="21" width="74" height="110" rx="4" fill="rgba(255,107,53,0.04)" stroke="#FF6B35" stroke-width="2" stroke-dasharray="5,3" opacity="0" style="transition:opacity 0.35s"/>
+                  <!-- Step 6a: Drag – selection + move cursor on frame 1 -->
+                  <rect id="dSel1" x="29" y="21" width="74" height="110" rx="4" fill="rgba(255,107,53,0.04)" stroke="#FF6B35" stroke-width="2" stroke-dasharray="5,3" opacity="0" style="transition:opacity 0.35s"/>
+                  <g id="dMoveCursor" opacity="0" style="transition:opacity 0.3s" transform="translate(66,76)">
+                    <circle r="9" fill="rgba(255,255,255,0.9)" stroke="#FF6B35" stroke-width="1.5"/>
+                    <line x1="-5" y1="0" x2="5" y2="0" stroke="#FF6B35" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="0" y1="-5" x2="0" y2="5" stroke="#FF6B35" stroke-width="1.5" stroke-linecap="round"/>
+                    <polygon points="0,-8 -2.5,-5 2.5,-5" fill="#FF6B35"/>
+                    <polygon points="0,8 -2.5,5 2.5,5" fill="#FF6B35"/>
+                    <polygon points="-8,0 -5,-2.5 -5,2.5" fill="#FF6B35"/>
+                    <polygon points="8,0 5,-2.5 5,2.5" fill="#FF6B35"/>
+                  </g>
+                  <!-- Drag ghost: semi-transparent copy of frame 1 at new position -->
+                  <g id="dDragGhost" opacity="0" style="transition:opacity 0.45s">
+                    <rect x="50" y="36" width="72" height="108" rx="3" fill="#f0ece5" stroke="#FF6B35" stroke-width="2"/>
+                    <rect x="56" y="42" width="60" height="96" rx="1" fill="rgba(255,255,255,0.85)"/>
+                  </g>
+                  <!-- Step 6b: Resize – selection + handles on frame 2 -->
+                  <rect id="dSel2" x="133" y="21" width="74" height="110" rx="4" fill="rgba(255,107,53,0.04)" stroke="#FF6B35" stroke-width="2" stroke-dasharray="5,3" opacity="0" style="transition:opacity 0.35s"/>
+                  <g id="dResizeHandles" opacity="0" style="transition:opacity 0.35s">
+                    <rect x="130" y="18" width="7" height="7" rx="1" fill="white" stroke="#FF6B35" stroke-width="1.5"/>
+                    <rect x="202" y="18" width="7" height="7" rx="1" fill="white" stroke="#FF6B35" stroke-width="1.5"/>
+                    <rect x="130" y="128" width="7" height="7" rx="1" fill="white" stroke="#FF6B35" stroke-width="1.5"/>
+                    <rect x="202" y="128" width="7" height="7" rx="1" fill="white" stroke="#FF6B35" stroke-width="1.5"/>
+                    <rect x="165" y="18" width="7" height="7" rx="1" fill="white" stroke="#FF6B35" stroke-width="1.5"/>
+                    <rect x="165" y="128" width="7" height="7" rx="1" fill="white" stroke="#FF6B35" stroke-width="1.5"/>
+                    <rect x="130" y="72" width="7" height="7" rx="1" fill="white" stroke="#FF6B35" stroke-width="1.5"/>
+                    <rect x="202" y="72" width="7" height="7" rx="1" fill="white" stroke="#FF6B35" stroke-width="1.5"/>
+                  </g>
+                  <!-- Resize cursor at bottom-right corner handle -->
+                  <g id="dResizeCursor" opacity="0" style="transition:opacity 0.3s" transform="translate(206,132)">
+                    <circle r="8" fill="rgba(255,255,255,0.92)" stroke="#FF6B35" stroke-width="1.5"/>
+                    <line x1="-4" y1="-4" x2="4" y2="4" stroke="#FF6B35" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="4" y1="-4" x2="-4" y2="4" stroke="#FF6B35" stroke-width="1.5" stroke-linecap="round"/>
+                  </g>
+                  <!-- Enlarged frame 2 result (covers original, shown after resize) -->
+                  <g id="dResizedFrame" opacity="0" style="transition:opacity 0.45s">
+                    <rect x="119" y="14" width="92" height="124" rx="3" fill="#e8ddd0"/>
+                    <rect x="120" y="15" width="90" height="122" rx="3" fill="#f5f0eb" stroke="#FF6B35" stroke-width="2"/>
+                    <rect x="126" y="21" width="78" height="110" rx="1" fill="rgba(30,144,255,0.4)"/>
+                  </g>
                 </svg>
-                <!-- Mode toggle overlay -->
+                <!-- Corner radius panel (step 5) -->
+                <div id="dCornerPanel" style="display:none;position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.97);border:1px solid #E5E5E5;border-radius:8px;padding:8px 14px;box-shadow:0 2px 14px rgba(0,0,0,0.13);min-width:170px;pointer-events:none;z-index:6">
+                  <div style="font-size:9px;font-weight:700;color:#333;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:7px">Corner Radius</div>
+                  <div style="display:flex;align-items:center;gap:9px">
+                    <div style="flex:1;height:4px;background:#E5E5E5;border-radius:2px;position:relative">
+                      <div id="dSliderFill" style="position:absolute;left:0;top:0;height:100%;background:#FF6B35;border-radius:2px;width:10%;transition:width 0.09s linear"></div>
+                      <div id="dSliderThumb" style="position:absolute;top:50%;transform:translate(-50%,-50%);width:13px;height:13px;background:#FF6B35;border-radius:50%;left:10%;box-shadow:0 1px 5px rgba(255,107,53,0.45);transition:left 0.09s linear"></div>
+                    </div>
+                    <span id="dRadiusVal" style="font-size:10px;font-weight:700;color:#FF6B35;min-width:28px;text-align:right">2px</span>
+                  </div>
+                </div>
+              <!-- Mode toggle overlay -->
                 <div class="demo-mode-toggle" id="dModeToggle" style="display:none">
                   <button class="demo-mode-btn active" id="dModeAuto">Auto</button>
                   <button class="demo-mode-btn" id="dModeManual">Manual</button>
@@ -1557,19 +1610,31 @@ footer {
       <!-- Step dots -->
       <div class="demo-dots-row">
         <button class="demo-step-dot active" data-step="1" onclick="demoGoTo(1)">
-          <span class="demo-dot-label">Upload Mockup</span>
+          <span class="demo-dot-label" data-i18n="demo_dot1">Upload Mockup</span>
         </button>
         <div class="demo-dot-line"></div>
         <button class="demo-step-dot" data-step="2" onclick="demoGoTo(2)">
-          <span class="demo-dot-label">Upload Art</span>
+          <span class="demo-dot-label" data-i18n="demo_dot2">Upload Art</span>
         </button>
         <div class="demo-dot-line"></div>
         <button class="demo-step-dot" data-step="3" onclick="demoGoTo(3)">
-          <span class="demo-dot-label">Mark Frames</span>
+          <span class="demo-dot-label" data-i18n="demo_dot3">Auto Mode</span>
         </button>
         <div class="demo-dot-line"></div>
         <button class="demo-step-dot" data-step="4" onclick="demoGoTo(4)">
-          <span class="demo-dot-label">Generate</span>
+          <span class="demo-dot-label" data-i18n="demo_dot4">Manual Mode</span>
+        </button>
+        <div class="demo-dot-line"></div>
+        <button class="demo-step-dot" data-step="5" onclick="demoGoTo(5)">
+          <span class="demo-dot-label" data-i18n="demo_dot5">Corner Radius</span>
+        </button>
+        <div class="demo-dot-line"></div>
+        <button class="demo-step-dot" data-step="6" onclick="demoGoTo(6)">
+          <span class="demo-dot-label" data-i18n="demo_dot6">Drag &amp; Resize</span>
+        </button>
+        <div class="demo-dot-line"></div>
+        <button class="demo-step-dot" data-step="7" onclick="demoGoTo(7)">
+          <span class="demo-dot-label" data-i18n="demo_dot7">Generate</span>
         </button>
       </div>
     </div>
@@ -1913,7 +1978,9 @@ const translations = {
     foot_product: 'Ürün', foot_features: 'Özellikler', foot_how: 'Nasıl Çalışır', foot_pricing: 'Fiyatlandırma',
     foot_resources: 'Kaynaklar', foot_blog: 'Blog', foot_support: 'Destek', foot_community: 'Topluluk',
     foot_legal: 'Yasal', foot_privacy: 'Gizlilik', foot_terms: 'Kullanım Şartları', foot_contact: 'İletişim',
-    foot_copy: '&copy; 2026 MockPlacer. Tüm hakları saklıdır.'
+    foot_copy: '&copy; 2026 MockPlacer. Tüm hakları saklıdır.',
+    demo_dot1: 'Mockup Yükle', demo_dot2: 'Art Yükle', demo_dot3: 'Otomatik Mod',
+    demo_dot4: 'Manuel Mod', demo_dot5: 'Köşe Yarıçapı', demo_dot6: 'Taşı & Boyutlandır', demo_dot7: 'Oluştur'
   },
   en: {
     nav_how: 'How It Works', nav_examples: 'Examples', nav_why: 'Why MockPlacer', nav_faq: 'FAQ', nav_cta: 'Try Free',
@@ -1949,7 +2016,9 @@ const translations = {
     foot_product: 'Product', foot_features: 'Features', foot_how: 'How It Works', foot_pricing: 'Pricing',
     foot_resources: 'Resources', foot_blog: 'Blog', foot_support: 'Support', foot_community: 'Community',
     foot_legal: 'Legal', foot_privacy: 'Privacy', foot_terms: 'Terms of Service', foot_contact: 'Contact',
-    foot_copy: '&copy; 2026 MockPlacer. All rights reserved.'
+    foot_copy: '&copy; 2026 MockPlacer. All rights reserved.',
+    demo_dot1: 'Upload Mockup', demo_dot2: 'Upload Art', demo_dot3: 'Auto Mode',
+    demo_dot4: 'Manual Mode', demo_dot5: 'Corner Radius', demo_dot6: 'Drag & Resize', demo_dot7: 'Generate'
   }
 };
 
@@ -1981,11 +2050,12 @@ setLang(currentLang);
 (function() {
   var currentStep = 1;
   var timer = null;
-  var stepDuration = [5000, 4500, 7000, 5500];
+  // Step durations: Upload Mockup, Upload Art, Auto Mode, Manual Mode, Corner Radius, Drag+Resize, Generate
+  var stepDuration = [4500, 4000, 6000, 5500, 6500, 8000, 5500];
   var pending = [];
 
   function clearPending() { pending.forEach(clearTimeout); pending = []; }
-  function later(fn, ms) { var t = setTimeout(fn, ms); pending.push(t); }
+  function later(fn, ms) { var t = setTimeout(fn, ms); pending.push(t); return t; }
   function gel(id) { return document.getElementById(id); }
   function setOp(id, v, instant) {
     var e = gel(id); if (!e) return;
@@ -1994,37 +2064,42 @@ setLang(currentLang);
   }
 
   function resetAll() {
-    // Canvas
     gel('dCanvasEmpty') && (gel('dCanvasEmpty').style.display = '');
     gel('dRoomScene')   && (gel('dRoomScene').style.display = 'none');
     gel('dModeToggle')  && (gel('dModeToggle').style.display = 'none');
-    // Sidebar zones
     gel('dArtDzInner')  && (gel('dArtDzInner').style.display = '');
     gel('dArtRows')     && (gel('dArtRows').style.display = 'none');
     gel('dMockDzInner') && (gel('dMockDzInner').style.display = '');
     gel('dMockThumb')   && (gel('dMockThumb').style.display = 'none');
-    // SVG overlays
-    ['dFill1','dFill2','dManualRect','dCursor1','dCursor2','dArt1','dArt2','dArt3'].forEach(function(id){ setOp(id,'0',true); });
+    ['dFill1','dFill2','dManualRect','dCursor1','dCursor2','dArt1','dArt2','dArt3',
+     'dSel1','dSel2','dSel3','dMoveCursor','dDragGhost','dResizeHandles','dResizeCursor','dResizedFrame'
+    ].forEach(function(id){ setOp(id,'0',true); });
+    // Reset manual rect to original shape
+    var mr = gel('dManualRect');
+    if (mr) { mr.setAttribute('x','244'); mr.setAttribute('y','28'); mr.setAttribute('width','60'); mr.setAttribute('height','96'); mr.setAttribute('rx','1'); }
+    // Reset fill1 in case it was faded during drag step
+    var f1 = gel('dFill1'); if (f1) f1.style.transition = 'none';
+    // Corner panel
+    var cp = gel('dCornerPanel'); if (cp) cp.style.display = 'none';
+    var sf = gel('dSliderFill');  if (sf) { sf.style.transition = 'none'; sf.style.width  = '10%'; }
+    var st = gel('dSliderThumb'); if (st) { st.style.transition = 'none'; st.style.left   = '10%'; }
+    var rv = gel('dRadiusVal');   if (rv) rv.textContent = '2px';
     // Results
     var r = gel('dResults');
     if (r) { r.style.opacity = '0'; r.style.transform = 'translateY(8px)'; }
-    // Gen button
     var g = gel('dGenBtn');
     if (g) { g.classList.remove('ready','pulse'); }
-    // Ghosts
     ['dGhost1','dGhost2'].forEach(function(id){
       var e = gel(id); if (!e) return;
       e.classList.remove('visible'); e.style.transition = 'none';
     });
-    // Mode buttons
     gel('dModeAuto')   && gel('dModeAuto').classList.add('active');
     gel('dModeManual') && gel('dModeManual').classList.remove('active');
   }
 
+  // ── Step 1: Upload Mockup ──────────────────────────────
   function animStep1() {
-    // Ghost: appears above sidebar, drifts down into Mockup Templates dz (~155px from top of sidebar)
-    var ghost = gel('dGhost1');
-    var mockDz = gel('dMockDz');
+    var ghost = gel('dGhost1'), mockDz = gel('dMockDz');
     if (!ghost || !mockDz) return;
     ghost.style.top = '5px'; ghost.style.left = '8px';
     later(function() {
@@ -2045,15 +2120,13 @@ setLang(currentLang);
     }, 1700);
   }
 
+  // ── Step 2: Upload Art ─────────────────────────────────
   function animStep2() {
-    // Start state: mockup already uploaded
     gel('dMockDzInner').style.display = 'none';
     gel('dMockThumb').style.display   = '';
     gel('dCanvasEmpty').style.display = 'none';
     gel('dRoomScene').style.display   = '';
-    // Ghost: appears above sidebar, drifts down into Art Images dz (~30px from top of sidebar)
-    var ghost = gel('dGhost2');
-    var artDz = gel('dArtDz');
+    var ghost = gel('dGhost2'), artDz = gel('dArtDz');
     if (!ghost || !artDz) return;
     ghost.style.top = '5px'; ghost.style.left = '8px';
     later(function() {
@@ -2072,8 +2145,8 @@ setLang(currentLang);
     }, 1700);
   }
 
+  // ── Step 3: Auto Mode – flood fill clicks on frames 1 & 2 ──
   function animStep3() {
-    // Start state: both uploaded, mode toggle visible, gen disabled
     gel('dMockDzInner').style.display = 'none';
     gel('dMockThumb').style.display   = '';
     gel('dCanvasEmpty').style.display = 'none';
@@ -2081,25 +2154,48 @@ setLang(currentLang);
     gel('dArtDzInner').style.display  = 'none';
     gel('dArtRows').style.display     = 'flex';
     gel('dModeToggle').style.display  = '';
-    // Cursor click frame 1
     later(function(){ setOp('dCursor1','1'); }, 500);
     later(function(){ setOp('dFill1','1'); setOp('dCursor1','0'); }, 1050);
-    // Cursor click frame 2
-    later(function(){ setOp('dCursor2','1'); }, 1900);
-    later(function(){ setOp('dFill2','1'); setOp('dCursor2','0'); }, 2400);
-    // Switch to manual
+    later(function(){ setOp('dCursor2','1'); }, 2200);
+    later(function(){ setOp('dFill2','1'); setOp('dCursor2','0'); }, 2750);
+  }
+
+  // ── Step 4: Manual Mode – draw rectangle on frame 3 ───
+  function animStep4() {
+    gel('dMockDzInner').style.display = 'none';
+    gel('dMockThumb').style.display   = '';
+    gel('dCanvasEmpty').style.display = 'none';
+    gel('dRoomScene').style.display   = '';
+    gel('dArtDzInner').style.display  = 'none';
+    gel('dArtRows').style.display     = 'flex';
+    gel('dModeToggle').style.display  = '';
+    setOp('dFill1','1',true); setOp('dFill2','1',true);
+    // Switch to Manual mode
     later(function(){
       gel('dModeAuto').classList.remove('active');
       gel('dModeManual').classList.add('active');
-    }, 3300);
-    // Draw manual rect on frame 3
-    later(function(){ setOp('dManualRect','1'); }, 4000);
-    // Enable gen button
-    later(function(){ gel('dGenBtn').classList.add('ready'); }, 4700);
+    }, 700);
+    // Start drawing: tiny rect at top-left of frame 3
+    later(function(){
+      var mr = gel('dManualRect');
+      if (mr) { mr.setAttribute('x','244'); mr.setAttribute('y','28'); mr.setAttribute('width','4'); mr.setAttribute('height','4'); }
+      setOp('dManualRect','1');
+    }, 1500);
+    // Grow step by step, simulating drag-draw from top-left to bottom-right
+    var draws = [[244,28,14,14],[244,28,28,32],[244,28,42,55],[244,28,55,78],[244,28,60,96]];
+    var dDelays = [1620, 1760, 1930, 2120, 2360];
+    draws.forEach(function(d, i) {
+      later(function(){
+        var mr = gel('dManualRect'); if (!mr) return;
+        mr.setAttribute('x',d[0]); mr.setAttribute('y',d[1]);
+        mr.setAttribute('width',d[2]); mr.setAttribute('height',d[3]);
+      }, dDelays[i]);
+    });
+    later(function(){ gel('dGenBtn').classList.add('ready'); }, 3300);
   }
 
-  function animStep4() {
-    // Start state: all marked, gen ready
+  // ── Step 5: Corner Radius slider ──────────────────────
+  function animStep5() {
     gel('dMockDzInner').style.display = 'none';
     gel('dMockThumb').style.display   = '';
     gel('dCanvasEmpty').style.display = 'none';
@@ -2111,24 +2207,109 @@ setLang(currentLang);
     gel('dModeAuto').classList.remove('active');
     gel('dModeManual').classList.add('active');
     gel('dGenBtn').classList.add('ready');
-    // Pulse button
+    // Select frame 3
+    later(function(){ setOp('dSel3','1'); }, 400);
+    // Show corner panel
+    later(function(){ gel('dCornerPanel').style.display = ''; }, 950);
+    // Animate slider 10% → 78% over 2 seconds (rx 1 → 18), then back to 45% (rx 10)
+    later(function(){
+      var totalMs = 2200, steps = 32;
+      var interval = totalMs / steps;
+      for (var i = 0; i <= steps; i++) {
+        (function(step) {
+          later(function(){
+            var pct = Math.round(10 + (step / steps) * 68);
+            var rx  = Math.round(1  + (step / steps) * 17);
+            var sf = gel('dSliderFill');  if (sf) sf.style.width = pct + '%';
+            var st = gel('dSliderThumb'); if (st) st.style.left  = pct + '%';
+            var rv = gel('dRadiusVal');   if (rv) rv.textContent  = rx + 'px';
+            var mr = gel('dManualRect');  if (mr) mr.setAttribute('rx', rx);
+          }, Math.round(step * interval));
+        })(i);
+      }
+    }, 1400);
+    // Slide back to a comfortable value
+    later(function(){
+      var sf = gel('dSliderFill');  if (sf) { sf.style.transition = 'width 0.5s ease'; sf.style.width = '45%'; }
+      var st = gel('dSliderThumb'); if (st) { st.style.transition = 'left 0.5s ease';  st.style.left  = '45%'; }
+      var rv = gel('dRadiusVal');   if (rv) rv.textContent = '10px';
+      var mr = gel('dManualRect');  if (mr) mr.setAttribute('rx', 10);
+    }, 4200);
+  }
+
+  // ── Step 6: Drag frame 1, then Resize frame 2 ─────────
+  function animStep6() {
+    gel('dMockDzInner').style.display = 'none';
+    gel('dMockThumb').style.display   = '';
+    gel('dCanvasEmpty').style.display = 'none';
+    gel('dRoomScene').style.display   = '';
+    gel('dArtDzInner').style.display  = 'none';
+    gel('dArtRows').style.display     = 'flex';
+    gel('dModeToggle').style.display  = '';
+    setOp('dFill1','1',true); setOp('dFill2','1',true); setOp('dManualRect','1',true);
+    gel('dModeAuto').classList.remove('active');
+    gel('dModeManual').classList.add('active');
+    gel('dGenBtn').classList.add('ready');
+
+    // — Drag phase (0–3600ms) —
+    later(function(){ setOp('dSel1','1'); setOp('dMoveCursor','1'); }, 350);
+    // Ghost frame appears at offset position
+    later(function(){
+      setOp('dDragGhost','1');
+      var f1 = gel('dFill1');
+      if (f1) { f1.style.transition = 'opacity 0.4s'; f1.style.opacity = '0.25'; }
+      var s1 = gel('dSel1');
+      if (s1) { s1.style.transition = 'opacity 0.4s'; s1.style.opacity = '0.25'; }
+      setOp('dMoveCursor','0');
+    }, 1450);
+    // Drop: ghost fades, selection clears, original fill restores
+    later(function(){
+      setOp('dDragGhost','0');
+      setOp('dSel1','0');
+      var f1 = gel('dFill1'); if (f1) { f1.style.transition = 'opacity 0.35s'; f1.style.opacity = '1'; }
+    }, 2500);
+
+    // — Resize phase (3600–8000ms) —
+    later(function(){ setOp('dSel2','1'); setOp('dResizeHandles','1'); }, 3700);
+    later(function(){ setOp('dResizeCursor','1'); }, 4250);
+    // Frame expands: hide cursor/handles, show enlarged frame
+    later(function(){
+      setOp('dResizeCursor','0');
+      setOp('dResizeHandles','0');
+      setOp('dSel2','0');
+      setOp('dResizedFrame','1');
+      var f2 = gel('dFill2'); if (f2) { f2.style.transition = 'opacity 0.35s'; f2.style.opacity = '0'; }
+    }, 5400);
+  }
+
+  // ── Step 7: Generate ──────────────────────────────────
+  function animStep7() {
+    gel('dMockDzInner').style.display = 'none';
+    gel('dMockThumb').style.display   = '';
+    gel('dCanvasEmpty').style.display = 'none';
+    gel('dRoomScene').style.display   = '';
+    gel('dArtDzInner').style.display  = 'none';
+    gel('dArtRows').style.display     = 'flex';
+    gel('dModeToggle').style.display  = '';
+    setOp('dFill1','1',true); setOp('dFill2','1',true); setOp('dManualRect','1',true);
+    gel('dModeAuto').classList.remove('active');
+    gel('dModeManual').classList.add('active');
+    gel('dGenBtn').classList.add('ready');
     later(function(){
       gel('dGenBtn').classList.add('pulse');
       setTimeout(function(){ gel('dGenBtn').classList.remove('pulse'); }, 400);
     }, 700);
-    // Replace overlays with solid art colors
     later(function(){
       setOp('dFill1','0'); setOp('dFill2','0'); setOp('dManualRect','0');
       setOp('dArt1','1'); setOp('dArt2','1'); setOp('dArt3','1');
     }, 1300);
-    // Show results
     later(function(){
       var r = gel('dResults');
       r.style.opacity = '1'; r.style.transform = 'translateY(0)';
     }, 2000);
   }
 
-  var stepAnims = [animStep1, animStep2, animStep3, animStep4];
+  var stepAnims = [animStep1, animStep2, animStep3, animStep4, animStep5, animStep6, animStep7];
 
   function showStep(n) {
     clearPending();
@@ -2139,7 +2320,7 @@ setLang(currentLang);
     currentStep = n;
     resetAll();
     stepAnims[n - 1]();
-    timer = setTimeout(function() { showStep(currentStep >= 4 ? 1 : currentStep + 1); }, stepDuration[n - 1]);
+    timer = setTimeout(function() { showStep(currentStep >= 7 ? 1 : currentStep + 1); }, stepDuration[n - 1]);
   }
 
   window.demoGoTo = function(n) { showStep(n); };
