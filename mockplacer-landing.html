@@ -1244,6 +1244,51 @@ footer {
   .demo-dot-label { font-size: 9px; }
 }
 
+/* ── Before / After ── */
+.before-after { background: var(--bg); }
+.ba-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 48px;
+  align-items: start;
+}
+@media (max-width: 640px) {
+  .ba-grid { grid-template-columns: 1fr; gap: 16px; }
+}
+.ba-card {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.08);
+  background: var(--bg);
+  position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.ba-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.06), 0 16px 48px rgba(0,0,0,0.12);
+}
+.ba-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.ba-label {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  background: rgba(0,0,0,0.52);
+  color: #fff;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+}
+
 /* ── Sample Mockups Gallery ── */
 .samples { background: var(--bg-section); }
 .sample-grid {
@@ -1780,6 +1825,27 @@ footer {
   </div>
 </section>
 
+<!-- Before / After -->
+<section class="before-after" id="before-after">
+  <div class="section-inner">
+    <div class="text-center reveal">
+      <span class="section-label" data-i18n="ba_label">Dönüşüm</span>
+      <h2 class="section-title mx-auto" data-i18n="ba_title">Dönüşümü Gör</h2>
+      <p class="section-desc mx-auto" data-i18n="ba_desc">Sanat görseliniz bir mockup içinde nasıl hayat buluyor</p>
+    </div>
+    <div class="ba-grid reveal">
+      <div class="ba-card">
+        <img src="/before-after/before1.jpg" alt="Before" loading="lazy">
+        <span class="ba-label" data-i18n="ba_before">Önce</span>
+      </div>
+      <div class="ba-card">
+        <img src="/before-after/after1.jpg" alt="After" loading="lazy">
+        <span class="ba-label" data-i18n="ba_after">Sonra</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FAQ -->
 <section id="sss">
   <div class="faq-inner">
@@ -1967,6 +2033,7 @@ const translations = {
     f4_title: 'Gizlilik Korunur', f4_desc: 'Görsellerin sunucuya gönderilmez. Her şey kendi tarayıcında işlenir, tamamen özel.',
     f5_title: 'Oryantasyon Eşleştirme', f5_desc: 'Dikey sanat dikey çerçeveye, yatay sanat yatay çerçeveye gider. Yanlış eşleşme olmaz, her kombinasyon anlamlı.',
     samples_label: 'Galeri', samples_title: "Örnek Mockup'lar", samples_desc: "Bunlar gibi profesyonel mockup'ları saniyeler içinde oluşturun",
+    ba_label: 'Dönüşüm', ba_title: 'Dönüşümü Gör', ba_desc: 'Sanat görseliniz bir mockup içinde nasıl hayat buluyor', ba_before: 'Önce', ba_after: 'Sonra',
     faq_label: 'SSS', faq_title: 'Sıkça Sorulan Sorular',
     faq1_q: 'MockPlacer gerçekten ücretsiz mi?', faq1_a: 'Evet! Günde 1 generate hakkın var, her generate\'de 30 görsele kadar üretebilirsin. Daha fazlası için Pro planımız yakında geliyor.',
     faq2_q: 'Hangi dosya formatını destekliyorsunuz?', faq2_a: 'PNG ve JPG yükleyebilirsin. Çıktılar yüksek çözünürlüklü PNG olarak gelir. Etsy, Shopify veya sosyal medya için hazır.',
@@ -2005,6 +2072,7 @@ const translations = {
     f4_title: 'Privacy Protected', f4_desc: 'Your images never leave your browser. Everything is processed locally, completely private.',
     f5_title: 'Orientation Matching', f5_desc: 'Portrait art goes to portrait frames, landscape to landscape. No mismatches, every combination makes sense.',
     samples_label: 'Gallery', samples_title: 'Sample Mockups', samples_desc: 'Create professional mockups like these in seconds',
+    ba_label: 'Transformation', ba_title: 'See the Transformation', ba_desc: 'See how your artwork comes to life inside a mockup', ba_before: 'Before', ba_after: 'After',
     faq_label: 'FAQ', faq_title: 'Frequently Asked Questions',
     faq1_q: 'Is MockPlacer really free?', faq1_a: 'Yes! You get 1 free generate per day, with up to 30 images per generate. Pro plan is coming soon for more.',
     faq2_q: 'What file formats do you support?', faq2_a: 'You can upload PNG and JPG files. All outputs come as high resolution PNGs. Ready for Etsy, Shopify or social media.',
