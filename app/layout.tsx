@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Bebas_Neue, Syne, JetBrains_Mono } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 
 const bebasNeue = Bebas_Neue({
@@ -48,6 +49,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-E7QGN4W75R"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-E7QGN4W75R');
+          `}
+        </Script>
+      </head>
       <body className={`${bebasNeue.variable} ${syne.variable} ${jetbrainsMono.variable}`}>
         {children}
       </body>
