@@ -1336,6 +1336,7 @@ footer {
 .testi-quote { font-family: 'Satoshi', sans-serif; font-size: 0.88rem; line-height: 1.6; color: var(--text); flex: 1; }
 /* ── Testimonials list (paginated single-column) ── */
 .testi-list {
+  display: none;
   flex-direction: column;
   gap: 10px;
   margin-top: 24px;
@@ -2063,7 +2064,7 @@ footer {
 
     </div>
 
-    <div class="testi-list reveal" id="testiList" style="display:none">
+    <div class="testi-list" id="testiList" style="display:none">
       <div class="testi-list-page" id="testiPage1">
 
       <div class="testi-list-card">
@@ -2600,6 +2601,7 @@ function toggleTestis() {
     btn.textContent = translations[currentLang]['testi_more'];
   } else {
     list.style.display = 'flex';
+    list.style.flexDirection = 'column';
     btn.setAttribute('data-i18n', 'testi_less');
     btn.textContent = translations[currentLang]['testi_less'];
   }
