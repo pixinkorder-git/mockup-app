@@ -142,6 +142,7 @@ export default function Home() {
   const [progress, setProgress]             = useState({ done: 0, total: 0 });
   const [tolerance, setTolerance]           = useState(60);
   const [isMobile, setIsMobile]             = useState(false);
+  const [lang, setLang]                     = useState<'tr' | 'en'>('tr');
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth <= 700);
@@ -149,6 +150,17 @@ export default function Home() {
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
   }, []);
+
+  useEffect(() => {
+    setLang((localStorage.getItem('mp-lang') as 'tr' | 'en') || 'tr');
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'mp-lang' && (e.newValue === 'tr' || e.newValue === 'en')) setLang(e.newValue);
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
+  const isTR = lang === 'tr';
 
   // Reset results only when the file set actually changes
   const artKey    = artImages.map((a) => a.id).join(',');
@@ -332,12 +344,12 @@ export default function Home() {
 
           {hasNoCombinations && (
             <p style={{ fontSize: 12, color: 'var(--danger)', fontFamily: 'monospace' }}>
-              No orientation matches between art and frames.
+              {isTR ? 'Sanat ve çerçeveler arasında uygun oryantasyon bulunamadı.' : 'No orientation matches between art and frames.'}
             </p>
           )}
           {artImages.length > 0 && mockups.length > 0 && !mockups.some((m) => m.frames.length > 0) && (
             <p style={{ fontSize: 12, color: 'var(--text-2)', fontFamily: 'monospace' }}>
-              Pin frames on a template to enable generation.
+              {isTR ? 'Oluşturmayı etkinleştirmek için şablona çerçeve ekleyin.' : 'Pin frames on a template to enable generation.'}
             </p>
           )}
         </div>
@@ -354,7 +366,7 @@ export default function Home() {
             <polyline points="20 6 9 17 4 12" />
           </svg>
           <span style={{ fontSize: 13, color: 'var(--success)', fontFamily: "'Clash Display', sans-serif", fontWeight: 600, letterSpacing: '0.04em' }}>
-            All {results.length} generated
+            {isTR ? `Tümü oluşturuldu (${results.length})` : `All ${results.length} generated`}
           </span>
         </div>
       ) : (
@@ -393,14 +405,17 @@ export default function Home() {
                 border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff',
                 animation: 'spin 0.8s linear infinite',
               }} />
-              Generating…
+              {isTR ? 'Oluşturuluyor…' : 'Generating…'}
             </>
           ) : (
             <>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polygon points="5 3 19 12 5 21 5 3" />
               </svg>
-              {results.length === 0 ? 'Generate' : `Generate More (${remainingCount})`}
+              {results.length === 0
+                ? (isTR ? 'Oluştur' : 'Generate')
+                : (isTR ? `Daha Fazla Oluştur (${remainingCount})` : `Generate More (${remainingCount})`)
+              }
             </>
           )}
         </button>
@@ -425,7 +440,7 @@ export default function Home() {
             e.currentTarget.style.color = 'var(--text-2)';
           }}
         >
-          Clear {results.length} results
+          {isTR ? `${results.length} sonucu temizle` : `Clear ${results.length} results`}
         </button>
       )}
     </div>
@@ -454,13 +469,13 @@ export default function Home() {
 
         {/* Stats + back link */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <NavStat label="Art" value={artImages.length} />
+          <NavStat label={isTR ? 'Görsel' : 'Art'} value={artImages.length} />
           <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
-          <NavStat label="Templates" value={mockups.length} />
+          <NavStat label={isTR ? 'Şablon' : 'Templates'} value={mockups.length} />
           {results.length > 0 && (
             <>
               <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
-              <NavStat label="Results" value={results.length} accent />
+              <NavStat label={isTR ? 'Sonuç' : 'Results'} value={results.length} accent />
             </>
           )}
           <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
@@ -468,7 +483,7 @@ export default function Home() {
             href="/"
             style={{ fontSize: 15, fontWeight: 600, color: '#FF6B35', textDecoration: 'none' }}
           >
-            ← Home
+            {isTR ? '← Ana Sayfa' : '← Home'}
           </Link>
         </div>
       </header>
@@ -498,10 +513,10 @@ export default function Home() {
 
               {/* ART IMAGES */}
               <div>
-                <SectionLabel badge={artImages.length}>Art Images</SectionLabel>
+                <SectionLabel badge={artImages.length}>{isTR ? 'Sanat Görselleri' : 'Art Images'}</SectionLabel>
                 <DropZone
                   onFiles={handleArtUpload}
-                  label="Drop artwork here"
+                  label={isTR ? 'Görselleri buraya bırakın' : 'Drop artwork here'}
                   sublabel="PNG · JPG · WEBP"
                   multiple
                   disabled={artImages.length >= MAX_ART}
@@ -512,8 +527,8 @@ export default function Home() {
                   color: artImages.length >= MAX_ART ? 'var(--danger)' : 'var(--text-2)',
                 }}>
                   {artImages.length >= MAX_ART
-                    ? `Limit reached (${MAX_ART})`
-                    : `${artImages.length} / ${MAX_ART} files`}
+                    ? (isTR ? `Sınıra ulaşıldı (${MAX_ART})` : `Limit reached (${MAX_ART})`)
+                    : (isTR ? `${artImages.length} / ${MAX_ART} dosya` : `${artImages.length} / ${MAX_ART} files`)}
                 </p>
                 {artImages.length > 0 && (
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 12 }}>
@@ -528,11 +543,11 @@ export default function Home() {
 
               {/* MOCKUP TEMPLATES */}
               <div>
-                <SectionLabel badge={mockups.length}>Mockup Templates</SectionLabel>
+                <SectionLabel badge={mockups.length}>{isTR ? 'Mockup Şablonları' : 'Mockup Templates'}</SectionLabel>
                 <DropZone
                   onFiles={handleMockupUpload}
-                  label="Drop templates here"
-                  sublabel="Light/white frame areas"
+                  label={isTR ? 'Şablonları buraya bırakın' : 'Drop templates here'}
+                  sublabel={isTR ? 'Açık/beyaz çerçeve alanları' : 'Light/white frame areas'}
                   multiple
                   disabled={mockups.length >= MAX_MOCKUPS}
                   minHeight={130}
@@ -542,8 +557,8 @@ export default function Home() {
                   color: mockups.length >= MAX_MOCKUPS ? 'var(--danger)' : 'var(--text-2)',
                 }}>
                   {mockups.length >= MAX_MOCKUPS
-                    ? `Limit reached (${MAX_MOCKUPS})`
-                    : `${mockups.length} / ${MAX_MOCKUPS} files`}
+                    ? (isTR ? `Sınıra ulaşıldı (${MAX_MOCKUPS})` : `Limit reached (${MAX_MOCKUPS})`)
+                    : (isTR ? `${mockups.length} / ${MAX_MOCKUPS} dosya` : `${mockups.length} / ${MAX_MOCKUPS} files`)}
                 </p>
                 {mockups.length > 0 && (
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 12 }}>
@@ -580,7 +595,7 @@ export default function Home() {
                   justifyContent: 'space-between',
                   marginBottom: 16, flexWrap: 'wrap', gap: 12,
                 }}>
-                  <SectionLabel>Frame Editor</SectionLabel>
+                  <SectionLabel>{isTR ? 'Çerçeve Düzenleyici' : 'Frame Editor'}</SectionLabel>
 
                   {/* Tolerance + clear */}
                   {activeMockup && (
@@ -598,13 +613,13 @@ export default function Home() {
                             onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--danger)')}
                             onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-2)')}
                           >
-                            Clear frames
+                            {isTR ? 'Çerçeveleri temizle' : 'Clear frames'}
                           </button>
                           <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
                         </>
                       )}
                       <span style={{ fontSize: 12, color: 'var(--text-2)', letterSpacing: '0.06em', fontFamily: 'var(--font-display)', fontWeight: 600 }}>
-                        Tolerance
+                        {isTR ? 'Tolerans' : 'Tolerance'}
                       </span>
                       <input
                         type="range" min={10} max={120} value={tolerance}
@@ -661,6 +676,7 @@ export default function Home() {
                     mockupUrl={activeMockup.url}
                     frames={activeMockup.frames}
                     tolerance={tolerance}
+                    lang={lang}
                     onAddFrame={handleAddFrame}
                     onRemoveFrame={handleRemoveFrame}
                     onUpdateFrame={handleUpdateFrame}
@@ -680,8 +696,8 @@ export default function Home() {
                     </svg>
                     <p style={{ fontSize: 14, color: '#737373', textAlign: 'center', lineHeight: 1.6, fontFamily: 'var(--font-body)' }}>
                       {mockups.length === 0
-                        ? 'Upload a mockup template to begin'
-                        : 'Select a template above to pin frames'}
+                        ? (isTR ? 'Başlamak için mockup şablonu yükleyin' : 'Upload a mockup template to begin')
+                        : (isTR ? 'Çerçeve eklemek için yukarıdan şablon seçin' : 'Select a template above to pin frames')}
                     </p>
                   </div>
                 )}
@@ -701,7 +717,7 @@ export default function Home() {
         {/* ── RESULTS ────────────────────────────────────────────────────── */}
         {results.length > 0 && (
           <div style={{ marginTop: 40 }}>
-            <ResultsGrid results={results} />
+            <ResultsGrid results={results} lang={lang} />
           </div>
         )}
 
@@ -711,7 +727,7 @@ export default function Home() {
           fontSize: 12, color: '#A3A3A3',
           letterSpacing: '0.04em', fontFamily: 'monospace',
         }}>
-          All processing is client-side · No uploads · No backend
+          {isTR ? 'Tüm işlemler tarayıcıda · Yükleme yok · Sunucu yok' : 'All processing is client-side · No uploads · No backend'}
         </p>
       </div>
     </div>

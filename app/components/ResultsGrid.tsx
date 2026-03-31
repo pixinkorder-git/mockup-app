@@ -6,6 +6,7 @@ import { GeneratedResult } from '@/app/utils/types';
 
 interface Props {
   results: GeneratedResult[];
+  lang?: 'tr' | 'en';
 }
 
 function downloadDataUrl(dataUrl: string, filename: string) {
@@ -24,7 +25,8 @@ function dataUrlToBytes(dataUrl: string): Uint8Array {
   return bytes;
 }
 
-export default function ResultsGrid({ results }: Props) {
+export default function ResultsGrid({ results, lang = 'en' }: Props) {
+  const isTR = lang === 'tr';
   const [downloadingAll, setDownloadingAll] = useState(false);
   const [downloadingZip, setDownloadingZip] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -90,7 +92,7 @@ export default function ResultsGrid({ results }: Props) {
             <div className="w-3 h-px" style={{ background: 'var(--border-2)' }} />
           </div>
           <h2 className="font-display tracking-wider" style={{ color: 'var(--text)', fontSize: 28 }}>
-            RESULTS
+            {isTR ? 'SONUÇLAR' : 'RESULTS'}
           </h2>
           <span
             className="font-mono px-2 py-0.5 rounded-sm"
@@ -130,7 +132,7 @@ export default function ResultsGrid({ results }: Props) {
                   className="w-3.5 h-3.5 rounded-full border border-t-transparent animate-spin inline-block"
                   style={{ borderColor: 'var(--text-2)', borderTopColor: 'transparent' }}
                 />
-                Zipping…
+                {isTR ? 'Sıkıştırılıyor…' : 'Zipping…'}
               </>
             ) : (
               <>
@@ -138,7 +140,7 @@ export default function ResultsGrid({ results }: Props) {
                   <rect x="3" y="3" width="18" height="18" rx="2" />
                   <path d="M9 3v18M9 7h3M9 11h3M9 15h3M12 7v2M12 11v2" />
                 </svg>
-                Download ZIP
+                {isTR ? 'ZIP İndir' : 'Download ZIP'}
               </>
             )}
           </button>
@@ -166,7 +168,7 @@ export default function ResultsGrid({ results }: Props) {
                   className="w-3.5 h-3.5 rounded-full border border-t-transparent animate-spin inline-block"
                   style={{ borderColor: 'var(--text-2)', borderTopColor: 'transparent' }}
                 />
-                Downloading…
+                {isTR ? 'İndiriliyor…' : 'Downloading…'}
               </>
             ) : (
               <>
@@ -175,7 +177,7 @@ export default function ResultsGrid({ results }: Props) {
                   <polyline points="7 10 12 15 17 10" />
                   <line x1="12" y1="15" x2="12" y2="3" />
                 </svg>
-                Download All
+                {isTR ? 'Tümünü İndir' : 'Download All'}
               </>
             )}
           </button>
@@ -187,14 +189,14 @@ export default function ResultsGrid({ results }: Props) {
         style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}
       >
         {results.map((result, i) => (
-          <ResultCard key={result.id} result={result} index={i} />
+          <ResultCard key={result.id} result={result} index={i} isTR={isTR} />
         ))}
       </div>
     </section>
   );
 }
 
-function ResultCard({ result, index }: { result: GeneratedResult; index: number }) {
+function ResultCard({ result, index, isTR = false }: { result: GeneratedResult; index: number; isTR?: boolean }) {
   const [hovered, setHovered] = useState(false);
 
   const filename = `mockup-${index + 1}-${result.mockupName.replace(/\s+/g, '_')}.jpg`;
@@ -249,7 +251,7 @@ function ResultCard({ result, index }: { result: GeneratedResult; index: number 
               <polyline points="7 10 12 15 17 10" />
               <line x1="12" y1="15" x2="12" y2="3" />
             </svg>
-            Download
+            {isTR ? 'İndir' : 'Download'}
           </button>
         </div>
       </div>

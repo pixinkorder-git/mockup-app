@@ -47,6 +47,7 @@ interface Props {
   mockupUrl: string;
   frames: Frame[];
   tolerance: number;
+  lang?: 'tr' | 'en';
   onAddFrame: (frame: Omit<Frame, 'id' | 'color'>) => void;
   onRemoveFrame: (id: string) => void;
   onUpdateFrame: (id: string, changes: Partial<Pick<Frame, 'x' | 'y' | 'w' | 'h'>>) => void;
@@ -134,10 +135,12 @@ export default function MockupEditor({
   mockupUrl,
   frames,
   tolerance,
+  lang = 'en',
   onAddFrame,
   onRemoveFrame,
   onUpdateFrame,
 }: Props) {
+  const isTR = lang === 'tr';
   const canvasRef    = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const snapshotRef  = useRef<ImageData | null>(null);
@@ -331,12 +334,12 @@ export default function MockupEditor({
       setIsProcessing(true); setWarning(null);
       try {
         const result = await floodFillImage(mockupUrl, imgX, imgY, tolerance);
-        if (!result) { setWarning('No distinct region found. Try clicking on a lighter area or increase tolerance.'); return; }
-        if (result.pixelCount > imgNatural.w * imgNatural.h * 0.65) { setWarning('Detected region is very large — you may have clicked the background. Try a more targeted spot or lower tolerance.'); return; }
+        if (!result) { setWarning(isTR ? 'Bölge bulunamadı. Daha açık bir alana tıklayın veya toleransı artırın.' : 'No distinct region found. Try clicking on a lighter area or increase tolerance.'); return; }
+        if (result.pixelCount > imgNatural.w * imgNatural.h * 0.65) { setWarning(isTR ? 'Algılanan bölge çok büyük — arka plana tıkladınız olabilir. Daha odaklı bir noktayı deneyin.' : 'Detected region is very large — you may have clicked the background. Try a more targeted spot or lower tolerance.'); return; }
         onAddFrame({ x: result.minX, y: result.minY, w: result.maxX - result.minX, h: result.maxY - result.minY, cornerRadius: cornerRadius > 0 ? cornerRadius : undefined });
       } finally { setIsProcessing(false); }
     },
-    [isProcessing, imgNatural.w, scale, mockupUrl, tolerance, onAddFrame, cornerRadius],
+    [isProcessing, imgNatural.w, scale, mockupUrl, tolerance, onAddFrame, cornerRadius, isTR],
   );
 
   // Ref so touch handlers can call flood fill without stale closures
@@ -347,12 +350,12 @@ export default function MockupEditor({
       setIsProcessing(true); setWarning(null);
       try {
         const result = await floodFillImage(mockupUrl, imgX, imgY, tolerance);
-        if (!result) { setWarning('No distinct region found. Try clicking on a lighter area or increase tolerance.'); return; }
-        if (result.pixelCount > imgNatural.w * imgNatural.h * 0.65) { setWarning('Detected region is very large — you may have clicked the background. Try a more targeted spot or lower tolerance.'); return; }
+        if (!result) { setWarning(isTR ? 'Bölge bulunamadı. Daha açık bir alana tıklayın veya toleransı artırın.' : 'No distinct region found. Try clicking on a lighter area or increase tolerance.'); return; }
+        if (result.pixelCount > imgNatural.w * imgNatural.h * 0.65) { setWarning(isTR ? 'Algılanan bölge çok büyük — arka plana tıkladınız olabilir. Daha odaklı bir noktayı deneyin.' : 'Detected region is very large — you may have clicked the background. Try a more targeted spot or lower tolerance.'); return; }
         onAddFrame({ x: result.minX, y: result.minY, w: result.maxX - result.minX, h: result.maxY - result.minY, cornerRadius: cornerRadius > 0 ? cornerRadius : undefined });
       } finally { setIsProcessing(false); }
     };
-  }, [isProcessing, imgNatural.w, mockupUrl, tolerance, onAddFrame, cornerRadius]);
+  }, [isProcessing, imgNatural.w, mockupUrl, tolerance, onAddFrame, cornerRadius, isTR]);
 
   // ── Unified mousedown ────────────────────────────────────────────────────────
   const handleMouseDown = useCallback(
@@ -649,17 +652,17 @@ export default function MockupEditor({
   // ── Status text ───────────────────────────────────────────────────────────────
   // Active-operation text (shown in accent color while something is happening)
   const activeText = resizeState
-    ? 'Resizing — release to confirm'
+    ? (isTR ? 'Yeniden boyutlandırılıyor — bırakın' : 'Resizing — release to confirm')
     : moveState
-      ? 'Moving — release to place'
+      ? (isTR ? 'Taşınıyor — bırakın' : 'Moving — release to place')
       : drag
-        ? `${Math.round(Math.abs(drag.curX - drag.startX) / scale)}×${Math.round(Math.abs(drag.curY - drag.startY) / scale)}px — release to pin`
+        ? `${Math.round(Math.abs(drag.curX - drag.startX) / scale)}×${Math.round(Math.abs(drag.curY - drag.startY) / scale)}px — ${isTR ? 'bırakın' : 'release to pin'}`
         : null;
 
   // Static hint — one fixed string per mode, never changes on hover
   const idleHint = mode === 'auto'
-    ? 'Click to add frame • Drag frame to move • Drag edge/corner to resize'
-    : 'Drag to draw frame • Drag frame to move • Drag edge/corner to resize';
+    ? (isTR ? 'Tıkla çerçeve ekle • Sürükle taşı • Kenar/köşe sürükle' : 'Click to add frame • Drag frame to move • Drag edge/corner to resize')
+    : (isTR ? 'Sürükle çerçeve çiz • Sürükle taşı • Kenar/köşe sürükle' : 'Drag to draw frame • Drag frame to move • Drag edge/corner to resize');
 
   return (
     <div className="flex flex-col gap-4">
@@ -688,14 +691,14 @@ export default function MockupEditor({
                     <line x1="5.5" y1="2" x2="5.5" y2="9" stroke="currentColor" strokeWidth="1.2" />
                     <line x1="2" y1="5.5" x2="9" y2="5.5" stroke="currentColor" strokeWidth="1.2" />
                   </svg>
-                  Auto (flood fill)
+                  {isTR ? 'Otomatik (alan doldurma)' : 'Auto (flood fill)'}
                 </>
               ) : (
                 <>
                   <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
                     <rect x="1.5" y="1.5" width="8" height="8" rx="0.5" stroke="currentColor" strokeWidth="1.2" strokeDasharray="2.5 1.5" />
                   </svg>
-                  Manual (draw rect)
+                  {isTR ? 'Manuel (dikdörtgen çiz)' : 'Manual (draw rect)'}
                 </>
               )}
             </button>
@@ -706,7 +709,7 @@ export default function MockupEditor({
           {isProcessing ? (
             <span className="flex items-center gap-1.5" style={{ color: 'var(--accent)' }}>
               <span className="w-3 h-3 rounded-full border border-t-transparent animate-spin inline-block" style={{ borderColor: 'var(--accent)', borderTopColor: 'transparent' }} />
-              Detecting…
+              {isTR ? 'Algılanıyor…' : 'Detecting…'}
             </span>
           ) : activeText ? (
             <span style={{ color: 'var(--accent)' }}>{activeText}</span>
@@ -722,7 +725,7 @@ export default function MockupEditor({
       {/* ── Corner Radius slider ─────────────────────────────────────────── */}
       <div className="flex items-center gap-3">
         <label className="text-xs font-mono flex-shrink-0" style={{ color: 'var(--text-2)', minWidth: 156 }}>
-          Corner Radius: {cornerRadius}px
+          {isTR ? 'Köşe Yuvarlaklığı' : 'Corner Radius'}: {cornerRadius}px
         </label>
         <input
           type="range" min={0} max={50} step={1} value={cornerRadius}
@@ -762,7 +765,7 @@ export default function MockupEditor({
         {frames.length > 0 && !isMobile && (
           <div className="w-48 flex-shrink-0 flex flex-col gap-2">
             <p className="text-xs uppercase tracking-widest font-mono" style={{ color: 'var(--text-2)' }}>
-              Frames ({frames.length})
+              {isTR ? 'Çerçeveler' : 'Frames'} ({frames.length})
             </p>
             {frames.map((frame, i) => (
               <div
@@ -778,7 +781,7 @@ export default function MockupEditor({
                 }}
               >
                 <div>
-                  <p className="text-xs font-mono" style={{ color: 'var(--text)' }}>Frame {i + 1}</p>
+                  <p className="text-xs font-mono" style={{ color: 'var(--text)' }}>{isTR ? 'Çerçeve' : 'Frame'} {i + 1}</p>
                   <p className="text-[10px] font-mono mt-0.5" style={{ color: 'var(--text-2)' }}>{frame.w}×{frame.h}</p>
                 </div>
                 <button onClick={() => onRemoveFrame(frame.id)} className="w-5 h-5 flex items-center justify-center rounded-sm transition-colors hover:bg-[rgba(184,64,64,0.2)]" title="Remove frame">
@@ -794,7 +797,7 @@ export default function MockupEditor({
 
       {frames.length > 0 && isMobile && (
         <div>
-          <p className="text-xs uppercase tracking-widest font-mono mb-2" style={{ color: 'var(--text-2)' }}>Frames ({frames.length})</p>
+          <p className="text-xs uppercase tracking-widest font-mono mb-2" style={{ color: 'var(--text-2)' }}>{isTR ? 'Çerçeveler' : 'Frames'} ({frames.length})</p>
           <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4, WebkitOverflowScrolling: 'touch' }}>
             {frames.map((frame, i) => (
               <div

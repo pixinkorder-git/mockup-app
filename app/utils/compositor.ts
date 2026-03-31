@@ -246,9 +246,10 @@ async function compositeCombination(
     ctx.clip();
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = '#ffffff';
-    ctx.fillRect(frame.x, frame.y, frame.w, frame.h);
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.drawImage(artImg, sx, sy, sw, sh, frame.x, frame.y, frame.w, frame.h);
+    // Expand fill and drawImage 1px beyond clip on all sides so anti-aliased
+    // clip edge pixels are fully covered and no white fringe bleeds through.
+    ctx.fillRect(frame.x - 1, frame.y - 1, frame.w + 2, frame.h + 2);
+    ctx.drawImage(artImg, sx, sy, sw, sh, frame.x - 1, frame.y - 1, frame.w + 2, frame.h + 2);
     ctx.restore();
   }
 
