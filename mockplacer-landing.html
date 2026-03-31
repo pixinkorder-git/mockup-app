@@ -1246,18 +1246,26 @@ footer {
 
 /* ── Before / After ── */
 .before-after { background: var(--bg); }
-.ba-grid {
+.ba-pairs {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  gap: 32px;
   margin-top: 48px;
+}
+@media (max-width: 860px) {
+  .ba-pairs { grid-template-columns: 1fr; gap: 24px; }
+}
+.ba-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
   align-items: start;
 }
-@media (max-width: 640px) {
-  .ba-grid { grid-template-columns: 1fr; gap: 16px; }
+@media (max-width: 480px) {
+  .ba-pair { grid-template-columns: 1fr; gap: 8px; }
 }
 .ba-card {
-  border-radius: 20px;
+  border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.08);
   background: var(--bg);
@@ -1275,17 +1283,17 @@ footer {
 }
 .ba-label {
   position: absolute;
-  bottom: 14px;
-  left: 14px;
+  bottom: 10px;
+  left: 10px;
   background: rgba(0,0,0,0.52);
   color: #fff;
   font-family: 'Satoshi', sans-serif;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 5px 14px;
-  border-radius: 8px;
+  padding: 4px 10px;
+  border-radius: 6px;
   backdrop-filter: blur(8px);
 }
 
@@ -1833,14 +1841,46 @@ footer {
       <h2 class="section-title mx-auto" data-i18n="ba_title">Dönüşümü Gör</h2>
       <p class="section-desc mx-auto" data-i18n="ba_desc">Sanat görseliniz bir mockup içinde nasıl hayat buluyor</p>
     </div>
-    <div class="ba-grid reveal">
-      <div class="ba-card">
-        <img src="/before-after/before1.png" alt="Before" loading="lazy">
-        <span class="ba-label" data-i18n="ba_before">Önce</span>
+    <div class="ba-pairs reveal">
+      <div class="ba-pair">
+        <div class="ba-card">
+          <img src="/before-after/before1.png" alt="Before 1" loading="lazy">
+          <span class="ba-label" data-i18n="ba_before">Önce</span>
+        </div>
+        <div class="ba-card">
+          <img src="/before-after/after1.jpg" alt="After 1" loading="lazy">
+          <span class="ba-label" data-i18n="ba_after">Sonra</span>
+        </div>
       </div>
-      <div class="ba-card">
-        <img src="/before-after/after1.jpg" alt="After" loading="lazy">
-        <span class="ba-label" data-i18n="ba_after">Sonra</span>
+      <div class="ba-pair">
+        <div class="ba-card">
+          <img src="/before-after/before2.png" alt="Before 2" loading="lazy">
+          <span class="ba-label" data-i18n="ba_before">Önce</span>
+        </div>
+        <div class="ba-card">
+          <img src="/before-after/after2.jpg" alt="After 2" loading="lazy">
+          <span class="ba-label" data-i18n="ba_after">Sonra</span>
+        </div>
+      </div>
+      <div class="ba-pair">
+        <div class="ba-card">
+          <img src="/before-after/before3.jpg" alt="Before 3" loading="lazy">
+          <span class="ba-label" data-i18n="ba_before">Önce</span>
+        </div>
+        <div class="ba-card">
+          <img src="/before-after/after3.png" alt="After 3" loading="lazy">
+          <span class="ba-label" data-i18n="ba_after">Sonra</span>
+        </div>
+      </div>
+      <div class="ba-pair">
+        <div class="ba-card">
+          <img src="/before-after/before4.jpg" alt="Before 4" loading="lazy">
+          <span class="ba-label" data-i18n="ba_before">Önce</span>
+        </div>
+        <div class="ba-card">
+          <img src="/before-after/after4.png" alt="After 4" loading="lazy">
+          <span class="ba-label" data-i18n="ba_after">Sonra</span>
+        </div>
       </div>
     </div>
   </div>
