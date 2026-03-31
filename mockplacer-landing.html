@@ -1289,6 +1289,46 @@ footer {
   transition: background 0.2s, transform 0.2s;
 }
 .sample-more-btn:hover { background: #E85A28; transform: translateY(-1px); }
+/* ── Testimonials ── */
+.testimonials { background: var(--bg-section); }
+.testi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+@media (max-width: 860px) { .testi-grid { grid-template-columns: 1fr; gap: 16px; } }
+.testi-card {
+  background: #fff;
+  border-radius: 20px;
+  border: 1px solid #E5E5E5;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.06);
+  padding: 28px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.testi-stars { display: flex; gap: 4px; }
+.testi-stars svg { color: var(--accent); }
+.testi-quote {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.97rem;
+  line-height: 1.65;
+  color: var(--text);
+  flex: 1;
+}
+.testi-author { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
+.testi-name {
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+.testi-role {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-muted, #888);
+}
 
 /* ── Sample Mockups Gallery ── */
 .samples { background: var(--bg-section); }
@@ -1844,6 +1884,60 @@ footer {
   </div>
 </section>
 
+<!-- Testimonials -->
+<section class="testimonials" id="testimonials">
+  <div class="section-inner">
+    <div class="text-center reveal">
+      <span class="section-label" data-i18n="testi_label">Yorumlar</span>
+      <h2 class="section-title mx-auto" data-i18n="testi_title">Kullanıcılar Ne Diyor</h2>
+    </div>
+    <div class="testi-grid reveal">
+      <div class="testi-card">
+        <div class="testi-stars">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="testi-quote" data-i18n="testi1_q">MockPlacer bana saatlerce zaman kazandırdı. Eskiden mockup başına 2 saat harcıyordum, şimdi 30 saniye sürüyor!</p>
+        <div class="testi-author">
+          <span class="testi-name">Sarah M.</span>
+          <span class="testi-role" data-i18n="testi1_role">Etsy Satıcısı</span>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="testi-quote" data-i18n="testi2_q">Toplu oluşturma özelliği oyunun kurallarını değiştirdi. Tek tıkla 30 mockup!</p>
+        <div class="testi-author">
+          <span class="testi-name">Alex K.</span>
+          <span class="testi-role" data-i18n="testi2_role">Grafik Tasarımcı</span>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="testi-quote" data-i18n="testi3_q">Sonunda gerçekten ücretsiz ve kullanımı kolay bir mockup aracı. Abonelik yok, limit yok.</p>
+        <div class="testi-author">
+          <span class="testi-name">Mike R.</span>
+          <span class="testi-role" data-i18n="testi3_role">POD Satıcısı</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FAQ -->
 <section id="sss">
   <div class="faq-inner">
@@ -2032,6 +2126,10 @@ const translations = {
     f5_title: 'Oryantasyon Eşleştirme', f5_desc: 'Dikey sanat dikey çerçeveye, yatay sanat yatay çerçeveye gider. Yanlış eşleşme olmaz, her kombinasyon anlamlı.',
     samples_label: 'Galeri', samples_title: "Örnek Mockup'lar", samples_desc: "Bunlar gibi profesyonel mockup'ları saniyeler içinde oluşturun", samples_more: 'Daha Fazla Gör', samples_less: 'Daha Az Gör',
     ba_label: 'Dönüşüm', ba_title: 'Dönüşümü Gör', ba_desc: 'Sanat görseliniz bir mockup içinde nasıl hayat buluyor',
+    testi_label: 'Yorumlar', testi_title: 'Kullanıcılar Ne Diyor',
+    testi1_q: 'MockPlacer bana saatlerce zaman kazandırdı. Eskiden mockup başına 2 saat harcıyordum, şimdi 30 saniye sürüyor!', testi1_role: 'Etsy Satıcısı',
+    testi2_q: 'Toplu oluşturma özelliği oyunun kurallarını değiştirdi. Tek tıkla 30 mockup!', testi2_role: 'Grafik Tasarımcı',
+    testi3_q: 'Sonunda gerçekten ücretsiz ve kullanımı kolay bir mockup aracı. Abonelik yok, limit yok.', testi3_role: 'POD Satıcısı',
     faq_label: 'SSS', faq_title: 'Sıkça Sorulan Sorular',
     faq1_q: 'MockPlacer gerçekten ücretsiz mi?', faq1_a: 'Evet! Günde 1 generate hakkın var, her generate\'de 30 görsele kadar üretebilirsin. Daha fazlası için Pro planımız yakında geliyor.',
     faq2_q: 'Hangi dosya formatını destekliyorsunuz?', faq2_a: 'PNG ve JPG yükleyebilirsin. Çıktılar yüksek çözünürlüklü PNG olarak gelir. Etsy, Shopify veya sosyal medya için hazır.',
@@ -2071,6 +2169,10 @@ const translations = {
     f5_title: 'Orientation Matching', f5_desc: 'Portrait art goes to portrait frames, landscape to landscape. No mismatches, every combination makes sense.',
     samples_label: 'Gallery', samples_title: 'Sample Mockups', samples_desc: 'Create professional mockups like these in seconds', samples_more: 'Show More', samples_less: 'Show Less',
     ba_label: 'Transformation', ba_title: 'See the Transformation', ba_desc: 'See how your artwork comes to life inside a mockup',
+    testi_label: 'Reviews', testi_title: 'What Users Say',
+    testi1_q: 'MockPlacer saved me hours of work. I used to spend 2 hours per mockup, now it takes 30 seconds!', testi1_role: 'Etsy Seller',
+    testi2_q: 'The bulk generation feature is a game changer. 30 mockups in one click!', testi2_role: 'Graphic Designer',
+    testi3_q: 'Finally a mockup tool that\'s actually free and easy to use. No subscriptions, no limits.', testi3_role: 'Print on Demand Seller',
     faq_label: 'FAQ', faq_title: 'Frequently Asked Questions',
     faq1_q: 'Is MockPlacer really free?', faq1_a: 'Yes! You get 1 free generate per day, with up to 30 images per generate. Pro plan is coming soon for more.',
     faq2_q: 'What file formats do you support?', faq2_a: 'You can upload PNG and JPG files. All outputs come as high resolution PNGs. Ready for Etsy, Shopify or social media.',
