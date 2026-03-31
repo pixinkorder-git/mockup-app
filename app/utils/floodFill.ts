@@ -6,32 +6,47 @@ export interface FillResult {
   pixelCount: number;
 }
 
-/** Relative luminance in [0, 1]. Values above threshold are "light enough" to be a frame area. */
+/** Relative luminance in [0, 1] */
 function luminance(r: number, g: number, b: number): number {
   return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
 }
 
 /**
- * Tolerance (10–120) maps to a luminance threshold:
- *   tolerance=60  → threshold=0.75  (white, cream, light beige)
- *   tolerance=120 → threshold=0.50  (also accepts mid-tones)
- *   tolerance=10  → threshold=0.958 (near-white only)
+ * Chebyshev distance: max absolute difference across R, G, B channels.
+ * Using max instead of sum prevents accepting pixels that differ a lot in
+ * one channel (e.g. a red tint) while being close on the other two.
  */
-function toThreshold(tolerance: number): number {
-  return Math.max(0, 1 - tolerance / 240);
+function colorDist(
+  r1: number, g1: number, b1: number,
+  r2: number, g2: number, b2: number
+): number {
+  return Math.max(Math.abs(r1 - r2), Math.abs(g1 - g2), Math.abs(b1 - b2));
 }
 
 /**
- * BFS flood fill that accepts multiple seed points simultaneously.
- * A pixel is accepted if its luminance >= luminanceThreshold.
- * Returns the merged bounding box over all accepted pixels, or null if too small.
+ * tolerance (10–120) → per-channel max distance from the seed pixel color.
+ *   tolerance=10  → maxDist=15  (near-identical pixels only — near-pure-white)
+ *   tolerance=60  → maxDist=90  (off-white, light gray, warm/cool tints)
+ *   tolerance=120 → maxDist=180 (any light-ish area)
+ *
+ * Because comparison is relative to the seed color, gray frames are detected
+ * correctly regardless of their absolute brightness. Clicking on RGB(210,210,210)
+ * will spread through similar grays and stop at the dark frame border.
  */
+function toMaxDist(tolerance: number): number {
+  return Math.round(tolerance * 1.5);
+}
+
+/** Never include pixels darker than this, regardless of tolerance. */
+const MIN_LUMINANCE = 0.20;
+
 function runFloodFill(
   data: Uint8ClampedArray,
   width: number,
   height: number,
   seeds: Array<{ x: number; y: number }>,
-  luminanceThreshold: number
+  seedR: number, seedG: number, seedB: number,
+  maxDist: number
 ): FillResult | null {
   const visited = new Uint8Array(width * height);
   const stack = new Int32Array(width * height);
@@ -39,13 +54,13 @@ function runFloodFill(
 
   let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
 
-  // Push all valid seeds onto the stack
   for (const { x, y } of seeds) {
     if (x < 0 || x >= width || y < 0 || y >= height) continue;
     const flat = y * width + x;
     if (visited[flat]) continue;
     const i = flat * 4;
-    if (luminance(data[i], data[i + 1], data[i + 2]) < luminanceThreshold) continue;
+    if (luminance(data[i], data[i + 1], data[i + 2]) < MIN_LUMINANCE) continue;
+    if (colorDist(data[i], data[i + 1], data[i + 2], seedR, seedG, seedB) > maxDist) continue;
     visited[flat] = 1;
     stack[stackTop++] = flat;
   }
@@ -66,7 +81,6 @@ function runFloodFill(
     if (y < minY) minY = y;
     else if (y > maxY) maxY = y;
 
-    // Neighbours: left, right, up, down
     const neighbours = [
       x > 0          ? flat - 1     : -1,
       x < width - 1  ? flat + 1     : -1,
@@ -76,7 +90,10 @@ function runFloodFill(
     for (const nf of neighbours) {
       if (nf < 0 || visited[nf]) continue;
       const ni = nf * 4;
-      if (luminance(data[ni], data[ni + 1], data[ni + 2]) >= luminanceThreshold) {
+      if (
+        luminance(data[ni], data[ni + 1], data[ni + 2]) >= MIN_LUMINANCE &&
+        colorDist(data[ni], data[ni + 1], data[ni + 2], seedR, seedG, seedB) <= maxDist
+      ) {
         visited[nf] = 1;
         stack[stackTop++] = nf;
       }
@@ -104,36 +121,47 @@ export async function floodFillImage(
       const ctx = offscreen.getContext('2d')!;
       ctx.drawImage(img, 0, 0, w, h);
       const { data } = ctx.getImageData(0, 0, w, h);
-      const threshold = toThreshold(tolerance);
+      const maxDist = toMaxDist(tolerance);
 
-      // Step 1: initial fill from the click point alone
-      const initial = runFloodFill(data, w, h, [{ x: startX, y: startY }], threshold);
+      // Capture the seed pixel color at the click point
+      const si = (startY * w + startX) * 4;
+      const seedR = data[si];
+      const seedG = data[si + 1];
+      const seedB = data[si + 2];
+
+      // Reject clicks on very dark areas (frame border, dark background)
+      if (luminance(seedR, seedG, seedB) < MIN_LUMINANCE) { resolve(null); return; }
+
+      // Step 1: initial fill from click point
+      const initial = runFloodFill(
+        data, w, h,
+        [{ x: startX, y: startY }],
+        seedR, seedG, seedB, maxDist
+      );
       if (!initial) { resolve(null); return; }
 
-      // Step 2: derive additional seed points from the initial bounding box
-      //   • centre of the box (catches regions missed by a corner click)
-      //   • top-edge centre +2px inward (captures thin strips at the top border)
+      // Step 2: secondary seeds from bounding box to catch regions missed by
+      //   an off-centre click (centre + top-edge inset)
       const centerX = Math.round((initial.minX + initial.maxX) / 2);
       const centerY = Math.round((initial.minY + initial.maxY) / 2);
       const topSeedY = initial.minY + 2;
 
-      // Step 3: re-run from all seeds together so the regions merge naturally
       const allSeeds = [
         { x: startX,  y: startY   },
         { x: centerX, y: centerY  },
         { x: centerX, y: topSeedY },
       ];
-      const merged = runFloodFill(data, w, h, allSeeds, threshold);
+      const merged = runFloodFill(data, w, h, allSeeds, seedR, seedG, seedB, maxDist);
       if (!merged) { resolve(null); return; }
 
-      // Step 4: shrink the bounding box by 4px on every side to exclude the
-      //   dark frame border from the art-placement rectangle
-      const SHRINK = 4;
+      // Expand bounding box by 1px on each side so edge pixels (which may be
+      // just outside the detected area due to anti-aliasing) are fully covered.
+      const EXPAND = 1;
       const result: FillResult = {
-        minX: merged.minX + SHRINK,
-        minY: merged.minY + SHRINK,
-        maxX: merged.maxX - SHRINK,
-        maxY: merged.maxY - SHRINK,
+        minX: Math.max(0,     merged.minX - EXPAND),
+        minY: Math.max(0,     merged.minY - EXPAND),
+        maxX: Math.min(w - 1, merged.maxX + EXPAND),
+        maxY: Math.min(h - 1, merged.maxY + EXPAND),
         pixelCount: merged.pixelCount,
       };
 

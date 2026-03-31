@@ -157,7 +157,6 @@ export default function MockupEditor({
   const [imgNatural, setImgNatural]       = useState({ w: 0, h: 0 });
   const [displaySize, setDisplaySize]     = useState({ w: 0, h: 0 });
   const [isProcessing, setIsProcessing]   = useState(false);
-  const [sidebarHover, setSidebarHover]   = useState<string | null>(null); // sidebar row hover
   const [warning, setWarning]             = useState<string | null>(null);
   const [mode, setMode]                   = useState<Mode>('auto');
   const [drag, setDrag]                   = useState<DragState   | null>(null);
@@ -741,72 +740,47 @@ export default function MockupEditor({
         </div>
       )}
 
-      {/* ── Canvas + frame list ───────────────────────────────────────────── */}
-      <div className="flex gap-4">
-        <div ref={containerRef} className="flex-1 min-w-0">
-          <canvas
-            ref={canvasRef}
-            onClick={mode === 'auto' ? handleAutoClick : undefined}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseLeave}
-            className="rounded-sm block select-none"
-            style={{
-              cursor,
-              width:      displaySize.w || '100%',
-              height:     displaySize.h || 'auto',
-              border:     `1px solid ${mode === 'manual' ? 'var(--border-2)' : 'var(--border)'}`,
-              userSelect: 'none',
-            }}
-          />
-        </div>
-
-        {frames.length > 0 && !isMobile && (
-          <div className="w-48 flex-shrink-0 flex flex-col gap-2">
-            <p className="text-xs uppercase tracking-widest font-mono" style={{ color: 'var(--text-2)' }}>
-              {isTR ? 'Çerçeveler' : 'Frames'} ({frames.length})
-            </p>
-            {frames.map((frame, i) => (
-              <div
-                key={frame.id}
-                onMouseEnter={() => setSidebarHover(frame.id)}
-                onMouseLeave={() => setSidebarHover(null)}
-                className="flex items-center justify-between gap-2 px-2.5 py-2 rounded-sm transition-colors"
-                style={{
-                  background:      sidebarHover === frame.id ? 'var(--surface-3)' : 'var(--surface-2)',
-                  border:          '1px solid var(--border)',
-                  borderLeftColor: frame.color.replace('0.50', '0.9'),
-                  borderLeftWidth: '3px',
-                }}
-              >
-                <div>
-                  <p className="text-xs font-mono" style={{ color: 'var(--text)' }}>{isTR ? 'Çerçeve' : 'Frame'} {i + 1}</p>
-                  <p className="text-[10px] font-mono mt-0.5" style={{ color: 'var(--text-2)' }}>{frame.w}×{frame.h}</p>
-                </div>
-                <button onClick={() => onRemoveFrame(frame.id)} className="w-5 h-5 flex items-center justify-center rounded-sm transition-colors hover:bg-[rgba(184,64,64,0.2)]" title="Remove frame">
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--text-2)" strokeWidth="1.5" strokeLinecap="round">
-                    <line x1="2" y1="2" x2="8" y2="8" /><line x1="8" y1="2" x2="2" y2="8" />
-                  </svg>
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
+      {/* ── Canvas (full width) ───────────────────────────────────────────── */}
+      <div ref={containerRef}>
+        <canvas
+          ref={canvasRef}
+          onClick={mode === 'auto' ? handleAutoClick : undefined}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
+          className="rounded-sm block select-none"
+          style={{
+            cursor,
+            width:      displaySize.w || '100%',
+            height:     displaySize.h || 'auto',
+            border:     `1px solid ${mode === 'manual' ? 'var(--border-2)' : 'var(--border)'}`,
+            userSelect: 'none',
+          }}
+        />
       </div>
 
-      {frames.length > 0 && isMobile && (
+      {/* ── Frame list — horizontal strip below canvas (all screen sizes) ── */}
+      {frames.length > 0 && (
         <div>
-          <p className="text-xs uppercase tracking-widest font-mono mb-2" style={{ color: 'var(--text-2)' }}>{isTR ? 'Çerçeveler' : 'Frames'} ({frames.length})</p>
+          <p className="text-xs uppercase tracking-widest font-mono mb-2" style={{ color: 'var(--text-2)' }}>
+            {isTR ? 'Çerçeveler' : 'Frames'} ({frames.length})
+          </p>
           <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4, WebkitOverflowScrolling: 'touch' }}>
             {frames.map((frame, i) => (
               <div
                 key={frame.id}
                 className="flex-shrink-0 flex items-center gap-2 px-2.5 py-2 rounded-sm"
-                style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderLeftColor: frame.color.replace('0.50', '0.9'), borderLeftWidth: '3px', minWidth: 100 }}
+                style={{
+                  background: 'var(--surface-2)',
+                  border: '1px solid var(--border)',
+                  borderLeftColor: frame.color.replace('0.50', '0.9'),
+                  borderLeftWidth: '3px',
+                  minWidth: 110,
+                }}
               >
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-mono" style={{ color: 'var(--text)' }}>F{i + 1}</p>
+                  <p className="text-xs font-mono" style={{ color: 'var(--text)' }}>{isTR ? 'Ç' : 'F'}{i + 1}</p>
                   <p className="text-[10px] font-mono mt-0.5" style={{ color: 'var(--text-2)' }}>{frame.w}×{frame.h}</p>
                 </div>
                 <button onClick={() => onRemoveFrame(frame.id)} className="w-5 h-5 flex items-center justify-center rounded-sm" style={{ flexShrink: 0 }} title="Remove frame">
@@ -823,8 +797,8 @@ export default function MockupEditor({
       {frames.length === 0 && !isProcessing && (
         <p className="text-xs text-center py-2" style={{ color: 'var(--text-3)' }}>
           {mode === 'auto'
-            ? 'No frames pinned yet — click on the white/light areas in the mockup above'
-            : 'No frames pinned yet — click and drag on the mockup to draw a frame'}
+            ? (isTR ? 'Henüz çerçeve yok — mockuptaki açık/beyaz alanlara tıklayın' : 'No frames pinned yet — click on the white/light areas in the mockup above')
+            : (isTR ? 'Henüz çerçeve yok — çizmek için sürükleyin' : 'No frames pinned yet — click and drag on the mockup to draw a frame')}
         </p>
       )}
     </div>
