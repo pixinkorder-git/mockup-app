@@ -58,15 +58,11 @@ function UpgradeBanner() {
     }
   }, [searchParams]);
 
-  const isTR = typeof navigator !== 'undefined' && navigator.language.startsWith('tr');
-
   if (!bannerVisible) return null;
 
   return (
     <div className="upgrade-banner" role="alert">
-      {isTR
-        ? 'Kullanmaya çalıştığınız özellik Pro sürüm gerektirmektedir. Bu özelliği kullanmak için aşağıdaki planlardan birini seçin.'
-        : 'The feature you tried requires a Pro plan. Choose a plan below to unlock it.'}
+      The feature you tried requires a Pro plan. Choose a plan below to unlock it.
       <button
         className="upgrade-banner-close"
         onClick={() => setBannerVisible(false)}
