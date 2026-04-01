@@ -30,6 +30,10 @@ export default function ResultsGrid({ results, lang = 'en' }: Props) {
   const [downloadingAll, setDownloadingAll] = useState(false);
   const [downloadingZip, setDownloadingZip] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [showProModal, setShowProModal] = useState(false);
+
+  // No auth yet — all users are treated as free
+  const isPro = false;
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth <= 700);
@@ -75,6 +79,96 @@ export default function ResultsGrid({ results, lang = 'en' }: Props) {
   const busy = downloadingAll || downloadingZip;
 
   return (
+    <>
+    {showProModal && (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center"
+        style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
+        onClick={() => setShowProModal(false)}
+      >
+        <div
+          className="relative rounded-2xl p-8 flex flex-col gap-5"
+          style={{
+            background: '#fff',
+            border: '1px solid #E5E5E5',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.12)',
+            maxWidth: 420,
+            width: 'calc(100% - 32px)',
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Close */}
+          <button
+            onClick={() => setShowProModal(false)}
+            className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full transition-colors"
+            style={{ background: '#F5F5F5', color: '#666' }}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+
+          {/* Icon */}
+          <div
+            className="w-12 h-12 rounded-xl flex items-center justify-center"
+            style={{ background: 'rgba(255,107,53,0.1)' }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          </div>
+
+          {/* Text */}
+          <div>
+            <h3 className="font-semibold mb-2" style={{ fontSize: 18, color: '#111' }}>
+              {isTR ? 'ZIP indirme bir premium ozellik' : 'ZIP download is a premium feature'}
+            </h3>
+            <p style={{ fontSize: 14, color: '#666', lineHeight: 1.6 }}>
+              {isTR
+                ? 'Tum gorselleri tek tikla indirmek icin Basic veya Pro plana gec.'
+                : 'Upgrade to Basic or Pro to download all images in one click.'}
+            </p>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex gap-3">
+            <a
+              href="/pricing"
+              className="flex-1 flex items-center justify-center rounded-xl font-medium transition-all"
+              style={{
+                background: '#FF6B35',
+                color: '#fff',
+                height: 44,
+                fontSize: 15,
+                boxShadow: '0 4px 20px rgba(255,107,53,0.3)',
+                textDecoration: 'none',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = '#E85A28')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = '#FF6B35')}
+            >
+              {isTR ? 'Planlara Bak' : 'View Plans'}
+            </a>
+            <button
+              onClick={() => setShowProModal(false)}
+              className="flex-1 rounded-xl font-medium transition-colors"
+              style={{
+                height: 44,
+                fontSize: 15,
+                background: '#F5F5F5',
+                color: '#444',
+                border: '1px solid #E5E5E5',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = '#ECECEC')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = '#F5F5F5')}
+            >
+              {isTR ? 'Kapat' : 'Close'}
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
     <section className="animate-fade-up">
       <div
         className="flex mb-5"
@@ -111,8 +205,8 @@ export default function ResultsGrid({ results, lang = 'en' }: Props) {
         >
           {/* Download ZIP */}
           <button
-            onClick={handleDownloadZip}
-            disabled={busy}
+            onClick={isPro ? handleDownloadZip : () => setShowProModal(true)}
+            disabled={busy && isPro}
             className="flex items-center justify-center gap-2 rounded-sm font-medium transition-all"
             style={{
               fontSize: 15,
@@ -121,9 +215,9 @@ export default function ResultsGrid({ results, lang = 'en' }: Props) {
               width: isMobile ? '100%' : undefined,
               background: 'var(--surface-2)',
               border: '1px solid var(--border-2)',
-              color: busy ? 'var(--text-2)' : 'var(--text)',
-              cursor: busy ? 'not-allowed' : 'pointer',
-              opacity: busy && !downloadingZip ? 0.5 : 1,
+              color: (busy && isPro) ? 'var(--text-2)' : 'var(--text)',
+              cursor: (busy && isPro) ? 'not-allowed' : 'pointer',
+              opacity: (busy && isPro) && !downloadingZip ? 0.5 : 1,
             }}
           >
             {downloadingZip ? (
@@ -141,6 +235,21 @@ export default function ResultsGrid({ results, lang = 'en' }: Props) {
                   <path d="M9 3v18M9 7h3M9 11h3M9 15h3M12 7v2M12 11v2" />
                 </svg>
                 {isTR ? 'ZIP İndir' : 'Download ZIP'}
+                {!isPro && (
+                  <span
+                    className="font-mono font-bold"
+                    style={{
+                      fontSize: 9,
+                      background: '#FF6B35',
+                      color: '#fff',
+                      borderRadius: 4,
+                      padding: '1px 4px',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    PRO
+                  </span>
+                )}
               </>
             )}
           </button>
@@ -193,6 +302,7 @@ export default function ResultsGrid({ results, lang = 'en' }: Props) {
         ))}
       </div>
     </section>
+    </>
   );
 }
 
