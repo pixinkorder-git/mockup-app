@@ -162,6 +162,35 @@ export default function Home() {
 
   const isTR = lang === 'tr';
 
+  // ── Daily generate limit ──────────────────────────────────────────────────
+  const DAILY_LIMIT = 3;
+  const [generateCount, setGenerateCount] = useState(0);
+
+  useEffect(() => {
+    const today = new Date().toISOString().slice(0, 10);
+    try {
+      const raw = localStorage.getItem('mockplacer_generates');
+      if (raw) {
+        const saved = JSON.parse(raw) as { count: number; date: string };
+        setGenerateCount(saved.date === today ? saved.count : 0);
+      }
+    } catch { /* ignore */ }
+  }, []);
+
+  const limitReached      = generateCount >= DAILY_LIMIT;
+  const generatesRemaining = Math.max(0, DAILY_LIMIT - generateCount);
+
+  const incrementGenerateCount = useCallback(() => {
+    const today = new Date().toISOString().slice(0, 10);
+    setGenerateCount((prev) => {
+      const next = prev + 1;
+      try {
+        localStorage.setItem('mockplacer_generates', JSON.stringify({ count: next, date: today }));
+      } catch { /* ignore */ }
+      return next;
+    });
+  }, []);
+
   // Reset results only when the file set actually changes
   const artKey    = artImages.map((a) => a.id).join(',');
   const mockupKey = mockups.map((m) => m.id).join(',');
@@ -189,7 +218,7 @@ export default function Home() {
   const isExhausted       = allCombinations.length > 0 && remainingCount === 0;
   const hasNoCombinations = artImages.length > 0 && mockups.some((m) => m.frames.length > 0) && allCombinations.length === 0;
   const activeMockup      = mockups.find((m) => m.id === activeMockupId) ?? null;
-  const canGenerate       = !isGenerating && pendingCombinations.length > 0;
+  const canGenerate       = !isGenerating && pendingCombinations.length > 0 && !limitReached;
 
   // ── Upload handlers ───────────────────────────────────────────────────────
   const handleArtUpload = useCallback(async (files: File[]) => {
@@ -293,6 +322,7 @@ export default function Home() {
         setProgress({ done, total })
       );
       setResults((prev) => [...prev, ...newResults]);
+      incrementGenerateCount();
       setGeneratedIds((prev) => {
         const next = new Set(prev);
         batch.forEach((c) => next.add(c.id));
@@ -301,7 +331,7 @@ export default function Home() {
     } finally {
       setIsGenerating(false);
     }
-  }, [canGenerate, pendingCombinations, mockups, artImages]);
+  }, [canGenerate, pendingCombinations, mockups, artImages, incrementGenerateCount]);
 
   const handleClearResults = useCallback(() => {
     setResults([]);
@@ -419,6 +449,22 @@ export default function Home() {
             </>
           )}
         </button>
+      )}
+
+      {/* Daily limit indicator */}
+      {!isExhausted && (
+        <p style={{
+          fontSize: 12, textAlign: 'center', fontFamily: 'monospace',
+          color: limitReached ? 'var(--danger)' : 'var(--text-2)',
+          margin: '-4px 0',
+        }}>
+          {limitReached
+            ? (isTR ? 'Günlük üretim limitine ulaştınız.' : 'Daily limit reached.')
+            : (isTR
+                ? `Bugün ${generatesRemaining} / ${DAILY_LIMIT} ücretsiz üretim hakkınız kaldı`
+                : `${generatesRemaining} of ${DAILY_LIMIT} free generates remaining today`)
+          }
+        </p>
       )}
 
       {results.length > 0 && (
@@ -715,6 +761,58 @@ export default function Home() {
         </div>
 
         {/* ── RESULTS ────────────────────────────────────────────────────── */}
+        {limitReached && results.length === 0 && (
+          <div style={{
+            marginTop: 40, padding: '28px 32px', borderRadius: 16,
+            background: 'rgba(255,107,53,0.06)',
+            border: '1px solid rgba(255,107,53,0.25)',
+            display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'flex-start',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{
+                width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+                background: 'rgba(255,107,53,0.12)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+              </div>
+              <p style={{ fontSize: 15, fontWeight: 600, color: '#1a1a1a', fontFamily: "'Clash Display', sans-serif" }}>
+                {isTR ? `Bugünkü 3 ücretsiz üretiminizi kullandınız.` : `You've used your 3 free generates today.`}
+              </p>
+            </div>
+            <p style={{ fontSize: 13, color: '#666', lineHeight: 1.6, paddingLeft: 46 }}>
+              {isTR
+                ? 'Yarın tekrar gelin veya daha fazlası için yükseltin.'
+                : 'Come back tomorrow or upgrade for more.'}
+            </p>
+            <a
+              href="/pricing?upgrade=true"
+              style={{
+                marginLeft: 46,
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                padding: '9px 18px', borderRadius: 10,
+                background: '#FF6B35', color: '#fff',
+                fontSize: 13, fontWeight: 600,
+                textDecoration: 'none',
+                boxShadow: '0 4px 16px rgba(255,107,53,0.28)',
+                transition: 'background 0.2s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = '#E85A28')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = '#FF6B35')}
+            >
+              {isTR ? 'Planları Gör' : 'View Plans'}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </a>
+          </div>
+        )}
+
         {results.length > 0 && (
           <div style={{ marginTop: 40 }}>
             <ResultsGrid results={results} lang={lang} />
