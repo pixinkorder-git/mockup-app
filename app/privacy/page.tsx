@@ -285,8 +285,8 @@ export default function PrivacyPage() {
             <h2>{isTR ? 'İletişim' : 'Contact'}</h2>
             <p>
               {isTR
-                ? <>Gizlilik ile ilgili sorularınız için bize ulaşabilirsiniz: <a href="mailto:mockplacer@gmail.com">mockplacer@gmail.com</a></>
-                : <>For any privacy-related questions, you can reach us at: <a href="mailto:mockplacer@gmail.com">mockplacer@gmail.com</a></>}
+                ? <>Gizlilik ile ilgili sorularınız için bize ulaşabilirsiniz: <a href="mailto:info@mockplacer.com">info@mockplacer.com</a></>
+                : <>For any privacy-related questions, you can reach us at: <a href="mailto:info@mockplacer.com">info@mockplacer.com</a></>}
             </p>
           </div>
 
