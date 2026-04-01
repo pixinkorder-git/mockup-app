@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 
 const PLANS = {
   basic: {
@@ -49,6 +50,17 @@ function CheckIcon() {
 
 export default function PricingPage() {
   const [yearly, setYearly] = useState(false);
+  const [bannerVisible, setBannerVisible] = useState(false);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get('upgrade') === 'true') {
+      setBannerVisible(true);
+    }
+  }, [searchParams]);
+
+  // Detect language for banner text
+  const isTR = typeof navigator !== 'undefined' && navigator.language.startsWith('tr');
 
   return (
     <>
@@ -332,13 +344,70 @@ export default function PricingPage() {
         }
         .free-note a:hover { text-decoration: underline; }
 
+        /* UPGRADE BANNER */
+        @keyframes slide-down {
+          from { opacity: 0; transform: translateY(-12px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .upgrade-banner {
+          animation: slide-down 0.3s ease forwards;
+          background: #FF6B35;
+          color: #fff;
+          font-size: 0.9rem;
+          font-weight: 500;
+          line-height: 1.5;
+          padding: 12px 48px 12px 20px;
+          border-radius: 10px;
+          margin: 16px 24px 0;
+          position: relative;
+        }
+        .upgrade-banner-close {
+          position: absolute;
+          top: 50%;
+          right: 14px;
+          transform: translateY(-50%);
+          background: rgba(255,255,255,0.2);
+          border: none;
+          color: #fff;
+          width: 26px;
+          height: 26px;
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.2s;
+          padding: 0;
+        }
+        .upgrade-banner-close:hover { background: rgba(255,255,255,0.35); }
+
         @media (max-width: 720px) {
           .pricing-nav { padding: 0 20px; }
           .plan-card { width: 100%; max-width: 380px; }
+          .upgrade-banner { margin: 12px 16px 0; font-size: 0.85rem; }
         }
       `}</style>
 
       <div className="pricing-wrap">
+        {/* UPGRADE BANNER */}
+        {bannerVisible && (
+          <div className="upgrade-banner" role="alert">
+            {isTR
+              ? 'Kullanmaya çalıştığınız özellik Pro sürüm gerektirmektedir. Bu özelliği kullanmak için aşağıdaki planlardan birini seçin.'
+              : 'The feature you tried requires a Pro plan. Choose a plan below to unlock it.'}
+            <button
+              className="upgrade-banner-close"
+              onClick={() => setBannerVisible(false)}
+              aria-label="Dismiss"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </div>
+        )}
+
         {/* NAV */}
         <nav className="pricing-nav">
           <a href="/" className="back-link">
