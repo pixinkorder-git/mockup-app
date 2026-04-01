@@ -39,6 +39,17 @@ const PLANS = {
   },
 };
 
+const FEATURE_TR: Record<string, string> = {
+  '15 generates per day': 'Günde 15 oluşturma',
+  'Unlimited generates': 'Sınırsız oluşturma',
+  'Up to 30 images per generate': 'Her oluşturmada 30 görsele kadar',
+  'PNG download': 'PNG indirme',
+  'ZIP download': 'ZIP indirme',
+  'Browser-based, no upload': 'Tarayıcı tabanlı, yükleme yok',
+  'Mockup library access (coming soon)': 'Mockup kütüphanesi erişimi (yakında)',
+  'Early access to new features': 'Yeni özelliklere erken erişim',
+};
+
 function CheckIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
@@ -79,6 +90,18 @@ function UpgradeBanner() {
 
 export default function PricingPage() {
   const [yearly, setYearly] = useState(false);
+  const [lang, setLang] = useState<'tr' | 'en'>('en');
+
+  useEffect(() => {
+    const stored = localStorage.getItem('mp-lang') as 'tr' | 'en' | null;
+    if (stored === 'tr' || stored === 'en') {
+      setLang(stored);
+    } else if (navigator.language.startsWith('tr')) {
+      setLang('tr');
+    }
+  }, []);
+
+  const isTR = lang === 'tr';
 
   return (
     <>
@@ -418,7 +441,7 @@ export default function PricingPage() {
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M10 3L5 8l5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            Back to MockPlacer
+            {isTR ? "MockPlacer'a Dön" : 'Back to MockPlacer'}
           </a>
           <a href="/">
             <Image src="/1logo.png" width={140} height={35} alt="MockPlacer" style={{ display: 'block' }} />
@@ -427,17 +450,19 @@ export default function PricingPage() {
 
         {/* HERO */}
         <div className="pricing-hero">
-          <div className="pricing-badge">Pricing</div>
+          <div className="pricing-badge">{isTR ? 'FİYATLANDIRMA' : 'Pricing'}</div>
           <h1 className="pricing-title">
-            Simple, <em>Transparent</em><br />Pricing
+            {isTR ? <>Basit, <em>Şeffaf</em><br />Fiyatlandırma</> : <>Simple, <em>Transparent</em><br />Pricing</>}
           </h1>
           <p className="pricing-sub">
-            Start free, upgrade when you need more. No hidden fees, cancel anytime.
+            {isTR
+              ? 'Ücretsiz başla, ihtiyacın olunca yükselt. Gizli ücret yok, istediğin zaman iptal et.'
+              : 'Start free, upgrade when you need more. No hidden fees, cancel anytime.'}
           </p>
 
           {/* TOGGLE */}
           <div className="toggle-wrap">
-            <span className={`toggle-label${yearly ? ' muted' : ''}`}>Monthly</span>
+            <span className={`toggle-label${yearly ? ' muted' : ''}`}>{isTR ? 'Aylık' : 'Monthly'}</span>
             <label className="toggle-switch">
               <input
                 type="checkbox"
@@ -447,8 +472,8 @@ export default function PricingPage() {
               <span className="toggle-track" />
               <span className="toggle-thumb" />
             </label>
-            <span className={`toggle-label${!yearly ? ' muted' : ''}`}>Yearly</span>
-            {yearly && <span className="save-badge">Save up to 30%</span>}
+            <span className={`toggle-label${!yearly ? ' muted' : ''}`}>{isTR ? 'Yıllık' : 'Yearly'}</span>
+            {yearly && <span className="save-badge">{isTR ? '%30\'a kadar tasarruf' : 'Save up to 30%'}</span>}
           </div>
         </div>
 
@@ -462,21 +487,25 @@ export default function PricingPage() {
 
             return (
               <div key={plan.name} className={`plan-card${plan.popular ? ' popular' : ''}`}>
-                {plan.popular && <div className="popular-badge">Most Popular</div>}
+                {plan.popular && (
+                  <div className="popular-badge">{isTR ? 'EN POPÜLER' : 'Most Popular'}</div>
+                )}
 
                 <div className="plan-name">{plan.name}</div>
                 <div className="plan-tagline">
-                  {plan.name === 'Basic' ? 'Perfect for occasional creators' : 'For serious sellers and designers'}
+                  {plan.name === 'Basic'
+                    ? (isTR ? 'Ara sıra kullananlar için' : 'Perfect for occasional creators')
+                    : (isTR ? 'Ciddi satıcılar ve tasarımcılar için' : 'For serious sellers and designers')}
                 </div>
 
                 <div className="plan-price">
                   <span className="plan-currency">$</span>
                   <span className="plan-amount">{price}</span>
                 </div>
-                <div className="plan-period">/{yearly ? 'year' : 'month'}</div>
+                <div className="plan-period">/{yearly ? (isTR ? 'yıl' : 'year') : (isTR ? 'ay' : 'month')}</div>
                 <div className="plan-yearly-note">
                   {yearly
-                    ? `~$${monthlyEquiv}/mo — save ${savePct}%`
+                    ? (isTR ? `~$${monthlyEquiv}/ay — %${savePct} tasarruf` : `~$${monthlyEquiv}/mo — save ${savePct}%`)
                     : '\u00a0'}
                 </div>
 
@@ -486,7 +515,7 @@ export default function PricingPage() {
                   {plan.features.map(f => (
                     <li key={f}>
                       <CheckIcon />
-                      {f}
+                      {isTR ? (FEATURE_TR[f] ?? f) : f}
                     </li>
                   ))}
                 </ul>
@@ -497,7 +526,7 @@ export default function PricingPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Get {plan.name}
+                  {isTR ? `${plan.name} Al` : `Get ${plan.name}`}
                 </a>
               </div>
             );
@@ -506,7 +535,9 @@ export default function PricingPage() {
 
         {/* FREE NOTE */}
         <p className="free-note">
-          Not ready to commit? <a href="https://mockplacer.com/app">Try the free tier</a> — 1 generate/day, no signup required.
+          {isTR
+            ? <><a href="https://mockplacer.com/app">Ücretsiz katmanı dene</a> — günde 3 oluşturma, kayıt gerekmez.</>
+            : <>Not ready to commit? <a href="https://mockplacer.com/app">Try the free tier</a> — 3 generates/day, no signup required.</>}
         </p>
       </div>
     </>
