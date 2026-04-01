@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 
@@ -48,8 +48,7 @@ function CheckIcon() {
   );
 }
 
-export default function PricingPage() {
-  const [yearly, setYearly] = useState(false);
+function UpgradeBanner() {
   const [bannerVisible, setBannerVisible] = useState(false);
   const searchParams = useSearchParams();
 
@@ -59,8 +58,31 @@ export default function PricingPage() {
     }
   }, [searchParams]);
 
-  // Detect language for banner text
   const isTR = typeof navigator !== 'undefined' && navigator.language.startsWith('tr');
+
+  if (!bannerVisible) return null;
+
+  return (
+    <div className="upgrade-banner" role="alert">
+      {isTR
+        ? 'Kullanmaya çalıştığınız özellik Pro sürüm gerektirmektedir. Bu özelliği kullanmak için aşağıdaki planlardan birini seçin.'
+        : 'The feature you tried requires a Pro plan. Choose a plan below to unlock it.'}
+      <button
+        className="upgrade-banner-close"
+        onClick={() => setBannerVisible(false)}
+        aria-label="Dismiss"
+      >
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+  );
+}
+
+export default function PricingPage() {
+  const [yearly, setYearly] = useState(false);
 
   return (
     <>
@@ -390,23 +412,9 @@ export default function PricingPage() {
 
       <div className="pricing-wrap">
         {/* UPGRADE BANNER */}
-        {bannerVisible && (
-          <div className="upgrade-banner" role="alert">
-            {isTR
-              ? 'Kullanmaya çalıştığınız özellik Pro sürüm gerektirmektedir. Bu özelliği kullanmak için aşağıdaki planlardan birini seçin.'
-              : 'The feature you tried requires a Pro plan. Choose a plan below to unlock it.'}
-            <button
-              className="upgrade-banner-close"
-              onClick={() => setBannerVisible(false)}
-              aria-label="Dismiss"
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
-          </div>
-        )}
+        <Suspense fallback={null}>
+          <UpgradeBanner />
+        </Suspense>
 
         {/* NAV */}
         <nav className="pricing-nav">
