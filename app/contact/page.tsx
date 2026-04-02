@@ -181,7 +181,7 @@ export default function ContactPage() {
             <h2>{isTR ? 'E-posta' : 'Email'}</h2>
             <div className="highlight-box">
               <p>
-                <a href="mailto:info@mockplacer.com">info@mockplacer.com</a>
+                <a href="mailto:info@mockplacer.com" style={{color: '#FF6B35', textDecoration: 'none', fontWeight: 600}}>info@mockplacer.com</a>
               </p>
             </div>
             <p>

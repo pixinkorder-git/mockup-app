@@ -317,8 +317,8 @@ export default function TermsPage() {
             <h2>{isTR ? 'İletişim' : 'Contact'}</h2>
             <p>
               {isTR
-                ? <>Bu şartlarla ilgili sorularınız için bize ulaşabilirsiniz: <a href="mailto:info@mockplacer.com">info@mockplacer.com</a></>
-                : <>For any questions about these terms, you can reach us at: <a href="mailto:info@mockplacer.com">info@mockplacer.com</a></>}
+                ? <>Bu şartlarla ilgili sorularınız için bize ulaşabilirsiniz: <a href="mailto:info@mockplacer.com" style={{color: '#FF6B35', textDecoration: 'none', fontWeight: 600}}>info@mockplacer.com</a></>
+                : <>For any questions about these terms, you can reach us at: <a href="mailto:info@mockplacer.com" style={{color: '#FF6B35', textDecoration: 'none', fontWeight: 600}}>info@mockplacer.com</a></>}
             </p>
           </div>
 
