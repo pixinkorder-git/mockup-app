@@ -191,7 +191,7 @@ export default function TermsPage() {
 
         {/* HERO */}
         <div className="privacy-hero">
-          <div className="privacy-badge">{isTR ? 'Yasal' : 'Legal'}</div>
+          <div className="privacy-badge">{isTR ? 'Yasal Metin' : 'Legal Notice'}</div>
           <h1 className="privacy-title">
             {isTR ? <>Kullanım <em>Şartları</em></> : <>Terms of <em>Service</em></>}
           </h1>
