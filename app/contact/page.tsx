@@ -181,7 +181,21 @@ export default function ContactPage() {
             <h2>{isTR ? 'E-posta' : 'Email'}</h2>
             <div className="highlight-box">
               <p>
-                <a href="mailto:info@mockplacer.com" style={{color: '#FF6B35', textDecoration: 'none', fontWeight: 600}}>info@mockplacer.com</a>
+                <button
+                  onClick={() => window.location.href = 'mailto:info@mockplacer.com'}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#FF6B35',
+                    fontWeight: 600,
+                    fontSize: 'inherit',
+                    cursor: 'pointer',
+                    padding: 0,
+                    textDecoration: 'underline'
+                  }}
+                >
+                  info@mockplacer.com
+                </button>
               </p>
             </div>
             <p>
