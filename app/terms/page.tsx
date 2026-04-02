@@ -317,36 +317,8 @@ export default function TermsPage() {
             <h2>{isTR ? 'İletişim' : 'Contact'}</h2>
             <p>
               {isTR
-                ? <>Bu şartlarla ilgili sorularınız için bize ulaşabilirsiniz: <button
-                  onClick={() => window.location.href = 'mailto:info@mockplacer.com'}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#FF6B35',
-                    fontWeight: 600,
-                    fontSize: 'inherit',
-                    cursor: 'pointer',
-                    padding: 0,
-                    textDecoration: 'underline'
-                  }}
-                >
-                  info@mockplacer.com
-                </button></>
-                : <>For any questions about these terms, you can reach us at: <button
-                  onClick={() => window.location.href = 'mailto:info@mockplacer.com'}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#FF6B35',
-                    fontWeight: 600,
-                    fontSize: 'inherit',
-                    cursor: 'pointer',
-                    padding: 0,
-                    textDecoration: 'underline'
-                  }}
-                >
-                  info@mockplacer.com
-                </button></>}
+                ? <>Bu şartlarla ilgili sorularınız için bize ulaşabilirsiniz: <a href="mailto:info@mockplacer.com" target="_blank" rel="noopener noreferrer" style={{color: '#FF6B35', fontWeight: 600}}>info@mockplacer.com</a></>
+                : <>For any questions about these terms, you can reach us at: <a href="mailto:info@mockplacer.com" target="_blank" rel="noopener noreferrer" style={{color: '#FF6B35', fontWeight: 600}}>info@mockplacer.com</a></>}
             </p>
           </div>
 
