@@ -149,6 +149,52 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
   transform: translateY(-1px);
 }
 
+.nav-sign-in {
+  color: #FF6B35 !important;
+  font-weight: 600 !important;
+  font-size: 0.88rem !important;
+  text-decoration: none;
+  border: 1.5px solid #FF6B35;
+  border-radius: 8px;
+  padding: 6px 14px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.nav-sign-in:hover {
+  background: #FF6B35 !important;
+  color: white !important;
+}
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.nav-user-name {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #333;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nav-sign-out {
+  font-size: 0.82rem;
+  color: #888;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+.nav-sign-out:hover { color: #FF6B35; }
+
 .lang-switch {
   display: flex;
   gap: 0;
@@ -1458,6 +1504,7 @@ footer {
     <li><a href="#sss" data-i18n="nav_faq">SSS</a></li>
     <li><a href="/pricing" data-i18n="nav_pricing">Fiyatlar</a></li>
     <li><div class="lang-switch"><button class="lang-btn" onclick="setLang('en')"><svg width="16" height="12" viewBox="0 0 16 12" style="vertical-align:middle;margin-right:4px"><rect width="16" height="12" fill="#012169"/><path d="M0 0L16 12M16 0L0 12" stroke="white" stroke-width="2"/><path d="M0 0L16 12M16 0L0 12" stroke="#C8102E" stroke-width="1"/><path d="M8 0V12M0 6H16" stroke="white" stroke-width="3.5"/><path d="M8 0V12M0 6H16" stroke="#C8102E" stroke-width="2"/></svg>EN</button><button class="lang-btn active" onclick="setLang('tr')"><svg width="16" height="12" viewBox="0 0 16 12" style="vertical-align:middle;margin-right:4px"><rect width="16" height="12" fill="#E30A17" rx="1"/><circle cx="6.5" cy="6" r="3" fill="white"/><circle cx="7.3" cy="6" r="2.4" fill="#E30A17"/><polygon points="9.5,6 8.2,5.2 8.2,6.8 9.5,6 8,6.6 8,5.4" fill="white"/></svg>TR</button></div></li>
+    <li id="nav-auth-li"><a href="/login" class="nav-sign-in" id="nav-sign-in-btn">Giriş Yap</a></li>
     <li><a href="https://mockplacer.com/app" class="nav-cta" data-i18n="nav_cta">Hemen Dene</a></li>
   </ul>
   <button class="mobile-menu-btn" aria-label="Menü">
@@ -2933,6 +2980,33 @@ setLang(currentLang);
   window.demoGoTo = function(n) { showStep(n); };
 
   document.addEventListener('DOMContentLoaded', function() { showStep(1); });
+})();
+</script>
+
+<script>
+// Auth UI — updates navbar based on window.__mpUser injected server-side
+(function() {
+  var user = window.__mpUser;
+  var authLi = document.getElementById('nav-auth-li');
+  var signInBtn = document.getElementById('nav-sign-in-btn');
+  if (!authLi) return;
+
+  var lang = localStorage.getItem('mp-lang') || (navigator.language.startsWith('tr') ? 'tr' : 'en');
+
+  if (user) {
+    var avatarHtml = user.avatar
+      ? '<img src="' + user.avatar + '" class="nav-user-avatar" alt="">'
+      : '';
+    var displayName = user.name || user.email || '';
+    authLi.innerHTML =
+      '<div class="nav-user">' +
+        avatarHtml +
+        '<span class="nav-user-name">' + displayName + '</span>' +
+        '<a href="/auth/signout" class="nav-sign-out">' + (lang === 'tr' ? 'Çıkış' : 'Sign Out') + '</a>' +
+      '</div>';
+  } else if (signInBtn) {
+    signInBtn.textContent = lang === 'tr' ? 'Giriş Yap' : 'Sign In';
+  }
 })();
 </script>
 

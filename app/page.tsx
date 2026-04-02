@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { Metadata } from 'next';
+import { createClient } from '@/utils/supabase/server';
 
 export const metadata: Metadata = {
   title: 'MockPlacer | Bulk Mockup Generator',
@@ -8,7 +9,23 @@ export const metadata: Metadata = {
     'Upload your mockup template, add artwork, mark the frames. MockPlacer generates 30 professional mockups in seconds. Free, no signup required.',
 };
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  // Get auth state server-side so landing page can show correct nav UI
+  let mpUser: { email?: string; name?: string | null; avatar?: string | null } | null = null;
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      mpUser = {
+        email: user.email,
+        name: user.user_metadata?.full_name ?? user.user_metadata?.name ?? null,
+        avatar: user.user_metadata?.avatar_url ?? null,
+      };
+    }
+  } catch {
+    // Not critical — landing page still renders without auth
+  }
+
   const html = readFileSync(join(process.cwd(), 'mockplacer-landing.html'), 'utf-8');
 
   // Extract <style> block content
@@ -42,6 +59,10 @@ export default function LandingPage() {
       {/* Landing page styles — override dark globals for this route */}
       {/* eslint-disable-next-line react/no-danger */}
       <style dangerouslySetInnerHTML={{ __html: styleContent }} />
+
+      {/* Inject auth state for landing page nav */}
+      {/* eslint-disable-next-line react/no-danger */}
+      <script dangerouslySetInnerHTML={{ __html: `window.__mpUser = ${JSON.stringify(mpUser)};` }} />
 
       {/* Landing page body HTML */}
       {/* eslint-disable-next-line react/no-danger */}

@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { createClient } from '@/utils/supabase/client';
 import DropZone from '@/app/components/DropZone';
 import MockupEditor from '@/app/components/MockupEditor';
 import ResultsGrid from '@/app/components/ResultsGrid';
@@ -143,6 +144,7 @@ export default function Home() {
   const [tolerance, setTolerance]           = useState(60);
   const [isMobile, setIsMobile]             = useState(false);
   const [lang, setLang]                     = useState<'tr' | 'en'>('tr');
+  const [user, setUser]                     = useState<{ email?: string; name?: string; avatar?: string } | null>(null);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth <= 700);
@@ -158,6 +160,31 @@ export default function Home() {
     };
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        setUser({
+          email: user.email,
+          name: user.user_metadata?.full_name ?? user.user_metadata?.name ?? undefined,
+          avatar: user.user_metadata?.avatar_url ?? undefined,
+        });
+      }
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setUser({
+          email: session.user.email,
+          name: session.user.user_metadata?.full_name ?? undefined,
+          avatar: session.user.user_metadata?.avatar_url ?? undefined,
+        });
+      } else {
+        setUser(null);
+      }
+    });
+    return () => subscription.unsubscribe();
   }, []);
 
   const isTR = lang === 'tr';
@@ -531,6 +558,32 @@ export default function Home() {
           >
             {isTR ? '← Ana Sayfa' : '← Home'}
           </Link>
+          <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
+          {user ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              {user.avatar && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={user.avatar} style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} alt="" />
+              )}
+              <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-2)', maxWidth: 110, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {user.name || user.email}
+              </span>
+              <button
+                onClick={async () => {
+                  const supabase = createClient();
+                  await supabase.auth.signOut();
+                  setUser(null);
+                }}
+                style={{ fontSize: 12, color: 'var(--text-2)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'inherit', flexShrink: 0 }}
+              >
+                {isTR ? 'Çıkış' : 'Sign Out'}
+              </button>
+            </div>
+          ) : (
+            <Link href="/login" style={{ fontSize: 13, fontWeight: 600, color: '#FF6B35', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+              {isTR ? 'Giriş Yap' : 'Sign In'}
+            </Link>
+          )}
         </div>
       </header>
 
