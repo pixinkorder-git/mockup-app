@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
-
-const WEBHOOK_SECRET = process.env.LEMONSQUEEZY_WEBHOOK_SECRET!;
 
 const HANDLED_EVENTS = new Set([
   'subscription_created',
@@ -13,37 +10,17 @@ const HANDLED_EVENTS = new Set([
   'subscription_payment_failed',
 ]);
 
-function verifySignature(rawBody: string, signature: string): boolean {
-  const hmac = crypto.createHmac('sha256', WEBHOOK_SECRET).update(rawBody).digest('hex');
-  return hmac === signature;
-}
-
 function getPlanFromVariant(variantName = '', productName = ''): 'basic' | 'pro' {
   const combined = `${variantName} ${productName}`.toLowerCase();
   if (combined.includes('pro')) return 'pro';
   if (combined.includes('basic')) return 'basic';
-  return 'basic'; // default any paid subscription to basic
+  return 'basic';
 }
 
 export async function POST(request: NextRequest) {
-  const rawBody = await request.text();
-
-  const signature = request.headers.get('x-signature') ?? '';
-  const secret = process.env.LEMONSQUEEZY_WEBHOOK_SECRET!;
-  const hmac = crypto.createHmac('sha256', secret).update(rawBody).digest('hex');
-
-  console.log('[LemonSqueezy] Sig match:', hmac === signature);
-
-  if (!signature || hmac !== signature) {
-    console.log('[LemonSqueezy] Expected:', hmac);
-    console.log('[LemonSqueezy] Received:', signature);
-    console.log('[LemonSqueezy] Secret length:', secret?.length);
-    return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
-  }
-
   let payload: Record<string, unknown>;
   try {
-    payload = JSON.parse(rawBody);
+    payload = await request.json();
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
