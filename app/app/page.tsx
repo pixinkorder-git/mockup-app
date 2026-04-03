@@ -498,20 +498,39 @@ export default function Home() {
         </button>
       )}
 
-      {/* Daily limit indicator */}
-      {!isExhausted && DAILY_LIMIT !== null && (
-        <p style={{
-          fontSize: 12, textAlign: 'center', fontFamily: 'monospace',
-          color: limitReached ? 'var(--danger)' : 'var(--text-2)',
-          margin: '-4px 0',
-        }}>
-          {limitReached
-            ? (isTR ? 'Günlük üretim limitine ulaştınız.' : 'Daily limit reached.')
-            : (isTR
-                ? `Bugün ${generatesRemaining} / ${DAILY_LIMIT} ücretsiz üretim hakkınız kaldı`
-                : `${generatesRemaining} of ${DAILY_LIMIT} free generates remaining today`)
-          }
-        </p>
+      {/* Plan badge + daily limit indicator */}
+      {!isExhausted && (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, margin: '-4px 0' }}>
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 5,
+            fontSize: 11, fontFamily: 'monospace', fontWeight: 600,
+            padding: '2px 8px', borderRadius: 99,
+            background: plan === 'pro' ? 'rgba(255,107,53,0.12)' : plan === 'basic' ? 'rgba(66,168,219,0.10)' : 'var(--surface-3)',
+            color: plan === 'pro' ? '#FF6B35' : plan === 'basic' ? '#2A8FC2' : 'var(--text-2)',
+            border: plan === 'pro' ? '1px solid rgba(255,107,53,0.25)' : plan === 'basic' ? '1px solid rgba(66,168,219,0.25)' : '1px solid var(--border)',
+          }}>
+            {plan === 'pro'
+              ? (isTR ? 'Pro Plan (Sınırsız)' : 'Pro Plan (Unlimited)')
+              : plan === 'basic'
+                ? (isTR ? 'Basic Plan (15/gün)' : 'Basic Plan (15/day)')
+                : (isTR ? 'Ücretsiz Plan (3/gün)' : 'Free Plan (3/day)')
+            }
+          </span>
+          {DAILY_LIMIT !== null && (
+            <p style={{
+              fontSize: 12, textAlign: 'center', fontFamily: 'monospace',
+              color: limitReached ? 'var(--danger)' : 'var(--text-2)',
+              margin: 0,
+            }}>
+              {limitReached
+                ? (isTR ? 'Günlük üretim limitine ulaştınız.' : 'Daily limit reached.')
+                : (isTR
+                    ? `Bugün ${generatesRemaining} / ${DAILY_LIMIT} ücretsiz üretim hakkınız kaldı`
+                    : `${generatesRemaining} of ${DAILY_LIMIT} free generates remaining today`)
+              }
+            </p>
+          )}
+        </div>
       )}
 
       {results.length > 0 && (
