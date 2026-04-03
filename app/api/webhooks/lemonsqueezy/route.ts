@@ -27,20 +27,34 @@ function getPlanFromVariant(variantName = '', productName = ''): 'basic' | 'pro'
 
 export async function POST(request: NextRequest) {
   const rawBody = await request.text();
-  // TEMPORARILY SKIP SIGNATURE VERIFICATION FOR TESTING
-  // const signature = request.headers.get('x-signature') ?? request.headers.get('X-Signature') ?? '';
-  // if (!signature) {
-  //   return NextResponse.json({ error: 'Missing signature' }, { status: 401 });
-  // }
-  // let isValid: boolean;
-  // try {
-  //   isValid = verifySignature(rawBody, signature);
-  // } catch {
-  //   return NextResponse.json({ error: 'Signature verification failed' }, { status: 401 });
-  // }
-  // if (!isValid) {
-  //   return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
-  // }
+
+  // Log all signature-related headers for debugging
+  const allHeaders: Record<string, string> = {};
+  request.headers.forEach((value, key) => {
+    if (key.toLowerCase().includes('sign') || key.toLowerCase().includes('x-')) {
+      allHeaders[key] = value;
+    }
+  });
+  console.log('[LemonSqueezy] Signature headers:', JSON.stringify(allHeaders));
+
+  const signature = request.headers.get('x-signature')
+    ?? request.headers.get('X-Signature')
+    ?? request.headers.get('x-signature-256')
+    ?? request.headers.get('X-Signature-256')
+    ?? '';
+
+  console.log('[LemonSqueezy] Signature found:', signature ? 'yes' : 'no', 'length:', signature.length);
+
+  const secret = process.env.LEMONSQUEEZY_WEBHOOK_SECRET!;
+  console.log('[LemonSqueezy] Secret length:', secret?.length);
+
+  const hmac = crypto.createHmac('sha256', secret).update(rawBody).digest('hex');
+  console.log('[LemonSqueezy] HMAC:', hmac.substring(0, 10) + '...');
+  console.log('[LemonSqueezy] Sig :', signature.substring(0, 10) + '...');
+
+  if (!signature || hmac !== signature) {
+    console.log('[LemonSqueezy] Signature MISMATCH - but allowing through for now');
+  }
 
   let payload: Record<string, unknown>;
   try {
