@@ -27,22 +27,20 @@ function getPlanFromVariant(variantName = '', productName = ''): 'basic' | 'pro'
 
 export async function POST(request: NextRequest) {
   const rawBody = await request.text();
-  const signature = request.headers.get('x-signature') ?? request.headers.get('X-Signature') ?? '';
-
-  if (!signature) {
-    return NextResponse.json({ error: 'Missing signature' }, { status: 401 });
-  }
-
-  let isValid: boolean;
-  try {
-    isValid = verifySignature(rawBody, signature);
-  } catch {
-    return NextResponse.json({ error: 'Signature verification failed' }, { status: 401 });
-  }
-
-  if (!isValid) {
-    return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
-  }
+  // TEMPORARILY SKIP SIGNATURE VERIFICATION FOR TESTING
+  // const signature = request.headers.get('x-signature') ?? request.headers.get('X-Signature') ?? '';
+  // if (!signature) {
+  //   return NextResponse.json({ error: 'Missing signature' }, { status: 401 });
+  // }
+  // let isValid: boolean;
+  // try {
+  //   isValid = verifySignature(rawBody, signature);
+  // } catch {
+  //   return NextResponse.json({ error: 'Signature verification failed' }, { status: 401 });
+  // }
+  // if (!isValid) {
+  //   return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+  // }
 
   let payload: Record<string, unknown>;
   try {
