@@ -14,9 +14,8 @@ const HANDLED_EVENTS = new Set([
 ]);
 
 function verifySignature(rawBody: string, signature: string): boolean {
-  const hmac = crypto.createHmac('sha256', WEBHOOK_SECRET);
-  const digest = hmac.update(rawBody).digest('hex');
-  return crypto.timingSafeEqual(Buffer.from(digest), Buffer.from(signature));
+  const hmac = crypto.createHmac('sha256', WEBHOOK_SECRET).update(rawBody).digest('hex');
+  return hmac === signature;
 }
 
 function getPlanFromVariant(variantName = '', productName = ''): 'basic' | 'pro' {
@@ -28,7 +27,7 @@ function getPlanFromVariant(variantName = '', productName = ''): 'basic' | 'pro'
 
 export async function POST(request: NextRequest) {
   const rawBody = await request.text();
-  const signature = request.headers.get('x-signature') ?? '';
+  const signature = request.headers.get('x-signature') ?? request.headers.get('X-Signature') ?? '';
 
   if (!signature) {
     return NextResponse.json({ error: 'Missing signature' }, { status: 401 });
