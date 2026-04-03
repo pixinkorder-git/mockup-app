@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { createClient } from '@supabase/supabase-js';
 
 const WEBHOOK_SECRET = process.env.LEMONSQUEEZY_WEBHOOK_SECRET!;
 
@@ -16,6 +17,13 @@ function verifySignature(rawBody: string, signature: string): boolean {
   const hmac = crypto.createHmac('sha256', WEBHOOK_SECRET);
   const digest = hmac.update(rawBody).digest('hex');
   return crypto.timingSafeEqual(Buffer.from(digest), Buffer.from(signature));
+}
+
+function getPlanFromVariant(variantName = '', productName = ''): 'basic' | 'pro' {
+  const combined = `${variantName} ${productName}`.toLowerCase();
+  if (combined.includes('pro')) return 'pro';
+  if (combined.includes('basic')) return 'basic';
+  return 'basic'; // default any paid subscription to basic
 }
 
 export async function POST(request: NextRequest) {
@@ -50,27 +58,55 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ received: true });
   }
 
-  console.log(`[LemonSqueezy] Event: ${eventName}`, JSON.stringify(payload, null, 2));
+  const data = payload.data as Record<string, unknown>;
+  const attributes = data?.attributes as Record<string, unknown>;
+  const customerEmail = attributes?.user_email as string | undefined;
+  const variantName = attributes?.variant_name as string | undefined;
+  const productName = attributes?.product_name as string | undefined;
+  const lemonSubscriptionId = data?.id as string | undefined;
+  const lemonCustomerId = attributes?.customer_id as string | number | undefined;
 
-  // TODO: Add database handling for each event type
+  console.log(`[LemonSqueezy] Event: ${eventName}`, { customerEmail, variantName, productName });
+
+  if (!customerEmail) {
+    console.error('[LemonSqueezy] No customer email in payload');
+    return NextResponse.json({ received: true });
+  }
+
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+
   switch (eventName) {
     case 'subscription_created':
-      console.log('[LemonSqueezy] New subscription created');
-      break;
     case 'subscription_updated':
-      console.log('[LemonSqueezy] Subscription updated');
+    case 'subscription_payment_success': {
+      const plan = getPlanFromVariant(variantName, productName);
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          plan,
+          lemon_customer_id: String(lemonCustomerId ?? ''),
+          lemon_subscription_id: String(lemonSubscriptionId ?? ''),
+        })
+        .eq('email', customerEmail);
+      if (error) console.error(`[LemonSqueezy] DB error on ${eventName}:`, error.message);
+      else console.log(`[LemonSqueezy] Updated ${customerEmail} → plan: ${plan}`);
       break;
+    }
     case 'subscription_cancelled':
-      console.log('[LemonSqueezy] Subscription cancelled');
+    case 'subscription_expired': {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ plan: 'free' })
+        .eq('email', customerEmail);
+      if (error) console.error(`[LemonSqueezy] DB error on ${eventName}:`, error.message);
+      else console.log(`[LemonSqueezy] Downgraded ${customerEmail} → plan: free`);
       break;
-    case 'subscription_expired':
-      console.log('[LemonSqueezy] Subscription expired');
-      break;
-    case 'subscription_payment_success':
-      console.log('[LemonSqueezy] Payment successful');
-      break;
+    }
     case 'subscription_payment_failed':
-      console.log('[LemonSqueezy] Payment failed');
+      console.log(`[LemonSqueezy] Payment failed for ${customerEmail} — no plan change`);
       break;
   }
 

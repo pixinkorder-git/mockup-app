@@ -144,7 +144,7 @@ export default function Home() {
   const [tolerance, setTolerance]           = useState(60);
   const [isMobile, setIsMobile]             = useState(false);
   const [lang, setLang]                     = useState<'tr' | 'en'>('tr');
-  const [user, setUser]                     = useState<{ email?: string; name?: string; avatar?: string } | null>(null);
+  const [user, setUser]                     = useState<{ id?: string; email?: string; name?: string; avatar?: string } | null>(null);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth <= 700);
@@ -167,6 +167,7 @@ export default function Home() {
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (user) {
         setUser({
+          id: user.id,
           email: user.email,
           name: user.user_metadata?.full_name ?? user.user_metadata?.name ?? undefined,
           avatar: user.user_metadata?.avatar_url ?? undefined,
@@ -176,6 +177,7 @@ export default function Home() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
         setUser({
+          id: session.user.id,
           email: session.user.email,
           name: session.user.user_metadata?.full_name ?? undefined,
           avatar: session.user.user_metadata?.avatar_url ?? undefined,
@@ -189,8 +191,26 @@ export default function Home() {
 
   const isTR = lang === 'tr';
 
+  const [plan, setPlan] = useState<'free' | 'basic' | 'pro'>('free');
+
+  useEffect(() => {
+    if (!user?.id) { setPlan('free'); return; }
+    const supabase = createClient();
+    supabase
+      .from('profiles')
+      .select('plan')
+      .eq('id', user.id)
+      .single()
+      .then(({ data }) => {
+        const fetched = data?.plan;
+        if (fetched === 'basic' || fetched === 'pro') setPlan(fetched);
+        else setPlan('free');
+      });
+  }, [user?.id]);
+
   // ── Daily generate limit ──────────────────────────────────────────────────
-  const DAILY_LIMIT = 3;
+  // null = unlimited (pro plan)
+  const DAILY_LIMIT: number | null = plan === 'pro' ? null : plan === 'basic' ? 15 : 3;
   const [generateCount, setGenerateCount] = useState(0);
 
   useEffect(() => {
@@ -204,8 +224,8 @@ export default function Home() {
     } catch { /* ignore */ }
   }, []);
 
-  const limitReached      = generateCount >= DAILY_LIMIT;
-  const generatesRemaining = Math.max(0, DAILY_LIMIT - generateCount);
+  const limitReached       = DAILY_LIMIT !== null && generateCount >= DAILY_LIMIT;
+  const generatesRemaining = DAILY_LIMIT !== null ? Math.max(0, DAILY_LIMIT - generateCount) : null;
 
   const incrementGenerateCount = useCallback(() => {
     const today = new Date().toISOString().slice(0, 10);
@@ -479,7 +499,7 @@ export default function Home() {
       )}
 
       {/* Daily limit indicator */}
-      {!isExhausted && (
+      {!isExhausted && DAILY_LIMIT !== null && (
         <p style={{
           fontSize: 12, textAlign: 'center', fontFamily: 'monospace',
           color: limitReached ? 'var(--danger)' : 'var(--text-2)',
@@ -834,7 +854,7 @@ export default function Home() {
                 </svg>
               </div>
               <p style={{ fontSize: 15, fontWeight: 600, color: '#1a1a1a', fontFamily: "'Clash Display', sans-serif" }}>
-                {isTR ? `Bugünkü 3 ücretsiz üretiminizi kullandınız.` : `You've used your 3 free generates today.`}
+                {isTR ? `Bugünkü ${DAILY_LIMIT ?? 0} ücretsiz üretiminizi kullandınız.` : `You've used your ${DAILY_LIMIT ?? 0} free generates today.`}
               </p>
             </div>
             <p style={{ fontSize: 13, color: '#666', lineHeight: 1.6, paddingLeft: 46 }}>
@@ -868,7 +888,7 @@ export default function Home() {
 
         {results.length > 0 && (
           <div style={{ marginTop: 40 }}>
-            <ResultsGrid results={results} lang={lang} />
+            <ResultsGrid results={results} lang={lang} plan={plan} />
           </div>
         )}
 

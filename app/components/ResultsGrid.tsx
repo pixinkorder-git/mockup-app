@@ -7,6 +7,7 @@ import { GeneratedResult } from '@/app/utils/types';
 interface Props {
   results: GeneratedResult[];
   lang?: 'tr' | 'en';
+  plan?: 'free' | 'basic' | 'pro';
 }
 
 function downloadDataUrl(dataUrl: string, filename: string) {
@@ -25,14 +26,13 @@ function dataUrlToBytes(dataUrl: string): Uint8Array {
   return bytes;
 }
 
-export default function ResultsGrid({ results, lang = 'en' }: Props) {
+export default function ResultsGrid({ results, lang = 'en', plan = 'free' }: Props) {
   const isTR = lang === 'tr';
   const [downloadingAll, setDownloadingAll] = useState(false);
   const [downloadingZip, setDownloadingZip] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // No auth yet — all users are treated as free
-  const isPro = false;
+  const canBulkDownload = plan === 'basic' || plan === 'pro';
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth <= 700);
@@ -115,8 +115,8 @@ export default function ResultsGrid({ results, lang = 'en' }: Props) {
         >
           {/* Download ZIP — PRO only */}
           <button
-            onClick={isPro ? handleDownloadZip : goUpgrade}
-            disabled={isPro && busy}
+            onClick={canBulkDownload ? handleDownloadZip : goUpgrade}
+            disabled={canBulkDownload && busy}
             className="flex items-center justify-center gap-2 rounded-sm font-medium transition-all"
             style={{
               fontSize: 15,
@@ -125,12 +125,12 @@ export default function ResultsGrid({ results, lang = 'en' }: Props) {
               width: isMobile ? '100%' : undefined,
               background: 'var(--surface-2)',
               border: '1px solid var(--border-2)',
-              color: (isPro && busy) ? 'var(--text-2)' : 'var(--text)',
-              cursor: (isPro && busy) ? 'not-allowed' : 'pointer',
-              opacity: (isPro && busy) && !downloadingZip ? 0.5 : 1,
+              color: (canBulkDownload && busy) ? 'var(--text-2)' : 'var(--text)',
+              cursor: (canBulkDownload && busy) ? 'not-allowed' : 'pointer',
+              opacity: (canBulkDownload && busy) && !downloadingZip ? 0.5 : 1,
             }}
           >
-            {isPro && downloadingZip ? (
+            {canBulkDownload && downloadingZip ? (
               <>
                 <span
                   className="w-3.5 h-3.5 rounded-full border border-t-transparent animate-spin inline-block"
@@ -152,8 +152,8 @@ export default function ResultsGrid({ results, lang = 'en' }: Props) {
 
           {/* Download All — PRO only */}
           <button
-            onClick={isPro ? handleDownloadAll : goUpgrade}
-            disabled={isPro && busy}
+            onClick={canBulkDownload ? handleDownloadAll : goUpgrade}
+            disabled={canBulkDownload && busy}
             className="flex items-center justify-center gap-2 rounded-sm font-medium transition-all"
             style={{
               fontSize: 15,
@@ -162,12 +162,12 @@ export default function ResultsGrid({ results, lang = 'en' }: Props) {
               width: isMobile ? '100%' : undefined,
               background: 'var(--surface-2)',
               border: '1px solid var(--border-2)',
-              color: (isPro && busy) ? 'var(--text-2)' : 'var(--text)',
-              cursor: (isPro && busy) ? 'not-allowed' : 'pointer',
-              opacity: (isPro && busy) && !downloadingAll ? 0.5 : 1,
+              color: (canBulkDownload && busy) ? 'var(--text-2)' : 'var(--text)',
+              cursor: (canBulkDownload && busy) ? 'not-allowed' : 'pointer',
+              opacity: (canBulkDownload && busy) && !downloadingAll ? 0.5 : 1,
             }}
           >
-            {isPro && downloadingAll ? (
+            {canBulkDownload && downloadingAll ? (
               <>
                 <span
                   className="w-3.5 h-3.5 rounded-full border border-t-transparent animate-spin inline-block"
