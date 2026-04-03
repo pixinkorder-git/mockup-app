@@ -17,7 +17,7 @@ export default function LoginPage() {
       setLang('tr');
     }
     const params = new URLSearchParams(window.location.search);
-    if (params.get('error') === 'auth_error') {
+    if (params.get('error') === 'auth_failed') {
       setError(isTRRef.current ? 'Giriş başarısız. Lütfen tekrar deneyin.' : 'Sign in failed. Please try again.');
     }
   }, []);
@@ -29,14 +29,17 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     setLoading(true);
     setError(null);
+    console.log('[MockPlacer] Starting Google OAuth sign in...');
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: window.location.origin + '/auth/callback',
+        redirectTo: 'https://mockplacer.com/auth/callback',
       },
     });
+    console.log('[MockPlacer] signInWithOAuth result:', { data, error });
     if (error) {
+      console.error('[MockPlacer] OAuth error:', error.message);
       setError(isTR ? 'Giriş başarısız. Lütfen tekrar deneyin.' : 'Sign in failed. Please try again.');
       setLoading(false);
     }
