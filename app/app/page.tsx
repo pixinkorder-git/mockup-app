@@ -6,6 +6,7 @@ import { createClient } from '@/utils/supabase/client';
 import DropZone from '@/app/components/DropZone';
 import MockupEditor from '@/app/components/MockupEditor';
 import ResultsGrid from '@/app/components/ResultsGrid';
+import UserDropdown from '@/app/components/UserDropdown';
 import { ArtImage, MockupTemplate, Frame, GeneratedResult } from '@/app/utils/types';
 import { computeCombinations, orderCombinations, generateBatch } from '@/app/utils/compositor';
 
@@ -599,25 +600,12 @@ export default function Home() {
           </Link>
           <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
           {user ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              {user.avatar && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={user.avatar} style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} alt="" />
-              )}
-              <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-2)', maxWidth: 110, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                {user.name || user.email}
-              </span>
-              <button
-                onClick={async () => {
-                  const supabase = createClient();
-                  await supabase.auth.signOut();
-                  setUser(null);
-                }}
-                style={{ fontSize: 12, color: 'var(--text-2)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'inherit', flexShrink: 0 }}
-              >
-                {isTR ? 'Çıkış' : 'Sign Out'}
-              </button>
-            </div>
+            <UserDropdown
+              user={user}
+              plan={plan}
+              lang={lang}
+              onSignOut={() => setUser(null)}
+            />
           ) : (
             <Link href="/login" style={{ fontSize: 13, fontWeight: 600, color: '#FF6B35', textDecoration: 'none', whiteSpace: 'nowrap' }}>
               {isTR ? 'Giriş Yap' : 'Sign In'}

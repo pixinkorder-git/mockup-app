@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default async function LandingPage() {
   // Get auth state server-side so landing page can show correct nav UI
-  let mpUser: { email?: string; name?: string | null; avatar?: string | null } | null = null;
+  let mpUser: { email?: string; name?: string | null; avatar?: string | null; plan?: string } | null = null;
   try {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
@@ -20,7 +20,16 @@ export default async function LandingPage() {
         email: user.email,
         name: user.user_metadata?.full_name ?? user.user_metadata?.name ?? null,
         avatar: user.user_metadata?.avatar_url ?? null,
+        plan: 'free',
       };
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('plan')
+        .eq('id', user.id)
+        .single();
+      if (profile?.plan === 'basic' || profile?.plan === 'pro') {
+        mpUser.plan = profile.plan;
+      }
     }
   } catch {
     // Not critical — landing page still renders without auth
