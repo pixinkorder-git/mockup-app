@@ -3050,31 +3050,37 @@ setLang(currentLang);
     return;
   }
 
-  // Plan badge colours
   var plan = user.plan || 'free';
-  var planLabel = plan === 'pro' ? 'Pro Plan' : plan === 'basic' ? 'Basic Plan' : (isTR ? 'Ücretsiz Plan' : 'Free Plan');
+  var planLabel  = plan === 'pro' ? 'Pro Plan' : plan === 'basic' ? 'Basic Plan' : (isTR ? 'Ücretsiz Plan' : 'Free Plan');
+  var planDetail = plan === 'pro' ? (isTR ? 'Sınırsız üretim' : 'Unlimited generates') : plan === 'basic' ? (isTR ? '15 üretim/gün' : '15 generates/day') : (isTR ? '3 üretim/gün' : '3 generates/day');
   var planColor  = plan === 'pro' ? '#FF6B35' : plan === 'basic' ? '#2A8FC2' : '#888';
   var planBg     = plan === 'pro' ? 'rgba(255,107,53,0.10)' : plan === 'basic' ? 'rgba(66,168,219,0.10)' : 'rgba(0,0,0,0.05)';
   var planBorder = plan === 'pro' ? 'rgba(255,107,53,0.25)' : plan === 'basic' ? 'rgba(66,168,219,0.25)' : 'rgba(0,0,0,0.10)';
 
+  var initials = (user.name || user.email || '?')[0].toUpperCase();
   var avatarSrc = user.avatar || '';
   var avatarTrigger = avatarSrc
     ? '<img src="' + avatarSrc + '" class="nav-user-avatar" alt="">'
-    : '<div style="width:30px;height:30px;border-radius:50%;background:#FF6B35;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="color:#fff;font-size:12px;font-weight:700">' + (user.name || user.email || '?')[0].toUpperCase() + '</span></div>';
+    : '<div style="width:30px;height:30px;border-radius:50%;background:#FF6B35;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="color:#fff;font-size:12px;font-weight:700">' + initials + '</span></div>';
   var avatarHeader = avatarSrc
     ? '<img src="' + avatarSrc + '" class="nav-dd-avatar" alt="">'
-    : '<div style="width:38px;height:38px;border-radius:50%;background:#FF6B35;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="color:#fff;font-size:15px;font-weight:700">' + (user.name || user.email || '?')[0].toUpperCase() + '</span></div>';
+    : '<div style="width:38px;height:38px;border-radius:50%;background:#FF6B35;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="color:#fff;font-size:15px;font-weight:700">' + initials + '</span></div>';
 
   var svgChevron = '<svg class="nav-user-chevron" width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="#888" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  var svgPlan    = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>';
+  var svgPlan    = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="' + planColor + '" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>';
+  var svgShare   = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>';
+  var svgReview  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
   var svgBilling = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>';
   var svgSignOut = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>';
+
+  var upgradeLinkHtml = plan === 'free'
+    ? ' <a href="/pricing" style="font-size:11px;font-weight:700;color:#FF6B35;text-decoration:none;white-space:nowrap;font-family:\'Clash Display\',sans-serif;margin-left:auto">' + (isTR ? 'Yükselt' : 'Upgrade') + '</a>'
+    : '';
 
   authLi.innerHTML =
     '<div class="nav-user">' +
       '<button class="nav-user-trigger" id="nav-dd-trigger">' +
-        avatarTrigger +
-        svgChevron +
+        avatarTrigger + svgChevron +
       '</button>' +
       '<div class="nav-dropdown" id="nav-dd-panel">' +
         '<div class="nav-dd-header">' +
@@ -3086,7 +3092,14 @@ setLang(currentLang);
           '</div>' +
         '</div>' +
         '<div class="nav-dd-items">' +
-          '<a href="/pricing" class="nav-dd-item">' + svgPlan + (isTR ? 'Planım' : 'My Plan') + '</a>' +
+          '<div style="display:flex;align-items:center;gap:10px;padding:8px 16px">' +
+            svgPlan +
+            '<span style="font-size:13px;color:#333">' + planLabel + '</span>' +
+            '<span style="font-size:11px;color:#999;font-family:monospace">' + planDetail + '</span>' +
+            upgradeLinkHtml +
+          '</div>' +
+          '<button class="nav-dd-item" id="nav-dd-share">' + svgShare + '<span id="nav-dd-share-label">' + (isTR ? "MockPlacer'ı Paylaş" : 'Share MockPlacer') + '</span></button>' +
+          '<a href="mailto:info@mockplacer.com?subject=Feedback" class="nav-dd-item">' + svgReview + (isTR ? 'Yorum Bırak' : 'Leave a Review') + '</a>' +
           '<a href="https://mockplacer.lemonsqueezy.com/billing" target="_blank" rel="noopener noreferrer" class="nav-dd-item">' + svgBilling + (isTR ? 'Faturalama' : 'Billing') + '</a>' +
           '<div class="nav-dd-divider"></div>' +
           '<button class="nav-dd-item danger" id="nav-dd-signout">' + svgSignOut + (isTR ? 'Çıkış Yap' : 'Sign Out') + '</button>' +
@@ -3100,6 +3113,20 @@ setLang(currentLang);
   trigger.addEventListener('click', function() {
     var isOpen = panel.classList.toggle('open');
     trigger.classList.toggle('open', isOpen);
+  });
+
+  document.getElementById('nav-dd-share').addEventListener('click', function() {
+    var url = 'https://mockplacer.com';
+    var label = document.getElementById('nav-dd-share-label');
+    var origText = label.textContent;
+    if (navigator.share) {
+      navigator.share({ title: 'MockPlacer', text: isTR ? 'MockPlacer ile saniyeler içinde profesyonel mockuplar oluştur!' : 'Create professional mockups in seconds with MockPlacer!', url: url }).catch(function(){});
+    } else {
+      navigator.clipboard.writeText(url).then(function() {
+        label.textContent = isTR ? 'Link kopyalandı!' : 'Link copied!';
+        setTimeout(function() { label.textContent = origText; }, 2000);
+      });
+    }
   });
 
   document.getElementById('nav-dd-signout').addEventListener('click', function() {
