@@ -3049,11 +3049,14 @@ setLang(currentLang);
     var stars = '';
     for (var s = 1; s <= 5; s++) stars += s <= r.rating ? starSvg : starEmpty;
     var date = new Date(r.created_at).toLocaleDateString(undefined, { month: 'short', year: 'numeric' });
+    var avatarHtml = r.avatar_url
+      ? '<img src="' + r.avatar_url + '" class="testi-avatar" style="width:40px;height:40px;border-radius:50%;object-fit:cover;flex-shrink:0" alt="" loading="lazy">'
+      : '<div class="testi-initials" style="background:' + colors[i % colors.length] + '">' + initials + '</div>';
     var card = document.createElement('div');
     card.className = 'testi-card';
     card.innerHTML =
       '<div class="testi-header">' +
-        '<div class="testi-initials" style="background:' + colors[i % colors.length] + '">' + initials + '</div>' +
+        avatarHtml +
         '<div class="testi-author"><span class="testi-name">' + firstName + '</span><span class="testi-role">' + date + '</span></div>' +
       '</div>' +
       '<div class="testi-stars">' + stars + '</div>' +

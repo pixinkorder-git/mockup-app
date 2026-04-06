@@ -8,6 +8,7 @@
     user_id UUID REFERENCES auth.users(id),
     email TEXT,
     name TEXT,
+    avatar_url TEXT,
     rating INTEGER CHECK (rating >= 1 AND rating <= 5),
     comment TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -30,6 +31,7 @@ export default function FeedbackPage() {
   const [comment, setComment] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submittedRating, setSubmittedRating] = useState(0);
@@ -51,6 +53,7 @@ export default function FeedbackPage() {
       if (!user) return;
       setEmail(user.email ?? '');
       setName(user.user_metadata?.full_name ?? user.user_metadata?.name ?? '');
+      setAvatarUrl(user.user_metadata?.avatar_url ?? '');
 
       const { data: existing } = await supabase
         .from('reviews')
@@ -83,13 +86,15 @@ export default function FeedbackPage() {
       if (existingReviewId) {
         await supabase.from('reviews').update({
           rating, comment: comment || null, name: name || null,
-          email: email || null, updated_at: new Date().toISOString(),
+          email: email || null, avatar_url: avatarUrl || null,
+          updated_at: new Date().toISOString(),
         }).eq('id', existingReviewId);
       } else {
         const { data } = await supabase.from('reviews').insert({
           user_id: user?.id ?? null,
           email: email || null,
           name: name || null,
+          avatar_url: avatarUrl || null,
           rating,
           comment: comment || null,
         }).select('id').single();

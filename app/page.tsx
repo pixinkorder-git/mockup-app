@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default async function LandingPage() {
   // Get auth state server-side so landing page can show correct nav UI
   let mpUser: { email?: string; name?: string | null; avatar?: string | null; plan?: string } | null = null;
-  let mpReviews: { name: string | null; rating: number; comment: string | null; created_at: string }[] = [];
+  let mpReviews: { name: string | null; avatar_url: string | null; rating: number; comment: string | null; created_at: string }[] = [];
   try {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
@@ -35,7 +35,7 @@ export default async function LandingPage() {
     // Fetch top reviews (rating >= 4 and has a comment) for testimonials
     const { data: reviews } = await supabase
       .from('reviews')
-      .select('name, rating, comment, created_at')
+      .select('name, avatar_url, rating, comment, created_at')
       .gte('rating', 4)
       .not('comment', 'is', null)
       .order('created_at', { ascending: false })
