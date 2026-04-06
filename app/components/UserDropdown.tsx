@@ -26,10 +26,10 @@ export default function UserDropdown({ user, plan, lang = 'en', onSignOut }: Use
 
   const planLabel = plan === 'pro' ? 'Pro Plan' : plan === 'basic' ? 'Basic Plan' : (isTR ? 'Ücretsiz Plan' : 'Free Plan');
   const planDetail = plan === 'pro'
-    ? (isTR ? 'Sınırsız üretim' : 'Unlimited generates')
+    ? (isTR ? 'Sınırsız oluşturma' : 'Unlimited generates')
     : plan === 'basic'
-      ? (isTR ? '15 üretim/gün' : '15 generates/day')
-      : (isTR ? '3 üretim/gün' : '3 generates/day');
+      ? (isTR ? 'Günde 15 oluşturma' : '15 generates/day')
+      : (isTR ? 'Günde 3 oluşturma' : '3 generates/day');
   const planColor  = plan === 'pro' ? '#FF6B35' : plan === 'basic' ? '#2A8FC2' : '#888';
   const planBg     = plan === 'pro' ? 'rgba(255,107,53,0.10)' : plan === 'basic' ? 'rgba(66,168,219,0.10)' : 'rgba(0,0,0,0.05)';
   const planBorder = plan === 'pro' ? 'rgba(255,107,53,0.25)' : plan === 'basic' ? 'rgba(66,168,219,0.25)' : 'rgba(0,0,0,0.10)';
@@ -147,7 +147,7 @@ export default function UserDropdown({ user, plan, lang = 'en', onSignOut }: Use
 
             {/* Leave a review */}
             <a
-              href="mailto:info@mockplacer.com?subject=Feedback"
+              href="/feedback"
               className="mp-dd-item"
               style={itemStyle}
               onClick={() => setOpen(false)}
@@ -169,7 +169,7 @@ export default function UserDropdown({ user, plan, lang = 'en', onSignOut }: Use
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
               </svg>
-              {isTR ? 'Faturalama' : 'Billing'}
+              {isTR ? 'Faturalandırma' : 'Billing'}
             </a>
 
             <div style={{ height: 1, background: '#F0F0F0', margin: '6px 0' }} />

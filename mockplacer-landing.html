@@ -3052,7 +3052,7 @@ setLang(currentLang);
 
   var plan = user.plan || 'free';
   var planLabel  = plan === 'pro' ? 'Pro Plan' : plan === 'basic' ? 'Basic Plan' : (isTR ? 'Ücretsiz Plan' : 'Free Plan');
-  var planDetail = plan === 'pro' ? (isTR ? 'Sınırsız üretim' : 'Unlimited generates') : plan === 'basic' ? (isTR ? '15 üretim/gün' : '15 generates/day') : (isTR ? '3 üretim/gün' : '3 generates/day');
+  var planDetail = plan === 'pro' ? (isTR ? 'Sınırsız oluşturma' : 'Unlimited generates') : plan === 'basic' ? (isTR ? 'Günde 15 oluşturma' : '15 generates/day') : (isTR ? 'Günde 3 oluşturma' : '3 generates/day');
   var planColor  = plan === 'pro' ? '#FF6B35' : plan === 'basic' ? '#2A8FC2' : '#888';
   var planBg     = plan === 'pro' ? 'rgba(255,107,53,0.10)' : plan === 'basic' ? 'rgba(66,168,219,0.10)' : 'rgba(0,0,0,0.05)';
   var planBorder = plan === 'pro' ? 'rgba(255,107,53,0.25)' : plan === 'basic' ? 'rgba(66,168,219,0.25)' : 'rgba(0,0,0,0.10)';
@@ -3099,8 +3099,8 @@ setLang(currentLang);
             upgradeLinkHtml +
           '</div>' +
           '<button class="nav-dd-item" id="nav-dd-share">' + svgShare + '<span id="nav-dd-share-label">' + (isTR ? "MockPlacer'ı Paylaş" : 'Share MockPlacer') + '</span></button>' +
-          '<a href="mailto:info@mockplacer.com?subject=Feedback" class="nav-dd-item">' + svgReview + (isTR ? 'Yorum Bırak' : 'Leave a Review') + '</a>' +
-          '<a href="https://mockplacer.lemonsqueezy.com/billing" target="_blank" rel="noopener noreferrer" class="nav-dd-item">' + svgBilling + (isTR ? 'Faturalama' : 'Billing') + '</a>' +
+          '<a href="/feedback" class="nav-dd-item">' + svgReview + (isTR ? 'Yorum Bırak' : 'Leave a Review') + '</a>' +
+          '<a href="https://mockplacer.lemonsqueezy.com/billing" target="_blank" rel="noopener noreferrer" class="nav-dd-item">' + svgBilling + (isTR ? 'Faturalandırma' : 'Billing') + '</a>' +
           '<div class="nav-dd-divider"></div>' +
           '<button class="nav-dd-item danger" id="nav-dd-signout">' + svgSignOut + (isTR ? 'Çıkış Yap' : 'Sign Out') + '</button>' +
         '</div>' +
