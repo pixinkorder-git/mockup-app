@@ -19,7 +19,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/utils/supabase/client';
 
@@ -184,15 +183,15 @@ export default function FeedbackPage() {
 
       <div className="fb-wrap">
         <nav className="fb-nav">
-          <Link href="/" className="back-link">
+          <button className="back-link" onClick={() => router.push('/')}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M10 3L5 8l5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             {isTR ? "MockPlacer'a Dön" : 'Back to MockPlacer'}
-          </Link>
-          <Link href="/">
+          </button>
+          <button onClick={() => router.push('/')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
             <Image src="/1logo.png" width={140} height={35} alt="MockPlacer" style={{ display: 'block' }} />
-          </Link>
+          </button>
         </nav>
 
         <main className="fb-main">

@@ -136,6 +136,19 @@ export default function UserDropdown({ user, plan, lang = 'en', onSignOut }: Use
               )}
             </div>
 
+            {/* Profile Settings */}
+            <a
+              href="/profile"
+              className="mp-dd-item"
+              style={itemStyle}
+              onClick={() => setOpen(false)}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+              </svg>
+              {isTR ? 'Profil Ayarları' : 'Profile Settings'}
+            </a>
+
             {/* Share */}
             <button className="mp-dd-item" style={itemStyle} onClick={handleShare}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
