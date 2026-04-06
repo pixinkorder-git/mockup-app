@@ -154,7 +154,6 @@ export default function PricingPage() {
           font-size: 0.82rem;
           font-weight: 600;
           letter-spacing: 0.06em;
-          text-transform: uppercase;
           padding: 6px 14px;
           border-radius: 100px;
           margin-bottom: 20px;
@@ -270,7 +269,6 @@ export default function PricingPage() {
           font-size: 0.75rem;
           font-weight: 700;
           letter-spacing: 0.05em;
-          text-transform: uppercase;
           padding: 4px 16px;
           border-radius: 100px;
           white-space: nowrap;
@@ -450,7 +448,7 @@ export default function PricingPage() {
 
         {/* HERO */}
         <div className="pricing-hero">
-          <div className="pricing-badge">{isTR ? 'FİYATLANDIRMA' : 'Pricing'}</div>
+          <div className="pricing-badge">{isTR ? 'Fiyatlandırma' : 'Pricing'}</div>
           <h1 className="pricing-title">
             {isTR ? <>Basit, <em>Şeffaf</em><br />Fiyatlandırma</> : <>Simple, <em>Transparent</em><br />Pricing</>}
           </h1>
@@ -488,7 +486,7 @@ export default function PricingPage() {
             return (
               <div key={plan.name} className={`plan-card${plan.popular ? ' popular' : ''}`}>
                 {plan.popular && (
-                  <div className="popular-badge">{isTR ? 'EN POPÜLER' : 'Most Popular'}</div>
+                  <div className="popular-badge">{isTR ? 'En Popüler' : 'Most Popular'}</div>
                 )}
 
                 <div className="plan-name">{plan.name}</div>

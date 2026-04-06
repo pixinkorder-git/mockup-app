@@ -67,7 +67,7 @@ export default function PrivacyPage() {
           font-size: 0.82rem;
           font-weight: 600;
           letter-spacing: 0.06em;
-          text-transform: uppercase;
+
           padding: 6px 14px;
           border-radius: 100px;
           margin-bottom: 20px;

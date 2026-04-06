@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 export default async function LandingPage() {
   // Get auth state server-side so landing page can show correct nav UI
   let mpUser: { email?: string; name?: string | null; avatar?: string | null; plan?: string } | null = null;
+  let mpReviews: { name: string | null; rating: number; comment: string | null; created_at: string }[] = [];
   try {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
@@ -31,6 +32,15 @@ export default async function LandingPage() {
         mpUser.plan = profile.plan;
       }
     }
+    // Fetch top reviews (rating >= 4 and has a comment) for testimonials
+    const { data: reviews } = await supabase
+      .from('reviews')
+      .select('name, rating, comment, created_at')
+      .gte('rating', 4)
+      .not('comment', 'is', null)
+      .order('created_at', { ascending: false })
+      .limit(6);
+    if (reviews) mpReviews = reviews;
   } catch {
     // Not critical — landing page still renders without auth
   }
@@ -69,9 +79,9 @@ export default async function LandingPage() {
       {/* eslint-disable-next-line react/no-danger */}
       <style dangerouslySetInnerHTML={{ __html: styleContent }} />
 
-      {/* Inject auth state for landing page nav */}
+      {/* Inject auth state and reviews for landing page */}
       {/* eslint-disable-next-line react/no-danger */}
-      <script dangerouslySetInnerHTML={{ __html: `window.__mpUser = ${JSON.stringify(mpUser)};` }} />
+      <script dangerouslySetInnerHTML={{ __html: `window.__mpUser = ${JSON.stringify(mpUser)}; window.__mpReviews = ${JSON.stringify(mpReviews)};` }} />
 
       {/* Landing page body HTML */}
       {/* eslint-disable-next-line react/no-danger */}

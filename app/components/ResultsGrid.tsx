@@ -96,7 +96,7 @@ export default function ResultsGrid({ results, lang = 'en', plan = 'free' }: Pro
             <div className="w-3 h-px" style={{ background: 'var(--border-2)' }} />
           </div>
           <h2 className="font-display tracking-wider" style={{ color: 'var(--text)', fontSize: 28 }}>
-            {isTR ? 'SONUÇLAR' : 'RESULTS'}
+            {isTR ? 'Sonuçlar' : 'Results'}
           </h2>
           <span
             className="font-mono px-2 py-0.5 rounded-sm"

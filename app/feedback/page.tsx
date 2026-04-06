@@ -1,11 +1,29 @@
 'use client';
 
+/*
+  Supabase table required — run once in SQL editor:
+
+  CREATE TABLE public.reviews (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id),
+    email TEXT,
+    name TEXT,
+    rating INTEGER CHECK (rating >= 1 AND rating <= 5),
+    comment TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+  );
+  ALTER TABLE public.reviews DISABLE ROW LEVEL SECURITY;
+*/
+
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/utils/supabase/client';
 
 export default function FeedbackPage() {
+  const router = useRouter();
   const [lang, setLang] = useState<'tr' | 'en'>('en');
   const [rating, setRating] = useState(0);
   const [hovered, setHovered] = useState(0);
@@ -14,6 +32,8 @@ export default function FeedbackPage() {
   const [email, setEmail] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submittedRating, setSubmittedRating] = useState(0);
+  const [existingReviewId, setExistingReviewId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const isTR = lang === 'tr';
@@ -24,12 +44,26 @@ export default function FeedbackPage() {
     else if (navigator.language.startsWith('tr')) setLang('tr');
   }, []);
 
+  // Load user info and any existing review
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) {
-        setEmail(user.email ?? '');
-        setName(user.user_metadata?.full_name ?? user.user_metadata?.name ?? '');
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (!user) return;
+      setEmail(user.email ?? '');
+      setName(user.user_metadata?.full_name ?? user.user_metadata?.name ?? '');
+
+      const { data: existing } = await supabase
+        .from('reviews')
+        .select('id, rating, comment, name, email')
+        .eq('user_id', user.id)
+        .single();
+
+      if (existing) {
+        setExistingReviewId(existing.id);
+        setRating(existing.rating ?? 0);
+        setComment(existing.comment ?? '');
+        if (existing.name) setName(existing.name);
+        if (existing.email) setEmail(existing.email);
       }
     });
   }, []);
@@ -45,18 +79,29 @@ export default function FeedbackPage() {
     try {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
-      const { error: dbError } = await supabase.from('feedback').insert({
-        user_id: user?.id ?? null,
-        email: email || null,
-        name: name || null,
-        rating,
-        comment: comment || null,
-      });
-      if (dbError) console.error('[Feedback] DB error:', dbError.message);
+
+      if (existingReviewId) {
+        await supabase.from('reviews').update({
+          rating, comment: comment || null, name: name || null,
+          email: email || null, updated_at: new Date().toISOString(),
+        }).eq('id', existingReviewId);
+      } else {
+        const { data } = await supabase.from('reviews').insert({
+          user_id: user?.id ?? null,
+          email: email || null,
+          name: name || null,
+          rating,
+          comment: comment || null,
+        }).select('id').single();
+        if (data?.id) setExistingReviewId(data.id);
+      }
+
+      setSubmittedRating(rating);
       setSubmitted(true);
     } catch (err) {
       console.error('[Feedback] Error:', err);
-      setSubmitted(true); // show success even on error — don't block user
+      setSubmittedRating(rating);
+      setSubmitted(true);
     } finally {
       setSubmitting(false);
     }
@@ -86,7 +131,7 @@ export default function FeedbackPage() {
         }
         .fb-badge {
           display: inline-block; background: rgba(255,107,53,0.08); color: #FF6B35;
-          font-size: 0.82rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+          font-size: 0.82rem; font-weight: 600; letter-spacing: 0.06em;
           padding: 6px 14px; border-radius: 100px; margin-bottom: 20px;
         }
         .fb-title { font-family: 'Clash Display', sans-serif; font-size: 1.9rem; font-weight: 600; line-height: 1.15; color: #1a1a1a; margin-bottom: 8px; }
@@ -104,8 +149,6 @@ export default function FeedbackPage() {
         }
         .fb-input:focus, .fb-textarea:focus { border-color: #FF6B35; background: #fff; }
         .fb-textarea { resize: vertical; min-height: 110px; }
-        .fb-row { display: flex; gap: 12px; }
-        .fb-row .fb-input { margin-bottom: 0; }
         .fb-row-wrap { display: flex; gap: 12px; margin-bottom: 16px; }
         .fb-row-wrap > * { flex: 1; }
         .fb-btn {
@@ -116,12 +159,20 @@ export default function FeedbackPage() {
         }
         .fb-btn:hover:not(:disabled) { background: #E85A28; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(255,107,53,0.4); }
         .fb-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .fb-btn-outline {
+          width: 100%; padding: 11px 24px; background: transparent; color: #666;
+          border: 1px solid #E5E5E5; border-radius: 12px; font-family: 'Satoshi', sans-serif;
+          font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.2s; margin-top: 10px;
+        }
+        .fb-btn-outline:hover { border-color: #FF6B35; color: #FF6B35; }
         .fb-error { margin-top: 12px; padding: 10px 16px; background: rgba(204,51,0,0.06); border: 1px solid rgba(204,51,0,0.2); border-radius: 8px; color: #CC3300; font-size: 0.88rem; }
         .fb-success { text-align: center; padding: 16px 0; }
-        .fb-success-icon { font-size: 48px; margin-bottom: 16px; }
+        .fb-success-stars { font-size: 28px; letter-spacing: 2px; margin-bottom: 16px; }
         .fb-success h2 { font-family: 'Clash Display', sans-serif; font-size: 1.5rem; font-weight: 600; color: #1a1a1a; margin-bottom: 8px; }
         .fb-success p { color: #777; font-size: 0.95rem; line-height: 1.6; }
-        .fb-success-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 24px; padding: 10px 20px; background: #FF6B35; color: #fff; border-radius: 10px; font-weight: 600; font-size: 0.9rem; text-decoration: none; font-family: 'Clash Display', sans-serif; }
+        .fb-success-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
+        .fb-success-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 12px 24px; background: #FF6B35; color: #fff; border-radius: 12px; font-weight: 600; font-size: 0.9rem; text-decoration: none; font-family: 'Clash Display', sans-serif; box-shadow: 0 4px 16px rgba(255,107,53,0.28); transition: background 0.2s; border: none; cursor: pointer; width: 100%; }
+        .fb-success-btn:hover { background: #E85A28; }
         @media (max-width: 480px) { .fb-nav { padding: 0 20px; } .fb-card { padding: 32px 20px; } .fb-row-wrap { flex-direction: column; } }
       `}</style>
       <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
@@ -143,16 +194,36 @@ export default function FeedbackPage() {
           <div className="fb-card">
             {submitted ? (
               <div className="fb-success">
-                <div className="fb-success-icon">⭐</div>
+                <div className="fb-success-stars">
+                  {[1,2,3,4,5].map(n => (
+                    <span key={n}>{n <= submittedRating ? '★' : '☆'}</span>
+                  ))}
+                </div>
                 <h2>{isTR ? 'Teşekkürler!' : 'Thank you!'}</h2>
-                <p>{isTR ? 'Geri bildiriminiz bizim için çok değerli. MockPlacer\'ı daha iyi yapacağız!' : 'Your feedback means a lot to us. We\'ll use it to make MockPlacer even better!'}</p>
-                <Link href="/" className="fb-success-btn">
-                  {isTR ? 'Ana Sayfaya Dön' : 'Back to Home'}
-                </Link>
+                <p>
+                  {isTR
+                    ? 'Geri bildiriminiz bizim için çok değerli. MockPlacer\'ı daha da iyi yapacağız!'
+                    : "Your feedback means a lot to us. We'll use it to make MockPlacer even better!"}
+                </p>
+                <div className="fb-success-actions">
+                  <button className="fb-success-btn" onClick={() => router.push('/')}>
+                    {isTR ? 'Ana Sayfaya Dön' : 'Back to Home'}
+                  </button>
+                  <button
+                    className="fb-btn-outline"
+                    onClick={() => setSubmitted(false)}
+                  >
+                    {isTR ? 'Yorumumu Düzenle' : 'Edit My Review'}
+                  </button>
+                </div>
               </div>
             ) : (
               <>
-                <span className="fb-badge">{isTR ? 'Geri Bildirim' : 'Feedback'}</span>
+                <span className="fb-badge">
+                  {existingReviewId
+                    ? (isTR ? 'Yorumu Düzenle' : 'Edit Review')
+                    : (isTR ? 'Geri Bildirim' : 'Feedback')}
+                </span>
                 <h1 className="fb-title">
                   {isTR ? <>MockPlacer&apos;ı nasıl <em>buldunuz?</em></> : <>How do you like <em>MockPlacer?</em></>}
                 </h1>
@@ -212,7 +283,9 @@ export default function FeedbackPage() {
                   <button type="submit" className="fb-btn" disabled={submitting}>
                     {submitting
                       ? (isTR ? 'Gönderiliyor...' : 'Submitting...')
-                      : (isTR ? 'Gönder' : 'Submit Feedback')}
+                      : existingReviewId
+                        ? (isTR ? 'Güncelle' : 'Update Review')
+                        : (isTR ? 'Gönder' : 'Submit Feedback')}
                   </button>
 
                   {error && <div className="fb-error">{error}</div>}

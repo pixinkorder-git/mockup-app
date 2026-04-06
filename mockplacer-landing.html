@@ -616,8 +616,7 @@ section { padding: clamp(72px,10vw,120px) clamp(20px,5vw,48px); }
   font-family: 'Clash Display', sans-serif;
   font-size: 0.92rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 2.5px;
+  letter-spacing: 1.5px;
   color: var(--accent);
   margin-bottom: 14px;
 }
@@ -1249,7 +1248,7 @@ footer {
 .demo-sec-label {
   font-size: 10px; font-weight: 700; color: #333; letter-spacing: 0.05em;
   border-left: 3px solid #FF6B35; padding-left: 7px;
-  margin-bottom: 6px; text-transform: uppercase;
+  margin-bottom: 6px;
 }
 .demo-divider { height: 1px; background: #E5E5E5; margin: 4px 0 8px; }
 .demo-dz {
@@ -3031,6 +3030,36 @@ setLang(currentLang);
   window.demoGoTo = function(n) { showStep(n); };
 
   document.addEventListener('DOMContentLoaded', function() { showStep(1); });
+})();
+</script>
+
+<script>
+// Real reviews from Supabase — prepend to testimonials grid
+(function() {
+  var reviews = window.__mpReviews;
+  if (!reviews || !reviews.length) return;
+  var grid = document.querySelector('.testi-grid');
+  if (!grid) return;
+  var starSvg = '<svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>';
+  var starEmpty = '<svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg>';
+  var colors = ['#FF6B35','#5B7FFF','#EC4899','#10B981','#8B5CF6','#F59E0B'];
+  reviews.forEach(function(r, i) {
+    var firstName = (r.name || 'User').split(' ')[0];
+    var initials = (r.name || 'U').split(' ').map(function(w){ return w[0]; }).join('').slice(0,2).toUpperCase();
+    var stars = '';
+    for (var s = 1; s <= 5; s++) stars += s <= r.rating ? starSvg : starEmpty;
+    var date = new Date(r.created_at).toLocaleDateString(undefined, { month: 'short', year: 'numeric' });
+    var card = document.createElement('div');
+    card.className = 'testi-card';
+    card.innerHTML =
+      '<div class="testi-header">' +
+        '<div class="testi-initials" style="background:' + colors[i % colors.length] + '">' + initials + '</div>' +
+        '<div class="testi-author"><span class="testi-name">' + firstName + '</span><span class="testi-role">' + date + '</span></div>' +
+      '</div>' +
+      '<div class="testi-stars">' + stars + '</div>' +
+      '<p class="testi-quote">"' + (r.comment || '') + '"</p>';
+    grid.insertBefore(card, grid.firstChild);
+  });
 })();
 </script>
 
