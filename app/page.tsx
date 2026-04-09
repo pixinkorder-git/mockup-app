@@ -1,8 +1,8 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
-import LandingNavAuth from '@/app/components/LandingNavAuth';
 
 export const metadata: Metadata = {
   title: 'MockPlacer | Bulk Mockup Generator',
@@ -11,28 +11,16 @@ export const metadata: Metadata = {
 };
 
 export default async function LandingPage() {
-  // Get auth state server-side so landing page can show correct nav UI
-  let mpUser: { email?: string; name?: string | null; avatar?: string | null; plan?: string } | null = null;
+  // Auth check is outside try-catch because redirect() throws a special
+  // Next.js exception that must not be caught.
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) {
+    redirect('/app');
+  }
+
   let mpReviews: { name: string | null; avatar_url: string | null; rating: number; comment: string | null; created_at: string }[] = [];
   try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      mpUser = {
-        email: user.email,
-        name: user.user_metadata?.full_name ?? user.user_metadata?.name ?? null,
-        avatar: user.user_metadata?.avatar_url ?? null,
-        plan: 'free',
-      };
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('plan')
-        .eq('id', user.id)
-        .single();
-      if (profile?.plan === 'basic' || profile?.plan === 'pro') {
-        mpUser.plan = profile.plan;
-      }
-    }
     // Fetch top reviews (rating >= 4 and has a comment) for testimonials
     const { data: reviews } = await supabase
       .from('reviews')
@@ -43,7 +31,7 @@ export default async function LandingPage() {
       .limit(6);
     if (reviews) mpReviews = reviews;
   } catch {
-    // Not critical — landing page still renders without auth
+    // Not critical — landing page still renders without reviews
   }
 
   const html = readFileSync(join(process.cwd(), 'mockplacer-landing.html'), 'utf-8');
@@ -80,9 +68,9 @@ export default async function LandingPage() {
       {/* eslint-disable-next-line react/no-danger */}
       <style dangerouslySetInnerHTML={{ __html: styleContent }} />
 
-      {/* Inject auth state and reviews for landing page */}
+      {/* Inject reviews for landing page (user is always null here — logged-in users are redirected to /app) */}
       {/* eslint-disable-next-line react/no-danger */}
-      <script dangerouslySetInnerHTML={{ __html: `window.__mpUser = ${JSON.stringify(mpUser)}; window.__mpReviews = ${JSON.stringify(mpReviews)};` }} />
+      <script dangerouslySetInnerHTML={{ __html: `window.__mpUser = null; window.__mpReviews = ${JSON.stringify(mpReviews)};` }} />
 
       {/* Landing page body HTML */}
       {/* eslint-disable-next-line react/no-danger */}
@@ -94,10 +82,8 @@ export default async function LandingPage() {
         <script key={i} dangerouslySetInnerHTML={{ __html: script }} />
       ))}
 
-      {/* Client component that owns #nav-auth-li and re-checks auth on every
-          mount — including soft navigation. This fixes the stale server-render
-          display bug where users appeared logged out after router.push('/'). */}
-      <LandingNavAuth initialUser={mpUser} />
+      {/* LandingNavAuth is not needed here: logged-in users are redirected to
+          /app before this renders, so the nav always shows Sign In. */}
     </>
   );
 }
