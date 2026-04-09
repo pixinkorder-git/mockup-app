@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createHmac, timingSafeEqual } from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 
 const HANDLED_EVENTS = new Set([
@@ -18,9 +19,31 @@ function getPlanFromVariant(variantName = '', productName = ''): 'basic' | 'pro'
 }
 
 export async function POST(request: NextRequest) {
+  const rawBody = await request.text();
+  const signature = request.headers.get('x-signature');
+  const secret = process.env.LEMONSQUEEZY_WEBHOOK_SECRET;
+
+  if (!secret) {
+    console.error('[LemonSqueezy] LEMONSQUEEZY_WEBHOOK_SECRET is not set');
+    return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 });
+  }
+
+  if (!signature) {
+    return NextResponse.json({ error: 'Missing signature' }, { status: 401 });
+  }
+
+  const hmac = createHmac('sha256', secret).update(rawBody).digest('hex');
+  const trusted = Buffer.from(hmac, 'hex');
+  const received = Buffer.from(signature, 'hex');
+
+  if (trusted.length !== received.length || !timingSafeEqual(trusted, received)) {
+    console.error('[LemonSqueezy] Invalid webhook signature');
+    return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+  }
+
   let payload: Record<string, unknown>;
   try {
-    payload = await request.json();
+    payload = JSON.parse(rawBody);
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
