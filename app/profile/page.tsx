@@ -131,7 +131,9 @@ export default function ProfilePage() {
       });
       if (upsertErr) throw upsertErr;
       setSuccess(true);
-      setTimeout(() => setSuccess(false), 3500);
+      setTimeout(() => {
+        router.push('/');
+      }, 1500);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       setError(isTR ? 'Kaydedilemedi: ' + msg : 'Could not save: ' + msg);
