@@ -2,6 +2,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { Metadata } from 'next';
 import { createClient } from '@/utils/supabase/server';
+import LandingNavAuth from '@/app/components/LandingNavAuth';
 
 export const metadata: Metadata = {
   title: 'MockPlacer | Bulk Mockup Generator',
@@ -92,6 +93,11 @@ export default async function LandingPage() {
         // eslint-disable-next-line react/no-danger
         <script key={i} dangerouslySetInnerHTML={{ __html: script }} />
       ))}
+
+      {/* Client component that owns #nav-auth-li and re-checks auth on every
+          mount — including soft navigation. This fixes the stale server-render
+          display bug where users appeared logged out after router.push('/'). */}
+      <LandingNavAuth initialUser={mpUser} />
     </>
   );
 }
