@@ -1,14 +1,9 @@
 'use client';
 
 /*
-  Run once in Supabase SQL editor to add profile columns:
-
-  ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS display_name TEXT;
-  ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS avatar_url TEXT;
-  ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS country TEXT;
-  ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS city TEXT;
-  ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS age INTEGER;
-  ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS phone TEXT;
+  Schema is managed via supabase/migrations/. See:
+    001_profiles.sql  — profiles table + RLS
+    002_rls_policies.sql — profile column additions + reviews RLS
 */
 
 import { useState, useEffect, useRef } from 'react';

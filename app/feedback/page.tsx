@@ -1,20 +1,9 @@
 'use client';
 
 /*
-  Supabase table required — run once in SQL editor:
-
-  CREATE TABLE public.reviews (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    user_id UUID REFERENCES auth.users(id),
-    email TEXT,
-    name TEXT,
-    avatar_url TEXT,
-    rating INTEGER CHECK (rating >= 1 AND rating <= 5),
-    comment TEXT,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-  );
-  ALTER TABLE public.reviews DISABLE ROW LEVEL SECURITY;
+  Schema is managed via supabase/migrations/. See:
+    001_profiles.sql  — profiles table + RLS
+    002_rls_policies.sql — reviews table RLS + profile column additions
 */
 
 import { useState, useEffect } from 'react';
