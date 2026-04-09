@@ -23,14 +23,13 @@ export default function TermsPage() {
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #fff; color: #1a1a1a; }
 
-        .privacy-wrap {
+        .terms-wrap {
           min-height: 100vh;
           background: #fff;
           font-family: 'Satoshi', sans-serif;
         }
 
-        /* NAV */
-        .privacy-nav {
+        .terms-nav {
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -43,7 +42,7 @@ export default function TermsPage() {
           top: 0;
           z-index: 100;
         }
-        .privacy-nav a { text-decoration: none; }
+        .terms-nav a { text-decoration: none; }
         .back-link {
           display: flex;
           align-items: center;
@@ -52,27 +51,29 @@ export default function TermsPage() {
           font-size: 0.9rem;
           font-weight: 500;
           transition: color 0.2s;
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-family: 'Satoshi', sans-serif;
         }
         .back-link:hover { color: #FF6B35; }
 
-        /* HERO */
-        .privacy-hero {
+        .terms-hero {
           text-align: center;
           padding: 64px 24px 40px;
         }
-        .privacy-badge {
+        .terms-badge {
           display: inline-block;
           background: rgba(255,107,53,0.08);
           color: #FF6B35;
           font-size: 0.82rem;
           font-weight: 600;
           letter-spacing: 0.06em;
-
           padding: 6px 14px;
           border-radius: 100px;
           margin-bottom: 20px;
         }
-        .privacy-title {
+        .terms-title {
           font-family: 'Clash Display', sans-serif;
           font-size: clamp(2rem, 4vw, 3rem);
           font-weight: 600;
@@ -80,27 +81,26 @@ export default function TermsPage() {
           color: #1a1a1a;
           margin-bottom: 12px;
         }
-        .privacy-title em {
+        .terms-title em {
           font-style: normal;
           color: #FF6B35;
         }
-        .privacy-updated {
+        .terms-updated {
           color: #999;
           font-size: 0.88rem;
         }
 
-        /* CONTENT */
-        .privacy-content {
+        .terms-content {
           max-width: 720px;
           margin: 0 auto;
           padding: 0 24px 80px;
         }
 
-        .privacy-section {
+        .terms-section {
           margin-bottom: 40px;
         }
 
-        .privacy-section h2 {
+        .terms-section h2 {
           font-family: 'Clash Display', sans-serif;
           font-size: 1.25rem;
           font-weight: 600;
@@ -110,14 +110,14 @@ export default function TermsPage() {
           border-left: 3px solid #FF6B35;
         }
 
-        .privacy-section p {
+        .terms-section p {
           color: #555;
           font-size: 0.97rem;
           line-height: 1.75;
           margin-bottom: 10px;
         }
 
-        .privacy-section ul {
+        .terms-section ul {
           list-style: none;
           display: flex;
           flex-direction: column;
@@ -125,7 +125,7 @@ export default function TermsPage() {
           margin-bottom: 10px;
         }
 
-        .privacy-section ul li {
+        .terms-section ul li {
           display: flex;
           align-items: flex-start;
           gap: 10px;
@@ -134,7 +134,7 @@ export default function TermsPage() {
           line-height: 1.6;
         }
 
-        .privacy-section ul li::before {
+        .terms-section ul li::before {
           content: '';
           width: 6px;
           height: 6px;
@@ -144,14 +144,14 @@ export default function TermsPage() {
           margin-top: 8px;
         }
 
-        .privacy-section a {
+        .terms-section a {
           color: #FF6B35;
           text-decoration: none;
           font-weight: 500;
         }
-        .privacy-section a:hover { text-decoration: underline; }
+        .terms-section a:hover { text-decoration: underline; }
 
-        .privacy-divider {
+        .terms-divider {
           height: 1px;
           background: #f0f0f0;
           margin-bottom: 40px;
@@ -171,13 +171,13 @@ export default function TermsPage() {
         }
 
         @media (max-width: 720px) {
-          .privacy-nav { padding: 0 20px; }
+          .terms-nav { padding: 0 20px; }
         }
       `}</style>
+      <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
 
-      <div className="privacy-wrap">
-        {/* NAV */}
-        <nav className="privacy-nav">
+      <div className="terms-wrap">
+        <nav className="terms-nav">
           <a href="/" className="back-link">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M10 3L5 8l5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
@@ -189,136 +189,168 @@ export default function TermsPage() {
           </a>
         </nav>
 
-        {/* HERO */}
-        <div className="privacy-hero">
-          <div className="privacy-badge">{isTR ? 'Yasal Metin' : 'Legal Notice'}</div>
-          <h1 className="privacy-title">
-            {isTR ? <>Kullanım <em>Şartları</em></> : <>Terms of <em>Service</em></>}
+        <div className="terms-hero">
+          <div className="terms-badge">{isTR ? 'Yasal' : 'Legal'}</div>
+          <h1 className="terms-title">
+            {isTR ? <>Kullanım <em>Koşulları</em></> : <>Terms of <em>Service</em></>}
           </h1>
-          <p className="privacy-updated">
+          <p className="terms-updated">
             {isTR ? 'Son güncelleme: Nisan 2026' : 'Last updated: April 2026'}
           </p>
         </div>
 
-        {/* CONTENT */}
-        <div className="privacy-content">
+        <div className="terms-content">
 
-          {/* 1. Acceptance of Terms */}
-          <div className="privacy-section">
-            <h2>{isTR ? 'Şartların Kabulü' : 'Acceptance of Terms'}</h2>
-            <p>
-              {isTR
-                ? 'MockPlacer\'ı kullanarak bu kullanım şartlarını kabul etmiş olursunuz. Şartları kabul etmiyorsanız lütfen hizmeti kullanmayınız.'
-                : 'By using MockPlacer, you agree to these Terms of Service. If you do not agree to these terms, please do not use the service.'}
-            </p>
-          </div>
-
-          <div className="privacy-divider" />
-
-          {/* 2. Service Description */}
-          <div className="privacy-section">
+          {/* 1. Service Description */}
+          <div className="terms-section">
             <h2>{isTR ? 'Hizmet Açıklaması' : 'Service Description'}</h2>
             <p>
               {isTR
-                ? 'MockPlacer, tarayıcı tabanlı bir toplu mockup oluşturma aracıdır.'
-                : 'MockPlacer is a browser-based bulk mockup generator.'}
+                ? 'MockPlacer, tasarımcıların ve e-ticaret sahiplerinin kendi görsellerini profesyonel mockup şablonlarına hızlıca toplu olarak yerleştirmesini sağlayan tarayıcı tabanlı bir araçtır.'
+                : 'MockPlacer is a browser-based tool that lets designers and e-commerce owners quickly place their artwork into professional mockup templates in bulk.'}
             </p>
             <div className="highlight-box">
               <p>
                 {isTR
-                  ? 'Tüm görsel işleme işlemleri tarayıcınızda gerçekleşir. Görselleriniz sunucularımıza yüklenmez.'
-                  : 'All image processing happens locally in your browser. No images are uploaded to our servers.'}
+                  ? 'Tüm görüntü işleme işlemleri doğrudan tarayıcınızda gerçekleşir. Yüklediğiniz dosyalar sunucularımıza iletilmez.'
+                  : 'All image processing runs entirely in your browser. Files you upload are never sent to our servers.'}
               </p>
             </div>
+            <ul>
+              <li>{isTR ? 'Toplu mockup oluşturma (birden fazla görsel x birden fazla şablon)' : 'Bulk mockup generation across multiple artworks and templates'}</li>
+              <li>{isTR ? 'Sürükle-bırak dosya yükleme' : 'Drag-and-drop file uploading'}</li>
+              <li>{isTR ? 'Çerçeve düzenleyici ile hassas yerleştirme' : 'Precise placement with the frame editor'}</li>
+              <li>{isTR ? 'Tek tıkla toplu ZIP indirme' : 'One-click bulk ZIP download'}</li>
+            </ul>
           </div>
 
-          <div className="privacy-divider" />
+          <div className="terms-divider" />
 
-          {/* 3. Free and Paid Plans */}
-          <div className="privacy-section">
-            <h2>{isTR ? 'Ücretsiz ve Ücretli Planlar' : 'Free and Paid Plans'}</h2>
-            <ul>
-              <li>{isTR ? 'Ücretsiz: Günde 3 mockup oluşturma' : 'Free: 3 generates per day'}</li>
-              <li>{isTR ? 'Basic ($5/ay): Günde 15 mockup oluşturma, ZIP indirme' : 'Basic ($5/mo): 15 generates per day, ZIP download'}</li>
-              <li>{isTR ? 'Pro ($10/ay): Sınırsız mockup oluşturma, mockup kütüphanesi, ZIP indirme' : 'Pro ($10/mo): Unlimited generates, mockup library, ZIP download'}</li>
-            </ul>
+          {/* 2. User Responsibilities */}
+          <div className="terms-section">
+            <h2>{isTR ? 'Kullanıcı Sorumlulukları' : 'User Responsibilities'}</h2>
             <p>
               {isTR
-                ? 'Plan ve fiyatlandırmalar önceden bildirim yapılarak değiştirilebilir.'
-                : 'Plans and pricing may change with prior notice.'}
+                ? 'Hizmeti kullanarak aşağıdaki koşulları kabul etmiş olursunuz:'
+                : 'By using the service, you agree to the following:'}
+            </p>
+            <ul>
+              <li>{isTR ? 'Yalnızca telif hakkına sahip olduğunuz veya kullanım iznine sahip olduğunuz görselleri yükleyeceksiniz.' : 'You will only upload images you own or have the right to use.'}</li>
+              <li>{isTR ? 'Hizmeti yasadışı, zararlı veya aldatıcı amaçlarla kullanmayacaksınız.' : 'You will not use the service for illegal, harmful, or deceptive purposes.'}</li>
+              <li>{isTR ? 'Otomatik araçlar veya botlar aracılığıyla hizmete erişmeyeceksiniz.' : 'You will not access the service through automated tools or bots.'}</li>
+              <li>{isTR ? 'Hesap bilgilerinizi üçüncü şahıslarla paylaşmayacaksınız.' : 'You will not share your account credentials with third parties.'}</li>
+              <li>{isTR ? 'Kullanım limitlerini aşmak veya hizmeti tersine mühendislik yapmak amacıyla girişimlerde bulunmayacaksınız.' : 'You will not attempt to bypass usage limits or reverse-engineer the service.'}</li>
+            </ul>
+          </div>
+
+          <div className="terms-divider" />
+
+          {/* 3. Intellectual Property */}
+          <div className="terms-section">
+            <h2>{isTR ? 'Fikri Mülkiyet' : 'Intellectual Property'}</h2>
+            <div className="highlight-box">
+              <p>
+                {isTR
+                  ? 'Yüklediğiniz görseller ve oluşturduğunuz tüm mockuplar size aittir. MockPlacer, içerikleriniz üzerinde hiçbir hak talep etmez.'
+                  : 'The images you upload and all mockups you generate belong to you. MockPlacer claims no rights over your content.'}
+              </p>
+            </div>
+            <p>
+              {isTR
+                ? 'MockPlacer platformu, arayüz tasarımı, algoritmaları ve dahili mockup şablonları MockPlacer\'a aittir ve telif hakkı yasalarıyla korunmaktadır. İzin alınmadan kopyalanamaz veya dağıtılamaz.'
+                : 'The MockPlacer platform, interface design, algorithms, and built-in mockup templates are the property of MockPlacer and protected by copyright law. They may not be copied or distributed without permission.'}
             </p>
           </div>
 
-          <div className="privacy-divider" />
+          <div className="terms-divider" />
 
-          {/* 4. User Content */}
-          <div className="privacy-section">
-            <h2>{isTR ? 'Kullanıcı İçeriği' : 'User Content'}</h2>
+          {/* 4. Payment Terms */}
+          <div className="terms-section">
+            <h2>{isTR ? 'Ödeme Koşulları' : 'Payment Terms'}</h2>
+            <p>
+              {isTR
+                ? 'Ücretli planlar LemonSqueezy aracılığıyla sunulur. Ödeme, abonelik başladığında tahsil edilir ve seçilen fatura dönemine (aylık veya yıllık) göre otomatik olarak yenilenir.'
+                : 'Paid plans are offered through LemonSqueezy. Payment is collected when a subscription starts and renews automatically according to the chosen billing period (monthly or annual).'}
+            </p>
             <ul>
-              <li>{isTR ? 'Yüklediğiniz tüm görseller ve oluşturduğunuz tüm mockuplar size aittir.' : 'You own all images you upload and all mockups you generate.'}</li>
-              <li>{isTR ? 'Kullandığınız görseller üzerinde gerekli haklara sahip olmanız sizin sorumluluğunuzdadır.' : 'You are responsible for having the rights to the images you use.'}</li>
-              <li>{isTR ? 'MockPlacer içeriğiniz üzerinde hiçbir mülkiyet hakkı talep etmez.' : 'MockPlacer does not claim any ownership of your content.'}</li>
+              <li>{isTR ? 'Fiyatlar USD cinsindendir ve geçerli vergiler hariçtir.' : 'Prices are in USD and exclusive of any applicable taxes.'}</li>
+              <li>{isTR ? 'Aboneliğinizi istediğiniz zaman iptal edebilirsiniz; mevcut dönem sonuna kadar erişiminiz devam eder.' : 'You may cancel your subscription at any time; access continues until the end of the current billing period.'}</li>
+              <li>{isTR ? 'Ödeme bilgileriniz MockPlacer tarafından saklanmaz; tüm işlemler LemonSqueezy tarafından güvenli şekilde yönetilir.' : 'Your payment details are not stored by MockPlacer; all transactions are securely handled by LemonSqueezy.'}</li>
             </ul>
           </div>
 
-          <div className="privacy-divider" />
+          <div className="terms-divider" />
 
-          {/* 5. Payments and Subscriptions */}
-          <div className="privacy-section">
-            <h2>{isTR ? 'Ödemeler ve Abonelikler' : 'Payments and Subscriptions'}</h2>
-            <ul>
-              <li>{isTR ? 'Ödemeler LemonSqueezy tarafından işlenir.' : 'Payments are processed by LemonSqueezy.'}</li>
-              <li>{isTR ? 'Abonelikler otomatik olarak yenilenir.' : 'Subscriptions renew automatically.'}</li>
-              <li>{isTR ? 'LemonSqueezy hesabınızdan istediğiniz zaman iptal edebilirsiniz.' : 'You can cancel anytime from your LemonSqueezy account.'}</li>
-              <li>{isTR ? 'Kısmi faturalama dönemleri için geri ödeme yapılmaz.' : 'No refunds are provided for partial billing periods.'}</li>
-            </ul>
+          {/* 5. Refund Policy */}
+          <div className="terms-section">
+            <h2>{isTR ? 'İade Politikası' : 'Refund Policy'}</h2>
+            <p>
+              {isTR
+                ? 'MockPlacer, anında dijital erişim sağlayan bir yazılım hizmetidir. Bu nedenle, ödeme gerçekleştikten sonra iade yapılmamaktadır.'
+                : 'MockPlacer is a software service that provides instant digital access. Payments are non-refundable once a charge is made.'}
+            </p>
+            <p>
+              {isTR
+                ? 'Hizmetle ilgili teknik bir sorun hizmetten yararlanmanızı engelliyorsa lütfen bizimle iletişime geçin. Her durum bireysel olarak değerlendirilir.'
+                : 'If a technical issue prevented you from using the service, please contact us. Each case is reviewed individually.'}
+            </p>
           </div>
 
-          <div className="privacy-divider" />
+          <div className="terms-divider" />
 
-          {/* 6. Prohibited Use */}
-          <div className="privacy-section">
-            <h2>{isTR ? 'Yasaklı Kullanım' : 'Prohibited Use'}</h2>
-            <ul>
-              <li>{isTR ? 'Yasadışı içerik oluşturmak veya paylaşmak' : 'Creating or sharing illegal content'}</li>
-              <li>{isTR ? 'Kullanım limitlerini aşmaya çalışmak' : 'Attempting to bypass usage limits'}</li>
-              <li>{isTR ? 'Ters mühendislik yapmak veya hizmeti kopyalamaya çalışmak' : 'Reverse engineering or attempting to copy the service'}</li>
-            </ul>
-          </div>
-
-          <div className="privacy-divider" />
-
-          {/* 7. Limitation of Liability */}
-          <div className="privacy-section">
+          {/* 6. Limitation of Liability */}
+          <div className="terms-section">
             <h2>{isTR ? 'Sorumluluk Sınırlaması' : 'Limitation of Liability'}</h2>
             <p>
               {isTR
-                ? 'Hizmet "olduğu gibi" sunulmaktadır. Çalışma süresi veya kullanılabilirlik için herhangi bir garanti verilmemektedir. MockPlacer, hizmetin kullanımından kaynaklanabilecek herhangi bir zarardan sorumlu değildir.'
-                : 'The service is provided "as is." No warranty is given for uptime or availability. MockPlacer is not liable for any damages resulting from the use of the service.'}
+                ? 'MockPlacer, hizmet kesintileri, veri kaybı veya hizmetin kullanımından kaynaklanan dolaylı ya da arızi zararlardan sorumlu tutulamaz.'
+                : 'MockPlacer shall not be liable for any indirect or incidental damages, including service interruptions, data loss, or damages arising from use of the service.'}
             </p>
-          </div>
-
-          <div className="privacy-divider" />
-
-          {/* 8. Changes to Terms */}
-          <div className="privacy-section">
-            <h2>{isTR ? 'Şartlardaki Değişiklikler' : 'Changes to Terms'}</h2>
             <p>
               {isTR
-                ? 'Bu şartları zaman zaman güncelleyebiliriz. Hizmeti kullanmaya devam etmeniz, güncellenmiş şartları kabul ettiğiniz anlamına gelir.'
-                : 'We may update these terms from time to time. Continued use of the service means you accept the updated terms.'}
+                ? 'Hizmet, olduğu gibi ve mevcut haliyle sunulmaktadır. Kesintisiz veya hatasız çalışacağına dair herhangi bir garanti verilmemektedir.'
+                : 'The service is provided as-is and as-available. No warranty is made that it will operate without interruption or error.'}
             </p>
           </div>
 
-          <div className="privacy-divider" />
+          <div className="terms-divider" />
+
+          {/* 7. Termination */}
+          <div className="terms-section">
+            <h2>{isTR ? 'Hesap Sonlandırma' : 'Termination'}</h2>
+            <p>
+              {isTR
+                ? 'Bu koşulları ihlal etmeniz durumunda MockPlacer, hesabınızı önceden bildirimde bulunmaksızın askıya alabilir veya sonlandırabilir.'
+                : 'MockPlacer may suspend or terminate your account without prior notice if you violate these terms.'}
+            </p>
+            <p>
+              {isTR
+                ? 'Hesabınızı dilediğiniz zaman kapatabilirsiniz. Hesap kapatma, kalan abonelik süresi için iade hakkı doğurmaz.'
+                : 'You may close your account at any time. Account closure does not entitle you to a refund for any remaining subscription period.'}
+            </p>
+          </div>
+
+          <div className="terms-divider" />
+
+          {/* 8. Changes to Terms */}
+          <div className="terms-section">
+            <h2>{isTR ? 'Koşullardaki Değişiklikler' : 'Changes to Terms'}</h2>
+            <p>
+              {isTR
+                ? 'MockPlacer bu koşulları zaman zaman güncelleyebilir. Önemli değişiklikler için kayıtlı e-posta adresinize bildirim gönderilecektir. Güncelleme tarihinden sonra hizmeti kullanmaya devam etmeniz yeni koşulları kabul ettiğiniz anlamına gelir.'
+                : 'MockPlacer may update these terms from time to time. For significant changes, a notification will be sent to your registered email. Continued use of the service after the update date constitutes acceptance of the new terms.'}
+            </p>
+          </div>
+
+          <div className="terms-divider" />
 
           {/* 9. Contact */}
-          <div className="privacy-section">
+          <div className="terms-section">
             <h2>{isTR ? 'İletişim' : 'Contact'}</h2>
             <p>
               {isTR
-                ? <>Bu şartlarla ilgili sorularınız için bize ulaşabilirsiniz: <a href="mailto:info@mockplacer.com" target="_blank" rel="noopener noreferrer" style={{color: '#FF6B35', fontWeight: 600}}>info@mockplacer.com</a></>
-                : <>For any questions about these terms, you can reach us at: <a href="mailto:info@mockplacer.com" target="_blank" rel="noopener noreferrer" style={{color: '#FF6B35', fontWeight: 600}}>info@mockplacer.com</a></>}
+                ? <>Bu koşullarla ilgili sorularınız için: <a href="mailto:info@mockplacer.com">info@mockplacer.com</a></>
+                : <>For any questions about these terms: <a href="mailto:info@mockplacer.com">info@mockplacer.com</a></>}
             </p>
           </div>
 
