@@ -69,11 +69,12 @@ export default function ProfilePage() {
   }, []);
 
   useEffect(() => {
+    let isMounted = true;
     const supabase = createClient();
-    supabase.auth.getUser().then(async ({ data: { user } }) => {
+
+    const fetchProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push('/login'); return; }
-      setUserId(user.id);
-      setEmail(user.email ?? '');
 
       // Parse Google full name into first/last as fallback
       const googleFull = user.user_metadata?.full_name ?? user.user_metadata?.name ?? '';
@@ -88,17 +89,24 @@ export default function ProfilePage() {
         .eq('id', user.id)
         .single();
 
-      setFirstName(profile?.first_name ?? googleFirst);
-      setLastName(profile?.last_name ?? googleLast);
-      setOccupation(profile?.occupation ?? '');
-      setBirthDate(profile?.birth_date ?? '');
-      const savedAvatar = profile?.avatar_url ?? '';
+      if (!isMounted) return;
+
+      setUserId(user.id);
+      setEmail(user.email || '');
+      setFirstName(profile?.first_name || googleFirst);
+      setLastName(profile?.last_name || googleLast);
+      setOccupation(profile?.occupation || '');
+      setBirthDate(profile?.birth_date || '');
+      setCountry(profile?.country || '');
+      setCity(profile?.city || '');
+      setPhone(profile?.phone || '');
+      const savedAvatar = profile?.avatar_url || '';
       setAvatarUrl(savedAvatar);
       setAvatarPreview(savedAvatar || googleAvatar);
-      setCountry(profile?.country ?? '');
-      setCity(profile?.city ?? '');
-      setPhone(profile?.phone ?? '');
-    });
+    };
+
+    fetchProfile();
+    return () => { isMounted = false; };
   }, [router]);
 
   const handleAvatarClick = () => fileInputRef.current?.click();
@@ -115,8 +123,9 @@ export default function ProfilePage() {
       const { error: upErr } = await supabase.storage.from('avatars').upload(path, file, { upsert: true });
       if (upErr) throw upErr;
       const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(path);
-      setAvatarUrl(publicUrl);
-      setAvatarPreview(publicUrl);
+      const bustedUrl = publicUrl + '?v=' + Date.now();
+      setAvatarUrl(bustedUrl);
+      setAvatarPreview(bustedUrl);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       setError(isTR ? 'Fotoğraf yüklenemedi: ' + msg : 'Failed to upload photo: ' + msg);
@@ -149,7 +158,7 @@ export default function ProfilePage() {
       });
       if (upsertErr) throw upsertErr;
       setSuccess(true);
-      setTimeout(() => { window.location.href = '/'; }, 1500);
+      setTimeout(() => setSuccess(false), 3000);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       setError(isTR ? 'Kaydedilemedi: ' + msg : 'Could not save: ' + msg);

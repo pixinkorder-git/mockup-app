@@ -36,38 +36,38 @@ export default async function LandingPage() {
         mpUser.avatar = profile.avatar_url;
       }
     }
-    // Fetch top reviews joined with profiles to get current name/avatar
+    // Fetch top reviews, then look up live profile data in a second query
     const { data: reviews } = await supabase
       .from('reviews')
-      .select(`
-        rating,
-        comment,
-        created_at,
-        profiles!inner (
-          first_name,
-          last_name,
-          avatar_url,
-          occupation
-        )
-      `)
+      .select('user_id, name, avatar_url, rating, comment, created_at')
       .gte('rating', 4)
       .not('comment', 'is', null)
       .order('created_at', { ascending: false })
       .limit(6);
-    if (reviews) {
+
+    if (reviews && reviews.length > 0) {
+      const userIds = [...new Set(reviews.map(r => r.user_id).filter(Boolean))];
+
+      const { data: profileRows } = await supabase
+        .from('profiles')
+        .select('id, first_name, last_name, avatar_url, occupation')
+        .in('id', userIds);
+
+      const profileMap = new Map(profileRows?.map(p => [p.id, p]) || []);
+
       mpReviews = reviews.map(r => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const p = (r as any).profiles as { first_name: string | null; last_name: string | null; avatar_url: string | null; occupation: string | null };
-        const first = p.first_name ? p.first_name.charAt(0).toUpperCase() + p.first_name.slice(1) : '';
-        const lastInitial = p.last_name ? p.last_name.charAt(0).toUpperCase() + '.' : '';
-        const name = first && lastInitial ? `${first} ${lastInitial}` : first || 'User';
+        const profile = profileMap.get(r.user_id);
+        const firstName = profile?.first_name || r.name?.split(' ')[0] || 'User';
+        const lastName = profile?.last_name || '';
+        const capitalizedFirst = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+        const lastInitial = lastName ? lastName.charAt(0).toUpperCase() + '.' : '';
         return {
-          name,
-          avatar_url: p.avatar_url ?? null,
+          name: lastInitial ? `${capitalizedFirst} ${lastInitial}` : capitalizedFirst,
+          avatar_url: profile?.avatar_url || r.avatar_url || null,
           rating: r.rating,
           comment: r.comment,
           created_at: r.created_at,
-          occupation: p.occupation ?? null,
+          occupation: profile?.occupation || null,
         };
       });
     }
