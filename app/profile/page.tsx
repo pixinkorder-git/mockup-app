@@ -4,6 +4,12 @@
   Schema is managed via supabase/migrations/. See:
     001_profiles.sql  — profiles table + RLS
     002_rls_policies.sql — profile column additions + reviews RLS
+
+  Required columns (run once in Supabase SQL editor):
+    ALTER TABLE profiles ADD COLUMN IF NOT EXISTS first_name TEXT;
+    ALTER TABLE profiles ADD COLUMN IF NOT EXISTS last_name TEXT;
+    ALTER TABLE profiles ADD COLUMN IF NOT EXISTS birth_date DATE;
+    ALTER TABLE profiles ADD COLUMN IF NOT EXISTS occupation TEXT;
 */
 
 import { useState, useEffect, useRef } from 'react';
@@ -34,11 +40,12 @@ export default function ProfilePage() {
 
   const [userId, setUserId] = useState<string | null>(null);
   const [email, setEmail] = useState('');
-  const [displayName, setDisplayName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [occupation, setOccupation] = useState('');
+  const [birthDate, setBirthDate] = useState('');
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
-  const [age, setAge] = useState('');
   const [phone, setPhone] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
   const [avatarPreview, setAvatarPreview] = useState('');
@@ -49,6 +56,11 @@ export default function ProfilePage() {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Age derived from birth date — not stored separately
+  const ageYears = birthDate
+    ? Math.floor((Date.now() - new Date(birthDate).getTime()) / (365.25 * 24 * 60 * 60 * 1000))
+    : null;
 
   useEffect(() => {
     const stored = localStorage.getItem('mp-lang') as 'tr' | 'en' | null;
@@ -62,23 +74,29 @@ export default function ProfilePage() {
       if (!user) { router.push('/login'); return; }
       setUserId(user.id);
       setEmail(user.email ?? '');
-      const googleName = user.user_metadata?.full_name ?? user.user_metadata?.name ?? '';
+
+      // Parse Google full name into first/last as fallback
+      const googleFull = user.user_metadata?.full_name ?? user.user_metadata?.name ?? '';
+      const parts = googleFull.trim().split(/\s+/);
+      const googleFirst = parts[0] || '';
+      const googleLast = parts.slice(1).join(' ') || '';
       const googleAvatar = user.user_metadata?.avatar_url ?? '';
 
       const { data: profile } = await supabase
         .from('profiles')
-        .select('display_name, avatar_url, country, city, age, phone, occupation')
+        .select('first_name, last_name, avatar_url, country, city, birth_date, phone, occupation')
         .eq('id', user.id)
         .single();
 
-      setDisplayName(profile?.display_name ?? googleName);
+      setFirstName(profile?.first_name ?? googleFirst);
+      setLastName(profile?.last_name ?? googleLast);
+      setOccupation(profile?.occupation ?? '');
+      setBirthDate(profile?.birth_date ?? '');
       const savedAvatar = profile?.avatar_url ?? '';
       setAvatarUrl(savedAvatar);
       setAvatarPreview(savedAvatar || googleAvatar);
-      setOccupation(profile?.occupation ?? '');
       setCountry(profile?.country ?? '');
       setCity(profile?.city ?? '');
-      setAge(profile?.age != null ? String(profile.age) : '');
       setPhone(profile?.phone ?? '');
     });
   }, [router]);
@@ -104,7 +122,8 @@ export default function ProfilePage() {
       setError(isTR ? 'Fotoğraf yüklenemedi: ' + msg : 'Failed to upload photo: ' + msg);
     } finally {
       setUploadingAvatar(false);
-      e.target.value = '';
+      // Always reset via ref — event target may be stale after async operations
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
@@ -118,20 +137,19 @@ export default function ProfilePage() {
       const supabase = createClient();
       const { error: upsertErr } = await supabase.from('profiles').upsert({
         id: userId,
-        display_name: displayName || null,
+        first_name: firstName || null,
+        last_name: lastName || null,
         occupation: occupation || null,
+        birth_date: birthDate || null,
         avatar_url: avatarUrl || null,
         country: country || null,
         city: city || null,
-        age: age ? parseInt(age, 10) : null,
         phone: phone || null,
         updated_at: new Date().toISOString(),
       });
       if (upsertErr) throw upsertErr;
       setSuccess(true);
-      setTimeout(() => {
-        router.push('/');
-      }, 1500);
+      setTimeout(() => { router.push('/'); }, 1500);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       setError(isTR ? 'Kaydedilemedi: ' + msg : 'Could not save: ' + msg);
@@ -140,7 +158,7 @@ export default function ProfilePage() {
     }
   };
 
-  const initials = (displayName || email || '?').trim()[0]?.toUpperCase() ?? '?';
+  const initials = ((firstName[0] || '') + (lastName[0] || '')).toUpperCase() || email[0]?.toUpperCase() || '?';
 
   return (
     <>
@@ -213,6 +231,7 @@ export default function ProfilePage() {
         .pf-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
         .pf-row { display: flex; gap: 12px; }
         .pf-row > div { flex: 1; }
+        .pf-age-hint { font-size: 0.82rem; color: #999; margin-top: -10px; margin-bottom: 16px; }
         .pf-btn {
           width: 100%; padding: 14px 24px; background: #FF6B35; color: white;
           border: none; border-radius: 12px; font-family: 'Clash Display', sans-serif;
@@ -300,14 +319,28 @@ export default function ProfilePage() {
             {/* Personal info */}
             <div className="pf-section-title">{isTR ? 'Kişisel Bilgiler' : 'Personal Info'}</div>
 
-            <label className="pf-label">{isTR ? 'Görünen Ad' : 'Display Name'}</label>
-            <input
-              type="text"
-              className="pf-input"
-              placeholder={isTR ? 'Adınız Soyadınız' : 'Your full name'}
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-            />
+            <div className="pf-row">
+              <div>
+                <label className="pf-label">{isTR ? 'Ad' : 'First Name'}</label>
+                <input
+                  type="text"
+                  className="pf-input"
+                  placeholder={isTR ? 'Adınız' : 'First name'}
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="pf-label">{isTR ? 'Soyad' : 'Last Name'}</label>
+                <input
+                  type="text"
+                  className="pf-input"
+                  placeholder={isTR ? 'Soyadınız' : 'Last name'}
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </div>
+            </div>
 
             <label className="pf-label">{isTR ? 'Meslek' : 'Occupation'}</label>
             <input
@@ -326,6 +359,34 @@ export default function ProfilePage() {
               readOnly
               tabIndex={-1}
             />
+
+            <div className="pf-row">
+              <div>
+                <label className="pf-label">{isTR ? 'Doğum Tarihi' : 'Birth Date'}</label>
+                <input
+                  type="date"
+                  className="pf-input"
+                  value={birthDate}
+                  max={new Date().toISOString().split('T')[0]}
+                  onChange={(e) => setBirthDate(e.target.value)}
+                />
+                {ageYears !== null && ageYears >= 0 && (
+                  <p className="pf-age-hint">
+                    {isTR ? `Yaşınız: ${ageYears}` : `Age: ${ageYears}`}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="pf-label">{isTR ? 'Telefon' : 'Phone'}</label>
+                <input
+                  type="text"
+                  className="pf-input"
+                  placeholder="+90 555 123 4567"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </div>
+            </div>
 
             <div className="pf-row">
               <div>
@@ -349,31 +410,6 @@ export default function ProfilePage() {
                   placeholder={isTR ? 'İstanbul' : 'New York'}
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className="pf-row">
-              <div>
-                <label className="pf-label">{isTR ? 'Yaş' : 'Age'}</label>
-                <input
-                  type="number"
-                  className="pf-input"
-                  placeholder="25"
-                  min={13}
-                  max={120}
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
-                />
-              </div>
-              <div>
-                <label className="pf-label">{isTR ? 'Telefon' : 'Phone'}</label>
-                <input
-                  type="text"
-                  className="pf-input"
-                  placeholder="+90 555 123 4567"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
             </div>
