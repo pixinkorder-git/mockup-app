@@ -32,7 +32,12 @@
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; -webkit-font-smoothing:antialiased; }
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  background: #fff;
+  color-scheme: light;
+}
 
 body {
   font-family: 'Satoshi', system-ui, sans-serif;
@@ -3164,16 +3169,20 @@ setLang(currentLang);
   // Prepend grid cards. Iterate in reverse so index-0 (newest) ends up first.
   reviews.slice().reverse().forEach(function(r, ri) {
     var idx = reviews.length - 1 - ri;
-    var firstName = (r.name || 'User').split(' ')[0];
-    var initials  = (r.name || 'U').split(' ').map(function(w){ return w[0]; }).join('').slice(0,2).toUpperCase();
+    var rawParts = (r.name || '').trim().split(/\s+/).filter(Boolean);
+    var firstName = rawParts.length ? (rawParts[0].charAt(0).toUpperCase() + rawParts[0].slice(1).toLowerCase()) : 'User';
+    var initials  = rawParts.map(function(w){ return w[0]; }).join('').slice(0,2).toUpperCase() || 'U';
     var stars = '';
     for (var s = 1; s <= 5; s++) stars += s <= r.rating ? starSvg : starEmpty;
     var date = new Date(r.created_at).toLocaleDateString(undefined, { month: 'short', year: 'numeric' });
+    var avatarEl = r.avatar_url
+      ? '<div class="testi-avatar"><img src="' + r.avatar_url + '" alt="' + firstName + '" loading="lazy"></div>'
+      : '<div class="testi-initials" style="background:' + colors[idx % colors.length] + '">' + initials + '</div>';
     var card = document.createElement('div');
     card.className = 'testi-card';
     card.innerHTML =
       '<div class="testi-header">' +
-        '<div class="testi-initials" style="background:' + colors[idx % colors.length] + '">' + initials + '</div>' +
+        avatarEl +
         '<div class="testi-author"><span class="testi-name">' + firstName + '</span><span class="testi-role">' + date + '</span></div>' +
       '</div>' +
       '<div class="testi-stars">' + stars + '</div>' +
@@ -3231,12 +3240,18 @@ setLang(currentLang);
 
   // Map __mpReviews to the same shape (dynamic reviews shown first)
   var dynamic = (window.__mpReviews || []).map(function(r, i) {
+    var parts = (r.name || '').trim().split(/\s+/).filter(Boolean);
+    var displayName = parts.length
+      ? (parts[0].charAt(0).toUpperCase() + parts[0].slice(1).toLowerCase()) +
+        (parts.length > 1 ? ' ' + parts[parts.length - 1].charAt(0).toUpperCase() + '.' : '')
+      : 'User';
     return {
-      n:    r.name || 'User',
+      n:    displayName,
       role: new Date(r.created_at).toLocaleDateString(undefined, { month:'short', year:'numeric' }),
       s:    r.rating,
       q:    r.comment || '',
       c:    COLORS[i % COLORS.length],
+      av:   r.avatar_url || null,
     };
   });
 

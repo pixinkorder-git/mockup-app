@@ -2,7 +2,23 @@
   "permissions": {
     "allow": [
       "Bash(cd:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(git push:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(npx tsc:*)",
+      "Bash(grep -rn \"mockup[0-9]\\\\|Gallery\\\\|gallery\\\\|Sample\" C:/Users/Umut/Desktop/mockup-app/ --include=*.tsx --include=*.ts)",
+      "Bash(python update_testi.py)",
+      "Bash(npm install:*)",
+      "Bash(grep -v \"//.*GERI\")",
+      "Bash(git fetch:*)",
+      "Bash(cat next.config.ts)",
+      "Bash(cat next.config.js)",
+      "Bash(cat next.config.mjs)",
+      "Bash(node -e ':*)",
+      "Bash(ls middleware.ts proxy.ts)",
+      "Bash(cat middleware.ts)",
+      "Bash(cat proxy.ts)"
     ]
   }
 }
