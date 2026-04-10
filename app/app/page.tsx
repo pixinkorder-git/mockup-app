@@ -592,12 +592,12 @@ export default function Home() {
             </>
           )}
           <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
-          <Link
+          <a
             href="/"
             style={{ fontSize: 15, fontWeight: 600, color: '#FF6B35', textDecoration: 'none' }}
           >
             {isTR ? '← Ana Sayfa' : '← Home'}
-          </Link>
+          </a>
           <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
           {user ? (
             <UserDropdown
