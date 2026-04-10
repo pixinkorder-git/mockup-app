@@ -3169,21 +3169,22 @@ setLang(currentLang);
   // Prepend grid cards. Iterate in reverse so index-0 (newest) ends up first.
   reviews.slice().reverse().forEach(function(r, ri) {
     var idx = reviews.length - 1 - ri;
-    var rawParts = (r.name || '').trim().split(/\s+/).filter(Boolean);
-    var firstName = rawParts.length ? (rawParts[0].charAt(0).toUpperCase() + rawParts[0].slice(1).toLowerCase()) : 'User';
+    // Server already formats name as "FirstName L." — use it directly
+    var displayName = r.name || 'User';
+    var rawParts = displayName.trim().split(/\s+/).filter(Boolean);
     var initials  = rawParts.map(function(w){ return w[0]; }).join('').slice(0,2).toUpperCase() || 'U';
     var stars = '';
     for (var s = 1; s <= 5; s++) stars += s <= r.rating ? starSvg : starEmpty;
     var date = new Date(r.created_at).toLocaleDateString(undefined, { month: 'short', year: 'numeric' });
     var avatarEl = r.avatar_url
-      ? '<div class="testi-avatar"><img src="' + r.avatar_url + '" alt="' + firstName + '" loading="lazy"></div>'
+      ? '<div class="testi-avatar"><img src="' + r.avatar_url + '" alt="' + displayName + '" loading="lazy"></div>'
       : '<div class="testi-initials" style="background:' + colors[idx % colors.length] + '">' + initials + '</div>';
     var card = document.createElement('div');
     card.className = 'testi-card';
     card.innerHTML =
       '<div class="testi-header">' +
         avatarEl +
-        '<div class="testi-author"><span class="testi-name">' + firstName + '</span><span class="testi-role">' + date + '</span></div>' +
+        '<div class="testi-author"><span class="testi-name">' + displayName + '</span><span class="testi-role">' + date + '</span></div>' +
       '</div>' +
       '<div class="testi-stars">' + stars + '</div>' +
       '<p class="testi-quote">"' + (r.comment || '') + '"</p>';

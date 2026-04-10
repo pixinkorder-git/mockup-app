@@ -57,6 +57,12 @@ export default async function LandingPage() {
 
       mpReviews = reviews.map(r => {
         const profile = profileMap.get(r.user_id);
+        console.log('Profile data:', {
+          user_id: r.user_id,
+          profile: profile,
+          firstName: profile?.first_name,
+          lastName: profile?.last_name,
+        });
         const firstName = profile?.first_name || r.name?.split(' ')[0] || 'User';
         const lastName = profile?.last_name || '';
         const capitalizedFirst = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
