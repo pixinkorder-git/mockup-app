@@ -3148,33 +3148,69 @@ setLang(currentLang);
 </script>
 
 <script>
-// Real reviews from Supabase — prepend to testimonials grid
+// Real reviews from Supabase — prepend to grid and line view, cap grid at 8
 (function() {
   var reviews = window.__mpReviews;
   if (!reviews || !reviews.length) return;
   var grid = document.querySelector('.testi-grid');
   if (!grid) return;
-  var starSvg = '<svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>';
-  var starEmpty = '<svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg>';
+
+  var starSvg   = '<svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>';
+  var starEmpty  = '<svg width="15" height="15" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg>';
+  var starSvgSm  = '<svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FF6B35"/></svg>';
+  var starEmptySm = '<svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#E5E5E5"/></svg>';
   var colors = ['#FF6B35','#5B7FFF','#EC4899','#10B981','#8B5CF6','#F59E0B'];
-  reviews.forEach(function(r, i) {
+
+  // Prepend grid cards. Iterate in reverse so index-0 (newest) ends up first.
+  reviews.slice().reverse().forEach(function(r, ri) {
+    var idx = reviews.length - 1 - ri;
     var firstName = (r.name || 'User').split(' ')[0];
-    var initials = (r.name || 'U').split(' ').map(function(w){ return w[0]; }).join('').slice(0,2).toUpperCase();
+    var initials  = (r.name || 'U').split(' ').map(function(w){ return w[0]; }).join('').slice(0,2).toUpperCase();
     var stars = '';
     for (var s = 1; s <= 5; s++) stars += s <= r.rating ? starSvg : starEmpty;
     var date = new Date(r.created_at).toLocaleDateString(undefined, { month: 'short', year: 'numeric' });
-    var avatarHtml = '<div class="testi-initials" style="background:' + colors[i % colors.length] + '">' + initials + '</div>';
     var card = document.createElement('div');
     card.className = 'testi-card';
     card.innerHTML =
       '<div class="testi-header">' +
-        avatarHtml +
+        '<div class="testi-initials" style="background:' + colors[idx % colors.length] + '">' + initials + '</div>' +
         '<div class="testi-author"><span class="testi-name">' + firstName + '</span><span class="testi-role">' + date + '</span></div>' +
       '</div>' +
       '<div class="testi-stars">' + stars + '</div>' +
       '<p class="testi-quote">"' + (r.comment || '') + '"</p>';
     grid.insertBefore(card, grid.firstChild);
   });
+
+  // Cap grid at exactly 8 visible cards
+  grid.querySelectorAll('.testi-card').forEach(function(card, i) {
+    if (i >= 8) card.style.display = 'none';
+  });
+
+  // Prepend line-format cards to #testiGridCards (dynamic reviews shown first)
+  var testiGridCards = document.getElementById('testiGridCards');
+  if (testiGridCards) {
+    reviews.slice().reverse().forEach(function(r, ri) {
+      var idx = reviews.length - 1 - ri;
+      var firstName = (r.name || 'User').split(' ')[0];
+      var initials  = (r.name || 'U').split(' ').map(function(w){ return w[0]; }).join('').slice(0,2).toUpperCase();
+      var stars = '';
+      for (var s = 1; s <= 5; s++) stars += s <= r.rating ? starSvgSm : starEmptySm;
+      var date = new Date(r.created_at).toLocaleDateString(undefined, { month: 'short', year: 'numeric' });
+      var listCard = document.createElement('div');
+      listCard.className = 'testi-list-card';
+      listCard.innerHTML =
+        '<div class="testi-list-left">' +
+          '<div class="testi-initials" style="background:' + colors[idx % colors.length] + '">' + initials + '</div>' +
+          '<div class="testi-list-meta">' +
+            '<span class="testi-name">' + firstName + '</span>' +
+            '<span class="testi-role">' + date + '</span>' +
+            '<div class="testi-list-stars">' + stars + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<p class="testi-list-quote">"' + (r.comment || '') + '"</p>';
+      testiGridCards.insertBefore(listCard, testiGridCards.firstChild);
+    });
+  }
 })();
 </script>
 
