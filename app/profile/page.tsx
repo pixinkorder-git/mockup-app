@@ -35,6 +35,7 @@ export default function ProfilePage() {
   const [userId, setUserId] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [occupation, setOccupation] = useState('');
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
   const [age, setAge] = useState('');
@@ -66,7 +67,7 @@ export default function ProfilePage() {
 
       const { data: profile } = await supabase
         .from('profiles')
-        .select('display_name, avatar_url, country, city, age, phone')
+        .select('display_name, avatar_url, country, city, age, phone, occupation')
         .eq('id', user.id)
         .single();
 
@@ -74,6 +75,7 @@ export default function ProfilePage() {
       const savedAvatar = profile?.avatar_url ?? '';
       setAvatarUrl(savedAvatar);
       setAvatarPreview(savedAvatar || googleAvatar);
+      setOccupation(profile?.occupation ?? '');
       setCountry(profile?.country ?? '');
       setCity(profile?.city ?? '');
       setAge(profile?.age != null ? String(profile.age) : '');
@@ -117,6 +119,7 @@ export default function ProfilePage() {
       const { error: upsertErr } = await supabase.from('profiles').upsert({
         id: userId,
         display_name: displayName || null,
+        occupation: occupation || null,
         avatar_url: avatarUrl || null,
         country: country || null,
         city: city || null,
@@ -304,6 +307,15 @@ export default function ProfilePage() {
               placeholder={isTR ? 'Adınız Soyadınız' : 'Your full name'}
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
+            />
+
+            <label className="pf-label">{isTR ? 'Meslek' : 'Occupation'}</label>
+            <input
+              type="text"
+              className="pf-input"
+              placeholder={isTR ? 'örn. Etsy Satıcısı, Tasarımcı' : 'e.g. Etsy Seller, Designer'}
+              value={occupation}
+              onChange={(e) => setOccupation(e.target.value)}
             />
 
             <label className="pf-label">E-mail</label>
