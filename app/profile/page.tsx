@@ -76,33 +76,35 @@ export default function ProfilePage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push('/login'); return; }
 
-      // Parse Google full name into first/last as fallback
-      const googleFull = user.user_metadata?.full_name ?? user.user_metadata?.name ?? '';
-      const parts = googleFull.trim().split(/\s+/);
-      const googleFirst = parts[0] || '';
-      const googleLast = parts.slice(1).join(' ') || '';
-      const googleAvatar = user.user_metadata?.avatar_url ?? '';
+      if (isMounted) {
+        setUserId(user.id);
+        setEmail(user.email || '');
+      }
 
       const { data: profile } = await supabase
         .from('profiles')
-        .select('first_name, last_name, avatar_url, country, city, birth_date, phone, occupation')
+        .select('*')
         .eq('id', user.id)
         .single();
 
-      if (!isMounted) return;
-
-      setUserId(user.id);
-      setEmail(user.email || '');
-      setFirstName(profile?.first_name || googleFirst);
-      setLastName(profile?.last_name || googleLast);
-      setOccupation(profile?.occupation || '');
-      setBirthDate(profile?.birth_date || '');
-      setCountry(profile?.country || '');
-      setCity(profile?.city || '');
-      setPhone(profile?.phone || '');
-      const savedAvatar = profile?.avatar_url || '';
-      setAvatarUrl(savedAvatar);
-      setAvatarPreview(savedAvatar || googleAvatar);
+      if (isMounted && profile) {
+        setFirstName(profile.first_name || '');
+        setLastName(profile.last_name || '');
+        setOccupation(profile.occupation || '');
+        setBirthDate(profile.birth_date || '');
+        setCountry(profile.country || '');
+        setCity(profile.city || '');
+        setPhone(profile.phone || '');
+        setAvatarUrl(profile.avatar_url || '');
+        setAvatarPreview(profile.avatar_url || user.user_metadata?.avatar_url || '');
+      } else if (isMounted) {
+        // No profile row yet — fall back to OAuth metadata
+        const googleFull = user.user_metadata?.full_name ?? user.user_metadata?.name ?? '';
+        const parts = googleFull.trim().split(/\s+/);
+        setFirstName(parts[0] || '');
+        setLastName(parts.slice(1).join(' ') || '');
+        setAvatarPreview(user.user_metadata?.avatar_url || '');
+      }
     };
 
     fetchProfile();
@@ -118,20 +120,22 @@ export default function ProfilePage() {
     setError(null);
     try {
       const supabase = createClient();
-      const ext = file.name.split('.').pop();
-      const path = `${userId}/avatar.${ext}`;
-      const { error: upErr } = await supabase.storage.from('avatars').upload(path, file, { upsert: true });
-      if (upErr) throw upErr;
-      const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(path);
-      const bustedUrl = publicUrl + '?v=' + Date.now();
-      setAvatarUrl(bustedUrl);
-      setAvatarPreview(bustedUrl);
+      const fileExt = file.name.split('.').pop();
+      // Unique filename per upload — no upsert needed, avoids CDN cache issues
+      const filePath = `${userId}/avatar-${Date.now()}.${fileExt}`;
+      const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file);
+      if (uploadError) throw uploadError;
+      const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(filePath);
+      const publicUrl = urlData.publicUrl + '?v=' + Date.now();
+      setAvatarUrl(publicUrl);
+      setAvatarPreview(publicUrl);
+      // Persist immediately — don't wait for the Save button
+      await supabase.from('profiles').update({ avatar_url: publicUrl }).eq('id', userId);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       setError(isTR ? 'Fotoğraf yüklenemedi: ' + msg : 'Failed to upload photo: ' + msg);
     } finally {
       setUploadingAvatar(false);
-      // Always reset via ref — event target may be stale after async operations
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
