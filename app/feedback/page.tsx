@@ -7,12 +7,10 @@
 */
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { createClient } from '@/utils/supabase/client';
 
 export default function FeedbackPage() {
-  const router = useRouter();
   const [lang, setLang] = useState<'tr' | 'en'>('en');
   const [rating, setRating] = useState(0);
   const [hovered, setHovered] = useState(0);
@@ -40,8 +38,24 @@ export default function FeedbackPage() {
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) return;
       setEmail(user.email ?? '');
-      setName(user.user_metadata?.full_name ?? user.user_metadata?.name ?? '');
-      setAvatarUrl(user.user_metadata?.avatar_url ?? '');
+
+      // Prefer profile data (always current) over OAuth metadata snapshot
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('first_name, last_name, avatar_url')
+        .eq('id', user.id)
+        .single();
+
+      if (profile) {
+        const first = profile.first_name ?? '';
+        const last = profile.last_name ?? '';
+        const fullName = [first, last].filter(Boolean).join(' ');
+        setName(fullName || (user.user_metadata?.full_name ?? user.user_metadata?.name ?? ''));
+        setAvatarUrl(profile.avatar_url ?? user.user_metadata?.avatar_url ?? '');
+      } else {
+        setName(user.user_metadata?.full_name ?? user.user_metadata?.name ?? '');
+        setAvatarUrl(user.user_metadata?.avatar_url ?? '');
+      }
 
       const { data: existing } = await supabase
         .from('reviews')
@@ -53,7 +67,7 @@ export default function FeedbackPage() {
         setExistingReviewId(existing.id);
         setRating(existing.rating ?? 0);
         setComment(existing.comment ?? '');
-        if (existing.name) setName(existing.name);
+        // Don't overwrite name from stale reviews snapshot — profile data takes precedence
         if (existing.email) setEmail(existing.email);
       }
     });
@@ -172,15 +186,15 @@ export default function FeedbackPage() {
 
       <div className="fb-wrap">
         <nav className="fb-nav">
-          <button className="back-link" onClick={() => router.push('/')}>
+          <a className="back-link" href="/">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M10 3L5 8l5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             {isTR ? "MockPlacer'a Dön" : 'Back to MockPlacer'}
-          </button>
-          <button onClick={() => router.push('/')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+          </a>
+          <a href="/" style={{ display: 'block', lineHeight: 0 }}>
             <Image src="/1logo.png" width={140} height={35} alt="MockPlacer" style={{ display: 'block' }} />
-          </button>
+          </a>
         </nav>
 
         <main className="fb-main">
@@ -199,9 +213,9 @@ export default function FeedbackPage() {
                     : "Your feedback means a lot to us. We'll use it to make MockPlacer even better!"}
                 </p>
                 <div className="fb-success-actions">
-                  <button className="fb-success-btn" onClick={() => router.push('/')}>
+                  <a className="fb-success-btn" href="/">
                     {isTR ? 'Ana Sayfaya Dön' : 'Back to Home'}
-                  </button>
+                  </a>
                   <button
                     className="fb-btn-outline"
                     onClick={() => setSubmitted(false)}

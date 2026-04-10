@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default async function LandingPage() {
   let mpUser: { email?: string; name?: string | null; avatar?: string | null; plan?: string } | null = null;
-  let mpReviews: { name: string | null; avatar_url: string | null; rating: number; comment: string | null; created_at: string }[] = [];
+  let mpReviews: { name: string; avatar_url: string | null; rating: number; comment: string | null; created_at: string; occupation: string | null }[] = [];
   try {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
@@ -25,22 +25,52 @@ export default async function LandingPage() {
       };
       const { data: profile } = await supabase
         .from('profiles')
-        .select('plan')
+        .select('plan, avatar_url')
         .eq('id', user.id)
         .single();
       if (profile?.plan === 'basic' || profile?.plan === 'pro') {
         mpUser.plan = profile.plan;
       }
+      // Use profile avatar (latest uploaded) rather than OAuth metadata
+      if (profile?.avatar_url) {
+        mpUser.avatar = profile.avatar_url;
+      }
     }
-    // Fetch top reviews (rating >= 4 and has a comment) for testimonials
+    // Fetch top reviews joined with profiles to get current name/avatar
     const { data: reviews } = await supabase
       .from('reviews')
-      .select('name, avatar_url, rating, comment, created_at')
+      .select(`
+        rating,
+        comment,
+        created_at,
+        profiles!inner (
+          first_name,
+          last_name,
+          avatar_url,
+          occupation
+        )
+      `)
       .gte('rating', 4)
       .not('comment', 'is', null)
       .order('created_at', { ascending: false })
       .limit(6);
-    if (reviews) mpReviews = reviews;
+    if (reviews) {
+      mpReviews = reviews.map(r => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const p = (r as any).profiles as { first_name: string | null; last_name: string | null; avatar_url: string | null; occupation: string | null };
+        const first = p.first_name ? p.first_name.charAt(0).toUpperCase() + p.first_name.slice(1) : '';
+        const lastInitial = p.last_name ? p.last_name.charAt(0).toUpperCase() + '.' : '';
+        const name = first && lastInitial ? `${first} ${lastInitial}` : first || 'User';
+        return {
+          name,
+          avatar_url: p.avatar_url ?? null,
+          rating: r.rating,
+          comment: r.comment,
+          created_at: r.created_at,
+          occupation: p.occupation ?? null,
+        };
+      });
+    }
   } catch {
     // Not critical — landing page still renders without auth or reviews
   }

@@ -149,7 +149,7 @@ export default function ProfilePage() {
       });
       if (upsertErr) throw upsertErr;
       setSuccess(true);
-      setTimeout(() => { router.push('/'); }, 1500);
+      setTimeout(() => { window.location.href = '/'; }, 1500);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       setError(isTR ? 'Kaydedilemedi: ' + msg : 'Could not save: ' + msg);
@@ -255,15 +255,15 @@ export default function ProfilePage() {
 
       <div className="pf-wrap">
         <nav className="pf-nav">
-          <button className="back-link" onClick={() => router.push('/')}>
+          <a className="back-link" href="/">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M10 3L5 8l5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             {isTR ? "MockPlacer'a Dön" : 'Back to MockPlacer'}
-          </button>
-          <button onClick={() => router.push('/')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+          </a>
+          <a href="/" style={{ display: 'block', lineHeight: 0 }}>
             <Image src="/1logo.png" width={140} height={35} alt="MockPlacer" style={{ display: 'block' }} />
-          </button>
+          </a>
         </nav>
 
         <div className="pf-hero">
