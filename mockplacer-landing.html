@@ -2728,6 +2728,17 @@ function toggleSamples() {
 
 let currentLang = localStorage.getItem('mp-lang') || 'tr';
 
+function applyAuthButtons(lang) {
+  if (!window.__mpUser) return;
+  const isTR = lang === 'tr';
+  document.querySelectorAll('[data-i18n="nav_cta"]').forEach(el => {
+    el.textContent = isTR ? 'Başla' : 'Start';
+  });
+  document.querySelectorAll('[data-i18n="hero_cta"]').forEach(el => {
+    el.textContent = isTR ? 'Oluşturmaya Başla' : 'Start Creating';
+  });
+}
+
 function setLang(lang) {
   currentLang = lang;
   localStorage.setItem('mp-lang', lang);
@@ -2744,6 +2755,7 @@ function setLang(lang) {
       }
     }
   });
+  applyAuthButtons(lang);
 }
 
 setLang(currentLang);
