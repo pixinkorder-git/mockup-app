@@ -3184,7 +3184,7 @@ setLang(currentLang);
     card.innerHTML =
       '<div class="testi-header">' +
         avatarEl +
-        '<div class="testi-author"><span class="testi-name">' + displayName + '</span><span class="testi-role">' + date + '</span></div>' +
+        '<div class="testi-author"><span class="testi-name">' + displayName + '</span><span class="testi-role">' + (r.occupation || date) + '</span></div>' +
       '</div>' +
       '<div class="testi-stars">' + stars + '</div>' +
       '<p class="testi-quote">"' + (r.comment || '') + '"</p>';
@@ -3248,11 +3248,12 @@ setLang(currentLang);
       : 'User';
     return {
       n:    displayName,
-      role: new Date(r.created_at).toLocaleDateString(undefined, { month:'short', year:'numeric' }),
+      role: r.occupation || null,
       s:    r.rating,
       q:    r.comment || '',
       c:    COLORS[i % COLORS.length],
       av:   r.avatar_url || null,
+      d:    r.created_at,
     };
   });
 
@@ -3269,10 +3270,11 @@ setLang(currentLang);
     var av = item.av
       ? '<div class="testi-avatar"><img src="' + item.av + '" alt="' + firstName + '" loading="lazy"></div>'
       : '<div class="testi-initials" style="background:' + (item.c || '#888') + '">' + inits + '</div>';
-    var roleText = item.role;
+    var roleText = item.role || '';
     if (item.d) {
       var locale = (typeof currentLang !== 'undefined' && currentLang === 'tr') ? 'tr-TR' : 'en-US';
-      roleText += ' · ' + new Date(item.d).toLocaleDateString(locale, { month: 'short', year: 'numeric' });
+      var datePart = new Date(item.d).toLocaleDateString(locale, { month: 'short', year: 'numeric' });
+      roleText = roleText ? roleText + ' · ' + datePart : datePart;
     }
     return '<div class="testi-list-card">' +
       '<div class="testi-list-left">' + av +
