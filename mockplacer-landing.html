@@ -433,14 +433,82 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
   transform: translateY(-1px);
 }
 
-/* ── Hero Visual: Floating mockups ── */
+/* ── Hero Visual: Before/After Slider ── */
 .hero-visual {
   position: relative;
   width: 100%;
-  max-width: 920px;
-  height: clamp(280px, 38vw, 420px);
+  max-width: 700px;
   animation: fadeUp 0.9s ease 0.4s both;
 }
+
+.ba-slider {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  user-select: none;
+  cursor: col-resize;
+}
+
+.ba-slider img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.ba-after {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.ba-after img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+.ba-divider {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 3px;
+  background: white;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.ba-handle {
+  position: absolute;
+  top: 50%;
+  width: 44px; height: 44px;
+  background: white;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.22);
+  pointer-events: none;
+  color: #555;
+}
+
+.ba-label {
+  position: absolute;
+  top: 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(0,0,0,0.45);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+.ba-label-before { left: 14px; }
+.ba-label-after  { right: 14px; }
 
 .float-mockup {
   position: absolute;
@@ -1590,42 +1658,59 @@ footer {
 
   <!-- Floating mockups -->
   <div class="hero-visual">
-    <div class="float-shape fs-circle fs-1"></div>
-    <div class="float-shape fs-square fs-2"></div>
-    <div class="float-shape fs-square fs-3"></div>
-
-    <!-- Laptop -->
-    <div class="float-mockup fm-laptop">
-      <div class="lt-bar">
-        <span class="lt-dot r"></span><span class="lt-dot y"></span><span class="lt-dot g"></span>
+    <div class="ba-slider" id="baSlider">
+      <!-- Before image (base layer) -->
+      <img src="/slider/before3.jpg" alt="Before" draggable="false">
+      <!-- After image (clipped overlay) -->
+      <div class="ba-after" id="baAfter">
+        <img src="/slider/after3.jpg" alt="After" draggable="false">
       </div>
-      <div class="lt-body">
-        <div class="lt-row accent" style="width:85%"></div>
-        <div class="lt-row" style="width:70%"></div>
-        <div class="lt-row" style="width:90%"></div>
-        <div class="lt-row" style="width:55%"></div>
+      <!-- Divider line + handle -->
+      <div class="ba-divider" id="baDivider">
+        <div class="ba-handle">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18l-6-6 6-6"/><path d="M15 6l6 6-6 6"/>
+          </svg>
+        </div>
       </div>
-    </div>
-
-    <!-- Room with frames – the core product -->
-    <div class="float-mockup fm-room">
-      <div class="frame frame-v"></div>
-      <div class="frame frame-h"></div>
-      <div class="frame frame-v"></div>
-    </div>
-
-    <!-- Phone -->
-    <div class="float-mockup fm-phone">
-      <div class="notch"></div>
-      <div class="fm-phone-body">
-        <div class="ph-line s"></div>
-        <div class="ph-line m"></div>
-        <div class="ph-block"></div>
-        <div class="ph-line"></div>
-      </div>
+      <!-- Labels -->
+      <span class="ba-label ba-label-before" data-i18n="ba_before">Before</span>
+      <span class="ba-label ba-label-after"  data-i18n="ba_after">After</span>
     </div>
   </div>
 </section>
+
+<script>
+(function() {
+  var slider  = document.getElementById('baSlider');
+  var after   = document.getElementById('baAfter');
+  var divider = document.getElementById('baDivider');
+  if (!slider) return;
+
+  var pct = 50; // starting split %
+
+  function setPos(x) {
+    var rect = slider.getBoundingClientRect();
+    pct = Math.max(2, Math.min(98, ((x - rect.left) / rect.width) * 100));
+    after.style.width   = pct + '%';
+    divider.style.left  = pct + '%';
+  }
+
+  // Initialise position
+  after.style.width  = pct + '%';
+  divider.style.left = pct + '%';
+
+  var dragging = false;
+
+  slider.addEventListener('mousedown',  function(e) { dragging = true; setPos(e.clientX); e.preventDefault(); });
+  window.addEventListener('mousemove',  function(e) { if (dragging) setPos(e.clientX); });
+  window.addEventListener('mouseup',    function()  { dragging = false; });
+
+  slider.addEventListener('touchstart', function(e) { dragging = true; setPos(e.touches[0].clientX); }, { passive: true });
+  window.addEventListener('touchmove',  function(e) { if (dragging) setPos(e.touches[0].clientX); },  { passive: true });
+  window.addEventListener('touchend',   function()  { dragging = false; });
+})();
+</script>
 
 <!-- HOW IT WORKS -->
 <section class="how" id="nasil">
@@ -2748,6 +2833,7 @@ const translations = {
     foot_resources: 'Kaynaklar', foot_blog: 'Blog', foot_support: 'Destek', foot_community: 'Topluluk',
     foot_legal: 'Yasal', foot_privacy: 'Gizlilik', foot_terms: 'Kullanım Şartları', foot_contact: 'İletişim',
     foot_copy: '&copy; 2026 MockPlacer. Tüm hakları saklıdır.',
+    ba_before: 'Önce', ba_after: 'Sonra',
     demo_dot1: 'Mockup Yükle', demo_dot2: 'Art Yükle', demo_dot3: 'Otomatik Mod',
     demo_dot4: 'Manuel Mod', demo_dot5: 'Köşe Yarıçapı', demo_dot6: 'Taşı & Boyutlandır', demo_dot7: 'Oluştur'
   },
@@ -2788,6 +2874,7 @@ const translations = {
     foot_resources: 'Resources', foot_blog: 'Blog', foot_support: 'Support', foot_community: 'Community',
     foot_legal: 'Legal', foot_privacy: 'Privacy', foot_terms: 'Terms of Service', foot_contact: 'Contact',
     foot_copy: '&copy; 2026 MockPlacer. All rights reserved.',
+    ba_before: 'Before', ba_after: 'After',
     demo_dot1: 'Upload Mockup', demo_dot2: 'Upload Art', demo_dot3: 'Auto Mode',
     demo_dot4: 'Manual Mode', demo_dot5: 'Corner Radius', demo_dot6: 'Drag & Resize', demo_dot7: 'Generate'
   }
