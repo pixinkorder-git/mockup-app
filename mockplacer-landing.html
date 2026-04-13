@@ -434,81 +434,16 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
 }
 
 /* ── Hero Visual: Before/After Slider ── */
-.hero-visual {
-  position: relative;
-  width: 100%;
-  max-width: 700px;
-  animation: fadeUp 0.9s ease 0.4s both;
-}
-
-.ba-slider {
-  position: relative;
-  width: 100%;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
-  user-select: none;
-  cursor: col-resize;
-}
-
-.ba-slider img {
-  display: block;
-  width: 100%;
-  height: auto;
-  pointer-events: none;
-}
-
-.ba-after {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-}
-
-.ba-after img {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-}
-
-.ba-divider {
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 3px;
-  background: white;
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-
-.ba-handle {
-  position: absolute;
-  top: 50%;
-  width: 44px; height: 44px;
-  background: white;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.22);
-  pointer-events: none;
-  color: #555;
-}
-
-.ba-label {
-  position: absolute;
-  top: 14px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  background: rgba(0,0,0,0.45);
-  color: white;
-  padding: 4px 10px;
-  border-radius: 20px;
-  pointer-events: none;
-}
-
-.ba-label-before { left: 14px; }
-.ba-label-after  { right: 14px; }
+.hero-slider-wrap { display:flex; justify-content:center; margin-top:40px; padding:0 20px; animation: fadeUp 0.9s ease 0.4s both; }
+.hero-slider { position:relative; width:100%; max-width:680px; border-radius:20px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.15); cursor:ew-resize; user-select:none; }
+.hs-after { display:block; width:100%; height:auto; }
+.hs-before-wrap { position:absolute; top:0; left:0; width:50%; height:100%; overflow:hidden; }
+.hs-before { display:block; width:100%; height:100%; object-fit:cover; object-position:left; }
+.hs-divider { position:absolute; top:0; left:50%; transform:translateX(-50%); width:3px; height:100%; background:white; box-shadow:0 0 8px rgba(0,0,0,0.3); }
+.hs-handle { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:44px; height:44px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 12px rgba(0,0,0,0.25); }
+.hs-label { position:absolute; top:14px; background:rgba(0,0,0,0.45); color:white; font-size:11px; font-weight:700; letter-spacing:1px; padding:4px 10px; border-radius:20px; pointer-events:none; }
+.hs-label-before { left:14px; }
+.hs-label-after { right:14px; }
 
 .float-mockup {
   position: absolute;
@@ -1261,7 +1196,7 @@ footer {
   .mobile-menu-btn { display: block; }
 
   .hero { padding-top: 100px; padding-bottom: 40px; min-height: auto; }
-  .hero-visual { height: 260px; }
+  .hero-slider-wrap { margin-top: 24px; padding: 0 12px; }
 
   .fm-laptop { display: none; }
   .fm-phone {
@@ -1656,59 +1591,45 @@ footer {
     <a href="#nasil" class="btn btn-ghost" data-i18n="hero_how">Nasıl Çalışır?</a>
   </div>
 
-  <!-- Floating mockups -->
-  <div class="hero-visual">
-    <div class="ba-slider" id="baSlider">
-      <!-- Before image (base layer) -->
-      <img src="/slider/before3.jpg" alt="Before" draggable="false">
-      <!-- After image (clipped overlay) -->
-      <div class="ba-after" id="baAfter">
-        <img src="/slider/after3.jpg" alt="After" draggable="false">
+  <div class="hero-slider-wrap">
+    <div class="hero-slider" id="heroSlider">
+      <img class="hs-after" src="/slider/after3.jpg" alt="After mockup">
+      <div class="hs-before-wrap" id="hsBeforeWrap">
+        <img class="hs-before" src="/slider/before3.jpg" alt="Before mockup">
       </div>
-      <!-- Divider line + handle -->
-      <div class="ba-divider" id="baDivider">
-        <div class="ba-handle">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18l-6-6 6-6"/><path d="M15 6l6 6-6 6"/>
+      <div class="hs-divider" id="hsDivider">
+        <div class="hs-handle">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M7 4L1 10L7 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M13 4L19 10L13 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
       </div>
-      <!-- Labels -->
-      <span class="ba-label ba-label-before" data-i18n="ba_before">Before</span>
-      <span class="ba-label ba-label-after"  data-i18n="ba_after">After</span>
+      <span class="hs-label hs-label-before" data-i18n="ba_before">BEFORE</span>
+      <span class="hs-label hs-label-after"  data-i18n="ba_after">AFTER</span>
     </div>
   </div>
 </section>
 
 <script>
-(function() {
-  var slider  = document.getElementById('baSlider');
-  var after   = document.getElementById('baAfter');
-  var divider = document.getElementById('baDivider');
-  if (!slider) return;
-
-  var pct = 50; // starting split %
-
-  function setPos(x) {
-    var rect = slider.getBoundingClientRect();
-    pct = Math.max(2, Math.min(98, ((x - rect.left) / rect.width) * 100));
-    after.style.width   = pct + '%';
-    divider.style.left  = pct + '%';
+(function(){
+  const slider = document.getElementById('heroSlider');
+  if(!slider) return;
+  const wrap = document.getElementById('hsBeforeWrap');
+  const divider = document.getElementById('hsDivider');
+  let dragging = false;
+  function setPos(x){
+    const rect = slider.getBoundingClientRect();
+    let pct = Math.min(Math.max((x - rect.left) / rect.width * 100, 0), 100);
+    wrap.style.width = pct + '%';
+    divider.style.left = pct + '%';
   }
-
-  // Initialise position
-  after.style.width  = pct + '%';
-  divider.style.left = pct + '%';
-
-  var dragging = false;
-
-  slider.addEventListener('mousedown',  function(e) { dragging = true; setPos(e.clientX); e.preventDefault(); });
-  window.addEventListener('mousemove',  function(e) { if (dragging) setPos(e.clientX); });
-  window.addEventListener('mouseup',    function()  { dragging = false; });
-
-  slider.addEventListener('touchstart', function(e) { dragging = true; setPos(e.touches[0].clientX); }, { passive: true });
-  window.addEventListener('touchmove',  function(e) { if (dragging) setPos(e.touches[0].clientX); },  { passive: true });
-  window.addEventListener('touchend',   function()  { dragging = false; });
+  slider.addEventListener('mousedown', e=>{ dragging=true; setPos(e.clientX); });
+  window.addEventListener('mousemove', e=>{ if(dragging) setPos(e.clientX); });
+  window.addEventListener('mouseup', ()=>{ dragging=false; });
+  slider.addEventListener('touchstart', e=>{ dragging=true; setPos(e.touches[0].clientX); },{passive:true});
+  window.addEventListener('touchmove', e=>{ if(dragging) setPos(e.touches[0].clientX); },{passive:true});
+  window.addEventListener('touchend', ()=>{ dragging=false; });
 })();
 </script>
 
