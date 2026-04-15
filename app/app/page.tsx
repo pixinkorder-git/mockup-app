@@ -207,6 +207,7 @@ export default function Home() {
   const [libraryLoading, setLibraryLoading]     = useState(false);
   const [libraryCategory, setLibraryCategory]   = useState('all');
   const [selectedLibraryId, setSelectedLibraryId] = useState<string | null>(null);
+  const [excludedMockupIds, setExcludedMockupIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!user?.id) { setPlan('free'); return; }
@@ -268,9 +269,14 @@ export default function Home() {
     }
   });
 
+  const activeMockupsForGenerate = useMemo(
+    () => mockups.filter((m) => !excludedMockupIds.has(m.id)),
+    [mockups, excludedMockupIds]
+  );
+
   const allCombinations = useMemo(
-    () => orderCombinations(computeCombinations(mockups, artImages), mockups),
-    [mockups, artImages]
+    () => orderCombinations(computeCombinations(activeMockupsForGenerate, artImages), activeMockupsForGenerate),
+    [activeMockupsForGenerate, artImages]
   );
   const pendingCombinations = useMemo(
     () => allCombinations.filter((c) => !generatedIds.has(c.id)),
@@ -278,7 +284,7 @@ export default function Home() {
   );
   const remainingCount    = pendingCombinations.length;
   const isExhausted       = allCombinations.length > 0 && remainingCount === 0;
-  const hasNoCombinations = artImages.length > 0 && mockups.some((m) => m.frames.length > 0) && allCombinations.length === 0;
+  const hasNoCombinations = artImages.length > 0 && activeMockupsForGenerate.some((m) => m.frames.length > 0) && allCombinations.length === 0;
   const activeMockup      = mockups.find((m) => m.id === activeMockupId) ?? null;
   const canGenerate       = !isGenerating && pendingCombinations.length > 0 && !limitReached;
 
@@ -337,10 +343,19 @@ export default function Home() {
       if (m) URL.revokeObjectURL(m.url);
       return prev.filter((x) => x.id !== id);
     });
+    setExcludedMockupIds((prev) => { const next = new Set(prev); next.delete(id); return next; });
     if (activeMockupId === id) {
       setActiveMockupId(() => mockups.find((m) => m.id !== id)?.id ?? null);
     }
   }, [activeMockupId, mockups]);
+
+  const toggleMockupEnabled = useCallback((id: string) => {
+    setExcludedMockupIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }, []);
 
   // ── Frame handlers ────────────────────────────────────────────────────────
   const handleAddFrame = useCallback((frameData: Omit<Frame, 'id' | 'color'>) => {
@@ -389,7 +404,7 @@ export default function Home() {
     setIsGenerating(true);
     setProgress({ done: 0, total: batch.length });
     try {
-      const newResults = await generateBatch(batch, mockups, artImages, (done, total) =>
+      const newResults = await generateBatch(batch, activeMockupsForGenerate, artImages, (done, total) =>
         setProgress({ done, total })
       );
       setResults((prev) => [...prev, ...newResults]);
@@ -464,7 +479,7 @@ export default function Home() {
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, flexWrap: 'wrap' }}>
             <ComboChip value={artImages.length} label="art" />
             <span style={{ fontSize: 13, color: 'var(--text-3)', fontFamily: 'monospace' }}>×</span>
-            <ComboChip value={mockups.filter((m) => m.frames.length > 0).length} label="templates" />
+            <ComboChip value={activeMockupsForGenerate.filter((m) => m.frames.length > 0).length} label="templates" />
             <span style={{ fontSize: 13, color: 'var(--text-3)', fontFamily: 'monospace' }}>=</span>
             <ComboChip value={allCombinations.length} label="combos" accent />
           </div>
@@ -489,7 +504,7 @@ export default function Home() {
               {isTR ? 'Sanat ve çerçeveler arasında uygun oryantasyon bulunamadı.' : 'No orientation matches between art and frames.'}
             </p>
           )}
-          {artImages.length > 0 && mockups.length > 0 && !mockups.some((m) => m.frames.length > 0) && (
+          {artImages.length > 0 && activeMockupsForGenerate.length > 0 && !activeMockupsForGenerate.some((m) => m.frames.length > 0) && (
             <p style={{ fontSize: 12, color: 'var(--text-2)', fontFamily: 'monospace' }}>
               {isTR ? 'Oluşturmayı etkinleştirmek için şablona çerçeve ekleyin.' : 'Pin frames on a template to enable generation.'}
             </p>
@@ -714,7 +729,7 @@ export default function Home() {
               ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
                   {filteredLibraryTemplates.map((tpl) => {
-                    const isSelected = selectedLibraryId === String(tpl.id);
+                    const isSelected = mockups.some((m) => m.url === tpl.image);
                     const isDisabled = !isSelected && mockups.length >= MAX_MOCKUPS;
                     return (
                       <div
@@ -904,53 +919,91 @@ export default function Home() {
                     : (isTR ? `${mockups.length} / ${MAX_MOCKUPS} dosya` : `${mockups.length} / ${MAX_MOCKUPS} files`)}
                 </p>
 
-                {/* Selected mockup cards */}
+                {/* My Templates list */}
                 {mockups.length > 0 && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 12 }}>
-                    {mockups.map((m) => (
-                      <div
-                        key={m.id}
-                        onClick={() => setActiveMockupId(m.id)}
-                        style={{
-                          display: 'flex', alignItems: 'center', gap: 10,
-                          padding: '7px 10px', borderRadius: 10,
-                          background: m.id === activeMockupId ? 'rgba(255,107,53,0.06)' : '#fff',
-                          border: `1.5px solid ${m.id === activeMockupId ? '#FF6B35' : 'var(--border)'}`,
-                          cursor: 'pointer', transition: 'all 0.15s',
-                        }}
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={m.url}
-                          alt={m.name}
-                          style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 6, flexShrink: 0, border: '1px solid var(--border)' }}
-                        />
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <p style={{
-                            margin: 0, fontSize: 12, fontWeight: 600, color: '#151515',
-                            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                          }}>{m.name}</p>
-                          {m.frames.length > 0 && (
-                            <p style={{ margin: 0, fontSize: 10, color: '#FF6B35', fontFamily: 'monospace', fontWeight: 700 }}>
-                              {m.frames.length}f
-                            </p>
-                          )}
-                        </div>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); removeMockup(m.id); }}
-                          title="Remove"
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginTop: 12 }}>
+                    {mockups.map((m) => {
+                      const enabled = !excludedMockupIds.has(m.id);
+                      return (
+                        <div
+                          key={m.id}
                           style={{
-                            width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
-                            background: 'rgba(0,0,0,0.08)', border: 'none', cursor: 'pointer',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            display: 'flex', alignItems: 'center', gap: 8,
+                            padding: '6px 8px', borderRadius: 10,
+                            background: m.id === activeMockupId ? 'rgba(255,107,53,0.06)' : '#fff',
+                            border: `1.5px solid ${m.id === activeMockupId ? '#FF6B35' : 'var(--border)'}`,
+                            opacity: enabled ? 1 : 0.45,
+                            transition: 'all 0.15s',
                           }}
                         >
-                          <svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#555" strokeWidth="1.5" strokeLinecap="round">
-                            <line x1="1" y1="1" x2="7" y2="7" /><line x1="7" y1="1" x2="1" y2="7" />
-                          </svg>
-                        </button>
-                      </div>
-                    ))}
+                          {/* Toggle checkbox */}
+                          <button
+                            onClick={() => toggleMockupEnabled(m.id)}
+                            title={enabled ? (isTR ? 'Üretimden çıkar' : 'Exclude from generate') : (isTR ? 'Üretime ekle' : 'Include in generate')}
+                            style={{
+                              width: 18, height: 18, borderRadius: 5, flexShrink: 0,
+                              border: `1.5px solid ${enabled ? '#FF6B35' : '#ccc'}`,
+                              background: enabled ? '#FF6B35' : '#fff',
+                              cursor: 'pointer',
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              padding: 0, transition: 'all 0.15s',
+                            }}
+                          >
+                            {enabled && (
+                              <svg width="9" height="9" viewBox="0 0 8 8" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="1,4 3,6 7,2" />
+                              </svg>
+                            )}
+                          </button>
+
+                          {/* Thumbnail — clicks to activate in editor */}
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={m.url}
+                            alt={m.name}
+                            onClick={() => setActiveMockupId(m.id)}
+                            style={{ width: 36, height: 36, objectFit: 'cover', borderRadius: 6, flexShrink: 0, border: '1px solid var(--border)', cursor: 'pointer' }}
+                          />
+
+                          {/* Name + frame count — clicks to activate */}
+                          <div style={{ flex: 1, minWidth: 0, cursor: 'pointer' }} onClick={() => setActiveMockupId(m.id)}>
+                            <p style={{
+                              margin: 0, fontSize: 11, fontWeight: 600,
+                              color: enabled ? '#151515' : '#999',
+                              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                            }}>{m.name}</p>
+                            <p style={{ margin: 0, fontSize: 10, fontFamily: 'monospace', fontWeight: 700, color: enabled ? '#FF6B35' : '#bbb' }}>
+                              {m.frames.length > 0 ? `${m.frames.length}f` : (isTR ? 'çerçeve yok' : 'no frames')}
+                            </p>
+                          </div>
+
+                          {/* Remove button */}
+                          <button
+                            onClick={() => removeMockup(m.id)}
+                            title={isTR ? 'Kaldır' : 'Remove'}
+                            style={{
+                              width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
+                              background: 'rgba(0,0,0,0.07)', border: 'none', cursor: 'pointer',
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              transition: 'background 0.15s',
+                            }}
+                            onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(220,38,38,0.12)')}
+                            onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.07)')}
+                          >
+                            <svg width="7" height="7" viewBox="0 0 8 8" fill="none" stroke="#666" strokeWidth="1.5" strokeLinecap="round">
+                              <line x1="1" y1="1" x2="7" y2="7" /><line x1="7" y1="1" x2="1" y2="7" />
+                            </svg>
+                          </button>
+                        </div>
+                      );
+                    })}
+                    {mockups.some((m) => excludedMockupIds.has(m.id)) && (
+                      <p style={{ fontSize: 10, color: 'var(--text-2)', fontFamily: 'monospace', margin: '2px 0 0', textAlign: 'center' }}>
+                        {isTR
+                          ? `${excludedMockupIds.size} şablon üretimden hariç`
+                          : `${excludedMockupIds.size} template excluded from generate`}
+                      </p>
+                    )}
                   </div>
                 )}
 
