@@ -38,9 +38,10 @@ function loadImageDimensions(url: string): Promise<{ w: number; h: number }> {
 
 // ─── Layout constants ─────────────────────────────────────────────────────────
 const CARD_MAX = 9999;
-const CARD_PAD = 16;
-const COL_LEFT = 340;
-const NAV_H    = 72;
+const CARD_PAD = 0;
+const COL_LEFT = 320;
+const COL_TEMPLATES = 200;
+const NAV_H    = 80;
 
 // ─── Section label ────────────────────────────────────────────────────────────
 function SectionLabel({ children, badge }: { children: React.ReactNode; badge?: number }) {
@@ -48,11 +49,11 @@ function SectionLabel({ children, badge }: { children: React.ReactNode; badge?: 
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
       <span style={{
         fontFamily: "'Clash Display', sans-serif",
-        fontSize: 18, fontWeight: 700,
+        fontSize: 22, fontWeight: 700,
         letterSpacing: '-0.01em',
         color: '#151515',
-        borderLeft: '3px solid #FF6B35',
-        paddingLeft: 10,
+        borderLeft: '4px solid #FF6B35',
+        paddingLeft: 12,
       }}>
         {children}
       </span>
@@ -577,8 +578,8 @@ export default function Home() {
           onClick={handleGenerate}
           disabled={!canGenerate}
           style={{
-            width: '100%', height: 56, borderRadius: 12,
-            fontSize: 16, fontWeight: 700, letterSpacing: '0.04em',
+            width: '100%', height: 64, borderRadius: 12,
+            fontSize: 18, fontWeight: 700, letterSpacing: '0.04em',
             fontFamily: "'Clash Display', sans-serif",
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
             background: canGenerate ? '#FF6B35' : 'rgba(255,107,53,0.4)',
@@ -868,7 +869,7 @@ export default function Home() {
         {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/1logo.png" width="200" height="50" style={{ display: 'block' }} alt="MockPlacer" />
+          <img src="/1logo.png" width="220" height="55" style={{ display: 'block' }} alt="MockPlacer" />
         </Link>
 
         {/* Stats + back link */}
@@ -891,7 +892,7 @@ export default function Home() {
           </a>
           <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
           {user ? (
-            <div style={{ transform: 'scale(1.3)', transformOrigin: 'right center' }}>
+            <div style={{ transform: 'scale(1.5)', transformOrigin: 'right center' }}>
               <UserDropdown
                 user={user}
                 plan={plan}
@@ -908,22 +909,22 @@ export default function Home() {
       </header>
 
       {/* ── MAIN CONTENT ───────────────────────────────────────────────────── */}
-      <div style={{ maxWidth: CARD_MAX, margin: '0 auto', padding: `16px 16px 60px` }}>
+      <div style={{ maxWidth: '100%', margin: '0', padding: `16px 0 60px` }}>
 
         {/* ── TOOL CARD ──────────────────────────────────────────────────── */}
         <div style={{
-          borderRadius: 20,
-          border: '1px solid rgba(255,107,53,0.12)',
+          borderRadius: 0,
+          border: 'none',
           background: '#FDFCFB',
           overflow: 'hidden',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.06)',
+          boxShadow: 'none',
           minHeight: 'calc(100vh - 100px)',
         }}>
           <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', minHeight: isMobile ? undefined : 'calc(100vh - 100px)' }}>
 
             {/* ── COL 1: TEMPLATES PANEL ───────────────────────────────── */}
             <div style={{
-              width: isMobile ? '100%' : 260, flexShrink: 0,
+              width: isMobile ? '100%' : COL_TEMPLATES, flexShrink: 0,
               display: 'flex', flexDirection: 'column',
               background: '#FAFAFA',
               borderRight: isMobile ? 'none' : '1px solid var(--border)',
@@ -931,7 +932,7 @@ export default function Home() {
               minHeight: isMobile ? undefined : 'calc(100vh - 100px)',
             }}>
               {/* Header */}
-              <div style={{ padding: '18px 16px 12px', flexShrink: 0 }}>
+              <div style={{ padding: '24px 16px 12px', flexShrink: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
                   <span style={{ fontFamily: "'Clash Display', sans-serif", fontSize: 16, fontWeight: 700, letterSpacing: '-0.01em', color: '#151515', borderLeft: '3px solid #FF6B35', paddingLeft: 10 }}>
                     {isTR ? 'Şablonlarım' : 'My Templates'}
@@ -946,9 +947,9 @@ export default function Home() {
                 <button
                   onClick={() => setLibraryModalOpen(true)}
                   style={{
-                    width: '100%', height: 36, borderRadius: 8,
+                    width: '100%', height: 48, borderRadius: 8,
                     border: 'none', background: '#FF6B35', color: '#fff',
-                    fontSize: 12, fontWeight: 700, fontFamily: 'var(--font-body)',
+                    fontSize: 15, fontWeight: 700, fontFamily: 'var(--font-body)',
                     cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
                     transition: 'background 0.15s',
@@ -1029,9 +1030,9 @@ export default function Home() {
 
             {/* ── COL 2: CONTROLS ──────────────────────────────────────── */}
             <div style={{
-              width: isMobile ? '100%' : 320, flexShrink: 0,
+              width: isMobile ? '100%' : COL_LEFT, flexShrink: 0,
               display: 'flex', flexDirection: 'column',
-              padding: CARD_PAD, gap: 24,
+              padding: '24px 20px', gap: 24,
               background: 'var(--surface-2)',
               borderRight: isMobile ? 'none' : '1px solid var(--border)',
               borderBottom: isMobile ? '1px solid var(--border)' : 'none',
@@ -1111,7 +1112,7 @@ export default function Home() {
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
 
               {/* Top bar */}
-              <div style={{ padding: `${CARD_PAD}px ${CARD_PAD}px 0`, flexShrink: 0 }}>
+              <div style={{ padding: '24px 20px 0', flexShrink: 0 }}>
                 <div style={{
                   display: 'flex', alignItems: 'center',
                   justifyContent: 'space-between',
@@ -1191,7 +1192,7 @@ export default function Home() {
               </div>
 
               {/* Canvas area */}
-              <div style={{ flex: 1, padding: `0 ${CARD_PAD}px ${CARD_PAD}px`, minHeight: 400 }}>
+              <div style={{ flex: 1, padding: '0 20px 20px', minHeight: 400 }}>
                 {activeMockup ? (
                   <MockupEditor
                     key={activeMockup.id}
@@ -1228,7 +1229,7 @@ export default function Home() {
 
             {/* ── MOBILE: Generate section below Frame Editor ──────────── */}
             {isMobile && (
-              <div style={{ padding: CARD_PAD, borderTop: '1px solid var(--border)' }}>
+              <div style={{ padding: '20px', borderTop: '1px solid var(--border)' }}>
                 {generateSection}
               </div>
             )}
@@ -1313,10 +1314,10 @@ export default function Home() {
 function NavStat({ label, value, accent = false }: { label: string; value: number; accent?: boolean }) {
   return (
     <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-      <span style={{ fontSize: 15, color: 'var(--text-3)', letterSpacing: '0.06em', fontFamily: 'var(--font-display)', fontWeight: 600, textTransform: 'uppercase' }}>
+      <span style={{ fontSize: 16, color: 'var(--text-3)', letterSpacing: '0.06em', fontFamily: 'var(--font-display)', fontWeight: 600, textTransform: 'uppercase' }}>
         {label}
       </span>
-      <span style={{ fontSize: 24, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-display)' }}>
+      <span style={{ fontSize: 26, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-display)' }}>
         {value}
       </span>
     </div>
