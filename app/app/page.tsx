@@ -1071,7 +1071,7 @@ export default function Home() {
                 />
                 {/* Uploaded (non-library) mockup thumbs */}
                 {(() => {
-                  const uploaded = mockups.filter((m) => !libraryFavorites.some((f) => f.mockup.id === m.id));
+                  const uploaded = mockups;
                   return uploaded.length > 0 ? (
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
                       {uploaded.map((m) => (
