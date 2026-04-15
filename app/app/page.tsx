@@ -149,13 +149,13 @@ interface LibraryFav {
   name: string;
   image: string;
   mockup: MockupTemplate;
+  checked: boolean; // true = also in mockups[], false = pool only
 }
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function Home() {
   const [artImages, setArtImages]             = useState<ArtImage[]>([]);
   const [mockups, setMockups]                 = useState<MockupTemplate[]>([]);
-  const [disabledMockupIds, setDisabledMockupIds] = useState<Set<string>>(new Set());
   const [activeMockupId, setActiveMockupId]   = useState<string | null>(null);
   const [results, setResults]               = useState<GeneratedResult[]>([]);
   const [generatedIds, setGeneratedIds]     = useState<Set<string>>(new Set());
@@ -264,11 +264,8 @@ export default function Home() {
     });
   }, []);
 
-  // activeMockups = checked templates used for generation
-  const activeMockups = useMemo(
-    () => mockups.filter((m) => !disabledMockupIds.has(m.id)),
-    [mockups, disabledMockupIds]
-  );
+  // activeMockups = all mockups[] (only checked library favs + manually uploaded)
+  const activeMockups = mockups;
 
   // Reset results only when the active set actually changes
   const artKey    = artImages.map((a) => a.id).join(',');
@@ -349,13 +346,18 @@ export default function Home() {
   }, []);
 
   const removeMockup = useCallback((id: string) => {
+    // If it's a library fav, just uncheck it (keep in pool)
+    setLibraryFavorites((prev) => prev.map((f) =>
+      f.mockup.id === id ? { ...f, checked: false } : f
+    ));
     setMockups((prev) => {
       const m = prev.find((x) => x.id === id);
-      if (m) URL.revokeObjectURL(m.url);
+      // Only revoke object URLs (manually uploaded), not static library paths
+      if (m && m.url.startsWith('blob:')) URL.revokeObjectURL(m.url);
       return prev.filter((x) => x.id !== id);
     });
     if (activeMockupId === id) {
-      setActiveMockupId(() => mockups.find((m) => m.id !== id)?.id ?? null);
+      setActiveMockupId(mockups.find((m) => m.id !== id)?.id ?? null);
     }
   }, [activeMockupId, mockups]);
 
@@ -433,10 +435,6 @@ export default function Home() {
       setToast(isTR ? 'Zaten kayıtlı' : 'Already in your templates');
       return;
     }
-    if (mockups.length >= MAX_MOCKUPS) {
-      setToast(isTR ? 'En fazla 6 aktif şablon' : 'Max 6 active templates');
-      return;
-    }
     const { w: imgW, h: imgH } = await loadImageDimensions(tpl.image);
     if (imgW === 0) return;
     const mockupId = genId();
@@ -454,38 +452,45 @@ export default function Home() {
         cornerRadius: f.cornerRadius,
       })),
     };
-    // Add to favorites pool AND to mockups[] immediately (starts active)
-    const newFav: LibraryFav = { favId: genId(), tplId: tpl.image, name: tpl.name, image: tpl.image, mockup: newMockup };
+    // Add to pool only — unchecked by default, not in mockups[]
+    const newFav: LibraryFav = { favId: genId(), tplId: tpl.image, name: tpl.name, image: tpl.image, mockup: newMockup, checked: false };
     setLibraryFavorites((prev) => [...prev, newFav]);
-    setMockups((prev) => [...prev, newMockup]);
-    setActiveMockupId(newMockup.id);
-    setToast(isTR ? 'Şablonlarınıza eklendi' : 'Added to your templates');
+    setToast(isTR ? 'Şablonlarınıza eklendi' : 'Added to My Templates');
     // Keep modal open so user can keep browsing
-  }, [libraryFavorites, mockups, isTR]);
+  }, [libraryFavorites, isTR]);
 
-  // ── Toggle favorite active/inactive via disabledMockupIds ────────────────
+  // ── Toggle fav checked state ──────────────────────────────────────────────
   const toggleFav = useCallback((favId: string) => {
     const fav = libraryFavorites.find((f) => f.favId === favId);
     if (!fav) return;
-    setDisabledMockupIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(fav.mockup.id)) {
-        next.delete(fav.mockup.id);  // activate
-      } else {
-        next.add(fav.mockup.id);     // deactivate
+    if (fav.checked) {
+      // Uncheck: remove from mockups[]
+      setLibraryFavorites((prev) => prev.map((f) => f.favId === favId ? { ...f, checked: false } : f));
+      setMockups((prev) => prev.filter((m) => m.id !== fav.mockup.id));
+      if (activeMockupId === fav.mockup.id) {
+        setActiveMockupId(mockups.find((m) => m.id !== fav.mockup.id)?.id ?? null);
       }
-      return next;
-    });
-  }, [libraryFavorites]);
+    } else {
+      // Check: add to mockups[]
+      if (mockups.length >= MAX_MOCKUPS) {
+        setToast(isTR ? 'En fazla 6 aktif şablon' : 'Max 6 active templates');
+        return;
+      }
+      setLibraryFavorites((prev) => prev.map((f) => f.favId === favId ? { ...f, checked: true } : f));
+      setMockups((prev) => [...prev, fav.mockup]);
+      setActiveMockupId(fav.mockup.id);
+    }
+  }, [libraryFavorites, mockups, activeMockupId, isTR]);
 
-  // ── Remove favorite entirely ──────────────────────────────────────────────
+  // ── Remove favorite entirely from pool ───────────────────────────────────
   const removeFav = useCallback((favId: string) => {
     const fav = libraryFavorites.find((f) => f.favId === favId);
     if (!fav) return;
     setLibraryFavorites((prev) => prev.filter((f) => f.favId !== favId));
-    setMockups((prev) => prev.filter((m) => m.id !== fav.mockup.id));
-    setDisabledMockupIds((prev) => { const next = new Set(prev); next.delete(fav.mockup.id); return next; });
-    if (activeMockupId === fav.mockup.id) setActiveMockupId(null);
+    if (fav.checked) {
+      setMockups((prev) => prev.filter((m) => m.id !== fav.mockup.id));
+      if (activeMockupId === fav.mockup.id) setActiveMockupId(null);
+    }
   }, [libraryFavorites, activeMockupId]);
 
   // ── Toast auto-dismiss ────────────────────────────────────────────────────
@@ -967,11 +972,11 @@ export default function Home() {
                 ) : (
                   <>
                     <p style={{ fontSize: 10, color: 'var(--text-2)', fontFamily: 'monospace', margin: '0 2px 6px', paddingTop: 2 }}>
-                      {libraryFavorites.filter(f => !disabledMockupIds.has(f.mockup.id)).length}/{libraryFavorites.length} {isTR ? 'aktif' : 'active'}
+                      {libraryFavorites.filter(f => f.checked).length}/{libraryFavorites.length} {isTR ? 'aktif' : 'active'}
                     </p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                       {libraryFavorites.map((fav) => {
-                        const isActive = !disabledMockupIds.has(fav.mockup.id);
+                        const isActive = fav.checked;
                         return (
                           <div
                             key={fav.favId}
