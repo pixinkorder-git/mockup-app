@@ -685,7 +685,7 @@ export default function Home() {
       {/* ── BROWSE LIBRARY MODAL ───────────────────────────────────────────── */}
       {libraryModalOpen && (
         <div
-          onClick={() => setLibraryModalOpen(false)}
+          onClick={() => { console.log('closing modal (backdrop)'); setLibraryModalOpen(false); }}
           style={{
             position: 'fixed', inset: 0, zIndex: 200,
             background: 'rgba(0,0,0,0.45)',
@@ -717,7 +717,7 @@ export default function Home() {
                 {isTR ? 'Kütüphane' : 'Browse Library'}
               </span>
               <button
-                onClick={() => setLibraryModalOpen(false)}
+                onClick={() => { console.log('closing modal (X button)'); setLibraryModalOpen(false); }}
                 style={{
                   width: 32, height: 32, borderRadius: '50%',
                   background: 'var(--surface-3)', border: 'none', cursor: 'pointer',
@@ -781,10 +781,10 @@ export default function Home() {
                           border: `2px solid ${isSelected ? '#FF6B35' : 'var(--border)'}`,
                           boxShadow: isSelected ? '0 0 0 3px rgba(255,107,53,0.18)' : 'none',
                           transition: 'all 0.15s',
-                          opacity: isSelected ? 0.72 : 1,
+                          opacity: 1,
                           position: 'relative',
                         }}
-                        onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = '#FF6B35'; }}
+                        onMouseEnter={(e) => { if (!isSelected) (e.currentTarget as HTMLDivElement).style.borderColor = '#FF6B35'; }}
                         onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = isSelected ? '#FF6B35' : 'var(--border)'; }}
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1010,60 +1010,89 @@ export default function Home() {
                 </button>
               </div>
 
+              <Divider />
+
               {/* MY TEMPLATES */}
-              {libraryFavorites.length > 0 && (
-                <div style={{
-                  background: '#fff',
-                  border: '1.5px solid var(--border)',
-                  borderRadius: 14,
-                  padding: '14px 16px',
-                  marginTop: 12,
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                    <span style={{ fontWeight: 700, fontSize: 14, fontFamily: 'var(--font-body)' }}>
-                      {isTR ? 'Kayıtlı Şablonlar' : 'My Templates'}
-                    </span>
-                    <span style={{ fontSize: 12, color: 'var(--text-2)' }}>
-                      {libraryFavorites.filter(f => !disabledMockupIds.has(f.mockup.id)).length}/{libraryFavorites.length} {isTR ? 'aktif' : 'active'}
-                    </span>
+              <div>
+                <SectionLabel badge={libraryFavorites.length}>
+                  {isTR ? 'Kayıtlı Şablonlar' : 'My Templates'}
+                </SectionLabel>
+
+                {libraryFavorites.length === 0 ? (
+                  <div style={{
+                    padding: '16px', borderRadius: 10,
+                    border: '1.5px dashed rgba(255,107,53,0.3)',
+                    background: 'rgba(255,107,53,0.02)',
+                    textAlign: 'center',
+                  }}>
+                    <p style={{ fontSize: 12, color: 'var(--text-2)', margin: 0, fontFamily: 'var(--font-body)' }}>
+                      {isTR ? 'Kütüphaneden şablon ekleyin' : 'Add templates from the library'}
+                    </p>
                   </div>
-                  {libraryFavorites.map((fav) => {
-                    const isActive = !disabledMockupIds.has(fav.mockup.id);
-                    return (
-                      <div
-                        key={fav.favId}
-                        style={{
-                          display: 'flex', alignItems: 'center', gap: 8,
-                          padding: '7px 8px', borderRadius: 10, marginBottom: 6,
-                          background: isActive ? 'rgba(255,107,53,0.06)' : '#fafafa',
-                          border: `1.5px solid ${isActive ? '#FF6B35' : 'var(--border)'}`,
-                          cursor: 'pointer',
-                        }}
-                        onClick={() => toggleFav(fav.favId)}
-                      >
-                        <div style={{
-                          width: 18, height: 18, borderRadius: 4, flexShrink: 0,
-                          border: `2px solid ${isActive ? '#FF6B35' : '#ccc'}`,
-                          background: isActive ? '#FF6B35' : '#fff',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        }}>
-                          {isActive && <svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round"/></svg>}
-                        </div>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={fav.image} alt={fav.name} style={{ width: 36, height: 36, objectFit: 'cover', borderRadius: 6, flexShrink: 0, opacity: isActive ? 1 : 0.5 }} />
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <p style={{ margin: 0, fontSize: 12, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{fav.name}</p>
-                          <p style={{ margin: 0, fontSize: 11, color: 'var(--text-2)' }}>{fav.mockup.frames.length}f</p>
-                        </div>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); removeFav(fav.favId); }}
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#bbb', fontSize: 18, padding: '0 2px', lineHeight: 1 }}
-                        >×</button>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+                ) : (
+                  <>
+                    <p style={{ fontSize: 11, color: 'var(--text-2)', fontFamily: 'monospace', margin: '0 0 8px' }}>
+                      {libraryFavorites.filter(f => !disabledMockupIds.has(f.mockup.id)).length}/{libraryFavorites.length} {isTR ? 'aktif' : 'active'}
+                    </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      {libraryFavorites.map((fav) => {
+                        const isActive = !disabledMockupIds.has(fav.mockup.id);
+                        return (
+                          <div
+                            key={fav.favId}
+                            onClick={() => setActiveMockupId(fav.mockup.id)}
+                            style={{
+                              display: 'flex', alignItems: 'center', gap: 8,
+                              padding: '7px 8px', borderRadius: 10,
+                              background: isActive ? 'rgba(255,107,53,0.06)' : '#fafafa',
+                              border: `1.5px solid ${isActive ? '#FF6B35' : 'var(--border)'}`,
+                              cursor: 'pointer', transition: 'all 0.15s',
+                            }}
+                          >
+                            {/* Checkbox — toggles active/inactive */}
+                            <div
+                              onClick={(e) => { e.stopPropagation(); toggleFav(fav.favId); }}
+                              style={{
+                                width: 18, height: 18, borderRadius: 4, flexShrink: 0,
+                                border: `2px solid ${isActive ? '#FF6B35' : '#ccc'}`,
+                                background: isActive ? '#FF6B35' : '#fff',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                transition: 'all 0.15s',
+                              }}
+                            >
+                              {isActive && (
+                                <svg width="10" height="10" viewBox="0 0 10 10">
+                                  <polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round"/>
+                                </svg>
+                              )}
+                            </div>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={fav.image}
+                              alt={fav.name}
+                              style={{ width: 38, height: 38, objectFit: 'cover', borderRadius: 6, flexShrink: 0, opacity: isActive ? 1 : 0.45 }}
+                            />
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <p style={{ margin: 0, fontSize: 12, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: isActive ? '#151515' : 'var(--text-2)' }}>
+                                {fav.name}
+                              </p>
+                              <p style={{ margin: 0, fontSize: 10, color: 'var(--text-2)', fontFamily: 'monospace' }}>
+                                {fav.mockup.frames.length}f
+                              </p>
+                            </div>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); removeFav(fav.favId); }}
+                              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ccc', fontSize: 18, padding: '0 2px', lineHeight: 1, flexShrink: 0 }}
+                              onMouseEnter={(e) => (e.currentTarget.style.color = '#EF4444')}
+                              onMouseLeave={(e) => (e.currentTarget.style.color = '#ccc')}
+                            >×</button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
+              </div>
 
               {/* Spacer — desktop only */}
               {!isMobile && <div style={{ flex: 1 }} />}
