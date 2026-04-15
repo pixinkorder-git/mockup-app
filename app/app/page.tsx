@@ -1010,23 +1010,23 @@ export default function Home() {
                 </button>
               </div>
 
-              <Divider />
-
-              {/* MY TEMPLATES */}
+              {/* MY TEMPLATES — always visible */}
               <div>
-                <SectionLabel badge={libraryFavorites.length}>
-                  {isTR ? 'Kayıtlı Şablonlar' : 'My Templates'}
-                </SectionLabel>
-
+                <div style={{ height: 1, background: 'var(--border)', margin: '20px 0' }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+                  <span style={{ fontFamily: "'Clash Display', sans-serif", fontSize: 18, fontWeight: 700, letterSpacing: '-0.01em', color: '#151515', borderLeft: '3px solid #FF6B35', paddingLeft: 10 }}>
+                    {isTR ? 'Kayıtlı Şablonlar' : 'My Templates'}
+                  </span>
+                  {libraryFavorites.length > 0 && (
+                    <span style={{ fontSize: 11, fontWeight: 700, padding: '1px 7px', borderRadius: 99, background: '#FF6B35', color: '#fff' }}>
+                      {libraryFavorites.length}
+                    </span>
+                  )}
+                </div>
                 {libraryFavorites.length === 0 ? (
-                  <div style={{
-                    padding: '16px', borderRadius: 10,
-                    border: '1.5px dashed rgba(255,107,53,0.3)',
-                    background: 'rgba(255,107,53,0.02)',
-                    textAlign: 'center',
-                  }}>
-                    <p style={{ fontSize: 12, color: 'var(--text-2)', margin: 0, fontFamily: 'var(--font-body)' }}>
-                      {isTR ? 'Kütüphaneden şablon ekleyin' : 'Add templates from the library'}
+                  <div style={{ padding: '14px 16px', borderRadius: 10, border: '1.5px dashed rgba(255,107,53,0.3)', background: 'rgba(255,107,53,0.02)', textAlign: 'center' }}>
+                    <p style={{ fontSize: 12, color: 'var(--text-2)', margin: 0 }}>
+                      {isTR ? 'Kütüphaneden şablon ekleyin' : 'Add templates from the library below'}
                     </p>
                   </div>
                 ) : (
@@ -1041,44 +1041,19 @@ export default function Home() {
                           <div
                             key={fav.favId}
                             onClick={() => setActiveMockupId(fav.mockup.id)}
-                            style={{
-                              display: 'flex', alignItems: 'center', gap: 8,
-                              padding: '7px 8px', borderRadius: 10,
-                              background: isActive ? 'rgba(255,107,53,0.06)' : '#fafafa',
-                              border: `1.5px solid ${isActive ? '#FF6B35' : 'var(--border)'}`,
-                              cursor: 'pointer', transition: 'all 0.15s',
-                            }}
+                            style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 8px', borderRadius: 10, background: isActive ? 'rgba(255,107,53,0.06)' : '#fafafa', border: `1.5px solid ${isActive ? '#FF6B35' : 'var(--border)'}`, cursor: 'pointer', transition: 'all 0.15s' }}
                           >
-                            {/* Checkbox — toggles active/inactive */}
                             <div
                               onClick={(e) => { e.stopPropagation(); toggleFav(fav.favId); }}
-                              style={{
-                                width: 18, height: 18, borderRadius: 4, flexShrink: 0,
-                                border: `2px solid ${isActive ? '#FF6B35' : '#ccc'}`,
-                                background: isActive ? '#FF6B35' : '#fff',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                transition: 'all 0.15s',
-                              }}
+                              style={{ width: 18, height: 18, borderRadius: 4, flexShrink: 0, border: `2px solid ${isActive ? '#FF6B35' : '#ccc'}`, background: isActive ? '#FF6B35' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
                             >
-                              {isActive && (
-                                <svg width="10" height="10" viewBox="0 0 10 10">
-                                  <polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round"/>
-                                </svg>
-                              )}
+                              {isActive && <svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round"/></svg>}
                             </div>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              src={fav.image}
-                              alt={fav.name}
-                              style={{ width: 38, height: 38, objectFit: 'cover', borderRadius: 6, flexShrink: 0, opacity: isActive ? 1 : 0.45 }}
-                            />
+                            <img src={fav.image} alt={fav.name} style={{ width: 38, height: 38, objectFit: 'cover', borderRadius: 6, flexShrink: 0, opacity: isActive ? 1 : 0.45 }} />
                             <div style={{ flex: 1, minWidth: 0 }}>
-                              <p style={{ margin: 0, fontSize: 12, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: isActive ? '#151515' : 'var(--text-2)' }}>
-                                {fav.name}
-                              </p>
-                              <p style={{ margin: 0, fontSize: 10, color: 'var(--text-2)', fontFamily: 'monospace' }}>
-                                {fav.mockup.frames.length}f
-                              </p>
+                              <p style={{ margin: 0, fontSize: 12, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: isActive ? '#151515' : 'var(--text-2)' }}>{fav.name}</p>
+                              <p style={{ margin: 0, fontSize: 10, color: 'var(--text-2)', fontFamily: 'monospace' }}>{fav.mockup.frames.length}f</p>
                             </div>
                             <button
                               onClick={(e) => { e.stopPropagation(); removeFav(fav.favId); }}
