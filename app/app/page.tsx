@@ -145,18 +145,18 @@ interface LibraryTemplateItem {
 // ─── Library favorite (saved from Browse Library) ─────────────────────────────
 interface LibraryFav {
   favId: string;
-  tplId: string;         // String(tpl.id) — used for isSelected check in modal
+  tplId: string;   // tpl.image path — unique identifier since JSON has no id field
   name: string;
   image: string;
-  enabled: boolean;      // true → mockup is in mockups[] and used for generate
-  mockup: MockupTemplate; // always current (frames synced on disable)
+  mockup: MockupTemplate;
 }
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function Home() {
-  const [artImages, setArtImages]           = useState<ArtImage[]>([]);
-  const [mockups, setMockups]               = useState<MockupTemplate[]>([]);
-  const [activeMockupId, setActiveMockupId] = useState<string | null>(null);
+  const [artImages, setArtImages]             = useState<ArtImage[]>([]);
+  const [mockups, setMockups]                 = useState<MockupTemplate[]>([]);
+  const [disabledMockupIds, setDisabledMockupIds] = useState<Set<string>>(new Set());
+  const [activeMockupId, setActiveMockupId]   = useState<string | null>(null);
   const [results, setResults]               = useState<GeneratedResult[]>([]);
   const [generatedIds, setGeneratedIds]     = useState<Set<string>>(new Set());
   const [isGenerating, setIsGenerating]     = useState(false);
@@ -264,9 +264,15 @@ export default function Home() {
     });
   }, []);
 
-  // Reset results only when the file set actually changes
+  // activeMockups = checked templates used for generation
+  const activeMockups = useMemo(
+    () => mockups.filter((m) => !disabledMockupIds.has(m.id)),
+    [mockups, disabledMockupIds]
+  );
+
+  // Reset results only when the active set actually changes
   const artKey    = artImages.map((a) => a.id).join(',');
-  const mockupKey = mockups.map((m) => m.id).join(',');
+  const mockupKey = activeMockups.map((m) => m.id).join(',');
   const prevKeysRef = useRef({ artKey: '', mockupKey: '' });
   useEffect(() => {
     const prev = prevKeysRef.current;
@@ -280,8 +286,8 @@ export default function Home() {
   });
 
   const allCombinations = useMemo(
-    () => orderCombinations(computeCombinations(mockups, artImages), mockups),
-    [mockups, artImages]
+    () => orderCombinations(computeCombinations(activeMockups, artImages), activeMockups),
+    [activeMockups, artImages]
   );
   const pendingCombinations = useMemo(
     () => allCombinations.filter((c) => !generatedIds.has(c.id)),
@@ -289,7 +295,7 @@ export default function Home() {
   );
   const remainingCount    = pendingCombinations.length;
   const isExhausted       = allCombinations.length > 0 && remainingCount === 0;
-  const hasNoCombinations = artImages.length > 0 && mockups.some((m) => m.frames.length > 0) && allCombinations.length === 0;
+  const hasNoCombinations = artImages.length > 0 && activeMockups.some((m) => m.frames.length > 0) && allCombinations.length === 0;
   const activeMockup      = mockups.find((m) => m.id === activeMockupId) ?? null;
   const canGenerate       = !isGenerating && pendingCombinations.length > 0 && !limitReached;
 
@@ -422,9 +428,13 @@ export default function Home() {
 
   // ── Browse Library ────────────────────────────────────────────────────────
   const addFromLibrary = useCallback(async (tpl: LibraryTemplateItem) => {
-    // Already in pool — show toast, keep modal open
-    if (libraryFavorites.some((f) => f.tplId === String(tpl.id))) {
+    // Already in pool — use image path as unique key (JSON has no id field)
+    if (libraryFavorites.some((f) => f.tplId === tpl.image)) {
       setToast(isTR ? 'Zaten kayıtlı' : 'Already in your templates');
+      return;
+    }
+    if (mockups.length >= MAX_MOCKUPS) {
+      setToast(isTR ? 'En fazla 6 aktif şablon' : 'Max 6 active templates');
       return;
     }
     const { w: imgW, h: imgH } = await loadImageDimensions(tpl.image);
@@ -444,49 +454,38 @@ export default function Home() {
         cornerRadius: f.cornerRadius,
       })),
     };
-    // Add to POOL only — user enables via checkbox in My Templates
-    const newFav: LibraryFav = { favId: genId(), tplId: String(tpl.id), name: tpl.name, image: tpl.image, enabled: false, mockup: newMockup };
+    // Add to favorites pool AND to mockups[] immediately (starts active)
+    const newFav: LibraryFav = { favId: genId(), tplId: tpl.image, name: tpl.name, image: tpl.image, mockup: newMockup };
     setLibraryFavorites((prev) => [...prev, newFav]);
+    setMockups((prev) => [...prev, newMockup]);
+    setActiveMockupId(newMockup.id);
     setToast(isTR ? 'Şablonlarınıza eklendi' : 'Added to your templates');
     // Keep modal open so user can keep browsing
-  }, [libraryFavorites, isTR]);
+  }, [libraryFavorites, mockups, isTR]);
 
-  // ── Toggle favorite enabled/disabled ─────────────────────────────────────
+  // ── Toggle favorite active/inactive via disabledMockupIds ────────────────
   const toggleFav = useCallback((favId: string) => {
     const fav = libraryFavorites.find((f) => f.favId === favId);
     if (!fav) return;
-    if (fav.enabled) {
-      // Snapshot current frames from mockups[] before removing
-      const currentMockup = mockups.find((m) => m.id === fav.mockup.id) ?? fav.mockup;
-      setLibraryFavorites((prev) => prev.map((f) =>
-        f.favId === favId ? { ...f, enabled: false, mockup: currentMockup } : f
-      ));
-      setMockups((prev) => prev.filter((m) => m.id !== fav.mockup.id));
-      if (activeMockupId === fav.mockup.id) {
-        setActiveMockupId(mockups.find((m) => m.id !== fav.mockup.id)?.id ?? null);
+    setDisabledMockupIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(fav.mockup.id)) {
+        next.delete(fav.mockup.id);  // activate
+      } else {
+        next.add(fav.mockup.id);     // deactivate
       }
-    } else {
-      if (mockups.length >= MAX_MOCKUPS) {
-        setToast(isTR ? 'En fazla 6 aktif şablon' : 'Max 6 active templates');
-        return;
-      }
-      setLibraryFavorites((prev) => prev.map((f) =>
-        f.favId === favId ? { ...f, enabled: true } : f
-      ));
-      setMockups((prev) => [...prev, fav.mockup]);
-      setActiveMockupId(fav.mockup.id);
-    }
-  }, [libraryFavorites, mockups, activeMockupId, isTR]);
+      return next;
+    });
+  }, [libraryFavorites]);
 
   // ── Remove favorite entirely ──────────────────────────────────────────────
   const removeFav = useCallback((favId: string) => {
     const fav = libraryFavorites.find((f) => f.favId === favId);
     if (!fav) return;
     setLibraryFavorites((prev) => prev.filter((f) => f.favId !== favId));
-    if (fav.enabled) {
-      setMockups((prev) => prev.filter((m) => m.id !== fav.mockup.id));
-      if (activeMockupId === fav.mockup.id) setActiveMockupId(null);
-    }
+    setMockups((prev) => prev.filter((m) => m.id !== fav.mockup.id));
+    setDisabledMockupIds((prev) => { const next = new Set(prev); next.delete(fav.mockup.id); return next; });
+    if (activeMockupId === fav.mockup.id) setActiveMockupId(null);
   }, [libraryFavorites, activeMockupId]);
 
   // ── Toast auto-dismiss ────────────────────────────────────────────────────
@@ -771,7 +770,7 @@ export default function Home() {
               ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
                   {filteredLibraryTemplates.map((tpl) => {
-                    const isSelected = libraryFavorites.some((f) => f.tplId === String(tpl.id));
+                    const isSelected = libraryFavorites.some((f) => f.tplId === tpl.image);
                     return (
                       <div
                         key={tpl.id}
@@ -1011,119 +1010,60 @@ export default function Home() {
                 </button>
               </div>
 
-              <Divider />
-
-              {/* MY TEMPLATES — pool of library favorites; checkbox toggles into mockups[] */}
-              <div>
-                <SectionLabel badge={libraryFavorites.length}>
-                  {isTR ? 'Kayıtlı Şablonlar' : 'My Templates'}
-                </SectionLabel>
-
-                {libraryFavorites.length === 0 ? (
-                  <p style={{
-                    fontSize: 12, color: 'var(--text-2)', fontFamily: 'var(--font-mono, monospace)',
-                    margin: 0,
-                  }}>
-                    {isTR ? 'Kütüphaneden şablon ekleyin' : 'Add templates from the library'}
-                  </p>
-                ) : (
-                  <>
-                    {/* active/total indicator */}
-                    <p style={{
-                      fontSize: 11, color: 'var(--text-2)', fontFamily: 'monospace',
-                      margin: '0 0 8px',
-                    }}>
-                      {libraryFavorites.filter((f) => f.enabled).length}/{libraryFavorites.length} {isTR ? 'aktif' : 'active'}
-                    </p>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                      {libraryFavorites.map((fav) => {
-                        const isActive = fav.enabled && fav.mockup.id === activeMockupId;
-                        const frameCount = fav.enabled
-                          ? (mockups.find((m) => m.id === fav.mockup.id)?.frames.length ?? fav.mockup.frames.length)
-                          : fav.mockup.frames.length;
-                        return (
-                          <div
-                            key={fav.favId}
-                            onClick={() => toggleFav(fav.favId)}
-                            style={{
-                              display: 'flex', alignItems: 'center', gap: 8,
-                              padding: '7px 8px', borderRadius: 10,
-                              background: isActive ? 'rgba(255,107,53,0.06)' : '#fff',
-                              border: `1.5px solid ${isActive ? '#FF6B35' : fav.enabled ? 'rgba(255,107,53,0.35)' : 'var(--border)'}`,
-                              cursor: 'pointer', transition: 'all 0.15s',
-                            }}
-                            onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = '#FF6B35'; }}
-                            onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = isActive ? '#FF6B35' : fav.enabled ? 'rgba(255,107,53,0.35)' : 'var(--border)'; }}
-                          >
-                            {/* Checkbox — toggles stage (mockups[]) */}
-                            <div
-                              onClick={(e) => { e.stopPropagation(); toggleFav(fav.favId); }}
-                              style={{
-                                width: 17, height: 17, borderRadius: 5, flexShrink: 0,
-                                border: `1.5px solid ${fav.enabled ? '#FF6B35' : '#ccc'}`,
-                                background: fav.enabled ? '#FF6B35' : '#fff',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                transition: 'all 0.15s',
-                              }}
-                            >
-                              {fav.enabled && (
-                                <svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                                  <polyline points="1,4 3,6 7,2" />
-                                </svg>
-                              )}
-                            </div>
-
-                            {/* Thumbnail */}
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              src={fav.image}
-                              alt={fav.name}
-                              style={{
-                                width: 36, height: 36, objectFit: 'cover', borderRadius: 6,
-                                flexShrink: 0, border: '1px solid var(--border)',
-                                opacity: fav.enabled ? 1 : 0.55,
-                              }}
-                            />
-
-                            {/* Name + frame count */}
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                              <p style={{
-                                margin: 0, fontSize: 11, fontWeight: 600,
-                                color: fav.enabled ? '#151515' : '#999',
-                                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                              }}>{fav.name}</p>
-                              <p style={{
-                                margin: 0, fontSize: 10, fontFamily: 'monospace', fontWeight: 700,
-                                color: fav.enabled ? '#FF6B35' : '#bbb',
-                              }}>
-                                {frameCount > 0 ? `${frameCount}f` : (isTR ? 'çerçeve yok' : 'no frames')}
-                              </p>
-                            </div>
-
-                            {/* Remove × — removes from pool entirely */}
-                            <button
-                              onClick={(e) => { e.stopPropagation(); removeFav(fav.favId); }}
-                              title={isTR ? 'Kaldır' : 'Remove'}
-                              style={{
-                                width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
-                                background: 'rgba(0,0,0,0.07)', border: 'none', cursor: 'pointer',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                transition: 'background 0.15s',
-                              }}
-                              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(220,38,38,0.14)')}
-                              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.07)')}
-                            >
-                              <svg width="7" height="7" viewBox="0 0 8 8" fill="none" stroke="#666" strokeWidth="1.5" strokeLinecap="round">
-                                <line x1="1" y1="1" x2="7" y2="7" /><line x1="7" y1="1" x2="1" y2="7" />
-                              </svg>
-                            </button>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </>
-                )}
-              </div>
+              {/* MY TEMPLATES */}
+              {libraryFavorites.length > 0 && (
+                <div style={{
+                  background: '#fff',
+                  border: '1.5px solid var(--border)',
+                  borderRadius: 14,
+                  padding: '14px 16px',
+                  marginTop: 12,
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                    <span style={{ fontWeight: 700, fontSize: 14, fontFamily: 'var(--font-body)' }}>
+                      {isTR ? 'Kayıtlı Şablonlar' : 'My Templates'}
+                    </span>
+                    <span style={{ fontSize: 12, color: 'var(--text-2)' }}>
+                      {libraryFavorites.filter(f => !disabledMockupIds.has(f.mockup.id)).length}/{libraryFavorites.length} {isTR ? 'aktif' : 'active'}
+                    </span>
+                  </div>
+                  {libraryFavorites.map((fav) => {
+                    const isActive = !disabledMockupIds.has(fav.mockup.id);
+                    return (
+                      <div
+                        key={fav.favId}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 8,
+                          padding: '7px 8px', borderRadius: 10, marginBottom: 6,
+                          background: isActive ? 'rgba(255,107,53,0.06)' : '#fafafa',
+                          border: `1.5px solid ${isActive ? '#FF6B35' : 'var(--border)'}`,
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => toggleFav(fav.favId)}
+                      >
+                        <div style={{
+                          width: 18, height: 18, borderRadius: 4, flexShrink: 0,
+                          border: `2px solid ${isActive ? '#FF6B35' : '#ccc'}`,
+                          background: isActive ? '#FF6B35' : '#fff',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}>
+                          {isActive && <svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round"/></svg>}
+                        </div>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={fav.image} alt={fav.name} style={{ width: 36, height: 36, objectFit: 'cover', borderRadius: 6, flexShrink: 0, opacity: isActive ? 1 : 0.5 }} />
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <p style={{ margin: 0, fontSize: 12, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{fav.name}</p>
+                          <p style={{ margin: 0, fontSize: 11, color: 'var(--text-2)' }}>{fav.mockup.frames.length}f</p>
+                        </div>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); removeFav(fav.favId); }}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#bbb', fontSize: 18, padding: '0 2px', lineHeight: 1 }}
+                        >×</button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
 
               {/* Spacer — desktop only */}
               {!isMobile && <div style={{ flex: 1 }} />}
