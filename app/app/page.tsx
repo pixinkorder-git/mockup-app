@@ -37,8 +37,8 @@ function loadImageDimensions(url: string): Promise<{ w: number; h: number }> {
 }
 
 // ─── Layout constants ─────────────────────────────────────────────────────────
-const CARD_MAX = 1100;
-const CARD_PAD = 28;
+const CARD_MAX = 1440;
+const CARD_PAD = 16;
 const COL_LEFT = 340;
 const NAV_H    = 64;
 
@@ -906,7 +906,7 @@ export default function Home() {
       </header>
 
       {/* ── MAIN CONTENT ───────────────────────────────────────────────────── */}
-      <div style={{ maxWidth: CARD_MAX, margin: '0 auto', padding: `32px ${CARD_PAD}px 80px` }}>
+      <div style={{ maxWidth: CARD_MAX, margin: '0 auto', padding: `32px 24px 80px` }}>
 
         {/* ── TOOL CARD ──────────────────────────────────────────────────── */}
         <div style={{
