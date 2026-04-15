@@ -913,9 +913,114 @@ export default function Home() {
         }}>
           <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', minHeight: isMobile ? undefined : 600 }}>
 
-            {/* ── LEFT SIDEBAR ─────────────────────────────────────────── */}
+            {/* ── COL 1: TEMPLATES PANEL ───────────────────────────────── */}
             <div style={{
-              width: isMobile ? '100%' : COL_LEFT, flexShrink: 0,
+              width: isMobile ? '100%' : 220, flexShrink: 0,
+              display: 'flex', flexDirection: 'column',
+              background: '#FAFAFA',
+              borderRight: isMobile ? 'none' : '1px solid var(--border)',
+              borderBottom: isMobile ? '1px solid var(--border)' : 'none',
+            }}>
+              {/* Header */}
+              <div style={{ padding: '18px 16px 12px', flexShrink: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                  <span style={{ fontFamily: "'Clash Display', sans-serif", fontSize: 16, fontWeight: 700, letterSpacing: '-0.01em', color: '#151515', borderLeft: '3px solid #FF6B35', paddingLeft: 10 }}>
+                    {isTR ? 'Şablonlarım' : 'My Templates'}
+                  </span>
+                  {libraryFavorites.length > 0 && (
+                    <span style={{ fontSize: 10, fontWeight: 700, padding: '1px 6px', borderRadius: 99, background: '#FF6B35', color: '#fff' }}>
+                      {libraryFavorites.length}
+                    </span>
+                  )}
+                </div>
+                {/* Browse Library — solid orange button */}
+                <button
+                  onClick={() => setLibraryModalOpen(true)}
+                  style={{
+                    width: '100%', height: 36, borderRadius: 8,
+                    border: 'none', background: '#FF6B35', color: '#fff',
+                    fontSize: 12, fontWeight: 700, fontFamily: 'var(--font-body)',
+                    cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                    transition: 'background 0.15s',
+                    boxShadow: '0 2px 8px rgba(255,107,53,0.25)',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = '#E85A28')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = '#FF6B35')}
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
+                    <rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
+                  </svg>
+                  {isTR ? 'Kütüphaneye Gözat' : 'Browse Library'}
+                </button>
+              </div>
+
+              {/* Fav list — scrollable */}
+              <div style={{ flex: 1, overflowY: 'auto', padding: '0 10px 16px' }}>
+                {libraryFavorites.length === 0 ? (
+                  <div style={{ margin: '4px 0', padding: '20px 12px', borderRadius: 10, border: '1.5px dashed rgba(255,107,53,0.3)', background: 'rgba(255,107,53,0.02)', textAlign: 'center' }}>
+                    <p style={{ fontSize: 11, color: 'var(--text-2)', margin: 0, lineHeight: 1.5 }}>
+                      {isTR ? 'Kütüphaneden\nşablon ekleyin' : 'Add from\nlibrary above'}
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <p style={{ fontSize: 10, color: 'var(--text-2)', fontFamily: 'monospace', margin: '0 2px 6px', paddingTop: 2 }}>
+                      {libraryFavorites.filter(f => !disabledMockupIds.has(f.mockup.id)).length}/{libraryFavorites.length} {isTR ? 'aktif' : 'active'}
+                    </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                      {libraryFavorites.map((fav) => {
+                        const isActive = !disabledMockupIds.has(fav.mockup.id);
+                        return (
+                          <div
+                            key={fav.favId}
+                            onClick={() => setActiveMockupId(fav.mockup.id)}
+                            style={{
+                              display: 'flex', alignItems: 'center', gap: 7,
+                              padding: '6px 7px', borderRadius: 9,
+                              background: isActive ? 'rgba(255,107,53,0.06)' : '#fff',
+                              border: `1.5px solid ${isActive ? '#FF6B35' : 'var(--border)'}`,
+                              cursor: 'pointer', transition: 'all 0.15s',
+                            }}
+                          >
+                            {/* Checkbox */}
+                            <div
+                              onClick={(e) => { e.stopPropagation(); toggleFav(fav.favId); }}
+                              style={{
+                                width: 16, height: 16, borderRadius: 4, flexShrink: 0,
+                                border: `2px solid ${isActive ? '#FF6B35' : '#ccc'}`,
+                                background: isActive ? '#FF6B35' : '#fff',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                transition: 'all 0.15s',
+                              }}
+                            >
+                              {isActive && <svg width="9" height="9" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round"/></svg>}
+                            </div>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={fav.image} alt={fav.name} style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 6, flexShrink: 0, opacity: isActive ? 1 : 0.5 }} />
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <p style={{ margin: 0, fontSize: 11, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: isActive ? '#151515' : 'var(--text-2)' }}>{fav.name}</p>
+                              <p style={{ margin: 0, fontSize: 10, color: 'var(--text-2)', fontFamily: 'monospace' }}>{fav.mockup.frames.length}f</p>
+                            </div>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); removeFav(fav.favId); }}
+                              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ccc', fontSize: 16, padding: '0 2px', lineHeight: 1, flexShrink: 0 }}
+                              onMouseEnter={(e) => (e.currentTarget.style.color = '#EF4444')}
+                              onMouseLeave={(e) => (e.currentTarget.style.color = '#ccc')}
+                            >×</button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* ── COL 2: CONTROLS ──────────────────────────────────────── */}
+            <div style={{
+              width: isMobile ? '100%' : 280, flexShrink: 0,
               display: 'flex', flexDirection: 'column',
               padding: CARD_PAD, gap: 24,
               background: 'var(--surface-2)',
@@ -953,11 +1058,9 @@ export default function Home() {
 
               <Divider />
 
-              {/* MOCKUP TEMPLATES — manual upload */}
+              {/* MOCKUP TEMPLATES — manual upload only */}
               <div>
                 <SectionLabel badge={mockups.length}>{isTR ? 'Mockup Şablonları' : 'Mockup Templates'}</SectionLabel>
-
-                {/* Upload drop zone — goes directly into mockups[] */}
                 <DropZone
                   onFiles={handleMockupUpload}
                   label={isTR ? 'Şablonları buraya bırakın' : 'Drop templates here'}
@@ -986,87 +1089,6 @@ export default function Home() {
                     </div>
                   ) : null;
                 })()}
-
-                {/* Browse Library button */}
-                <button
-                  onClick={() => setLibraryModalOpen(true)}
-                  style={{
-                    width: '100%', marginTop: 10, height: 38, borderRadius: 10,
-                    border: '1.5px dashed rgba(255,107,53,0.4)',
-                    background: 'transparent', color: '#FF6B35',
-                    fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-body)',
-                    cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                    transition: 'border-color 0.15s',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#FF6B35')}
-                  onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'rgba(255,107,53,0.4)')}
-                >
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
-                    <rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
-                  </svg>
-                  {isTR ? 'Kütüphaneye Gözat' : 'Browse Library'}
-                </button>
-              </div>
-
-              {/* MY TEMPLATES — always visible */}
-              <div>
-                <div style={{ height: 1, background: 'var(--border)', margin: '20px 0' }} />
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-                  <span style={{ fontFamily: "'Clash Display', sans-serif", fontSize: 18, fontWeight: 700, letterSpacing: '-0.01em', color: '#151515', borderLeft: '3px solid #FF6B35', paddingLeft: 10 }}>
-                    {isTR ? 'Kayıtlı Şablonlar' : 'My Templates'}
-                  </span>
-                  {libraryFavorites.length > 0 && (
-                    <span style={{ fontSize: 11, fontWeight: 700, padding: '1px 7px', borderRadius: 99, background: '#FF6B35', color: '#fff' }}>
-                      {libraryFavorites.length}
-                    </span>
-                  )}
-                </div>
-                {libraryFavorites.length === 0 ? (
-                  <div style={{ padding: '14px 16px', borderRadius: 10, border: '1.5px dashed rgba(255,107,53,0.3)', background: 'rgba(255,107,53,0.02)', textAlign: 'center' }}>
-                    <p style={{ fontSize: 12, color: 'var(--text-2)', margin: 0 }}>
-                      {isTR ? 'Kütüphaneden şablon ekleyin' : 'Add templates from the library below'}
-                    </p>
-                  </div>
-                ) : (
-                  <>
-                    <p style={{ fontSize: 11, color: 'var(--text-2)', fontFamily: 'monospace', margin: '0 0 8px' }}>
-                      {libraryFavorites.filter(f => !disabledMockupIds.has(f.mockup.id)).length}/{libraryFavorites.length} {isTR ? 'aktif' : 'active'}
-                    </p>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                      {libraryFavorites.map((fav) => {
-                        const isActive = !disabledMockupIds.has(fav.mockup.id);
-                        return (
-                          <div
-                            key={fav.favId}
-                            onClick={() => setActiveMockupId(fav.mockup.id)}
-                            style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 8px', borderRadius: 10, background: isActive ? 'rgba(255,107,53,0.06)' : '#fafafa', border: `1.5px solid ${isActive ? '#FF6B35' : 'var(--border)'}`, cursor: 'pointer', transition: 'all 0.15s' }}
-                          >
-                            <div
-                              onClick={(e) => { e.stopPropagation(); toggleFav(fav.favId); }}
-                              style={{ width: 18, height: 18, borderRadius: 4, flexShrink: 0, border: `2px solid ${isActive ? '#FF6B35' : '#ccc'}`, background: isActive ? '#FF6B35' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
-                            >
-                              {isActive && <svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round"/></svg>}
-                            </div>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={fav.image} alt={fav.name} style={{ width: 38, height: 38, objectFit: 'cover', borderRadius: 6, flexShrink: 0, opacity: isActive ? 1 : 0.45 }} />
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                              <p style={{ margin: 0, fontSize: 12, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: isActive ? '#151515' : 'var(--text-2)' }}>{fav.name}</p>
-                              <p style={{ margin: 0, fontSize: 10, color: 'var(--text-2)', fontFamily: 'monospace' }}>{fav.mockup.frames.length}f</p>
-                            </div>
-                            <button
-                              onClick={(e) => { e.stopPropagation(); removeFav(fav.favId); }}
-                              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ccc', fontSize: 18, padding: '0 2px', lineHeight: 1, flexShrink: 0 }}
-                              onMouseEnter={(e) => (e.currentTarget.style.color = '#EF4444')}
-                              onMouseLeave={(e) => (e.currentTarget.style.color = '#ccc')}
-                            >×</button>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </>
-                )}
               </div>
 
               {/* Spacer — desktop only */}
