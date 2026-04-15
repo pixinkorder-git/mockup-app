@@ -18,7 +18,17 @@
       "Bash(node -e ':*)",
       "Bash(ls middleware.ts proxy.ts)",
       "Bash(cat middleware.ts)",
-      "Bash(cat proxy.ts)"
+      "Bash(cat proxy.ts)",
+      "Bash(python3:*)",
+      "Bash(python:*)",
+      "Bash(vercel --prod)",
+      "Bash(npx vercel:*)",
+      "Bash(mkdir -p \"C:/Users/Umut/Desktop/mockup-app/public/templates\")",
+      "Bash(cp \"C:/Users/Umut/Desktop/mockup-app/app/Browse Library/\"*.png \"C:/Users/Umut/Desktop/mockup-app/public/templates/\")",
+      "Bash(cp \"C:/Users/Umut/Desktop/mockup-app/app/Browse Library/template \\(1\\).png\" \"C:/Users/Umut/Desktop/mockup-app/public/templates/\")",
+      "Bash(cp \"/c/Users/Umut/Desktop/mockup-app/app/Browse Library/templates.json\" \"/c/Users/Umut/Desktop/mockup-app/public/templates.json\")",
+      "Bash(node -e \"const d=require\\('./public/templates.json'\\); console.log\\(d.length, 'templates'\\)\")",
+      "Bash(echo \"Copied. $\\(python3 -c \"import json; d=json.load\\(open\\('/c/Users/Umut/Desktop/mockup-app/public/templates.json'\\)\\); print\\(len\\(d\\), 'templates'\\)\" 2>/dev/null || node -e \"const d=require\\('./public/templates.json'\\); console.log\\(d.length, 'templates'\\)\" 2>/dev/null || echo \"done\"\\)\")"
     ]
   }
 }

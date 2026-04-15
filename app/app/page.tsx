@@ -442,7 +442,7 @@ export default function Home() {
     if (mockupTab !== 'library') return;
     if (libraryTemplates.length > 0) return;
     setLibraryLoading(true);
-    fetch('/api/templates')
+    fetch('/templates.json')
       .then((r) => r.json())
       .then((data) => Array.isArray(data) && setLibraryTemplates(data))
       .catch(() => null)
