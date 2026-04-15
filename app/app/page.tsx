@@ -202,7 +202,7 @@ export default function Home() {
   const isTR = lang === 'tr';
 
   const [plan, setPlan] = useState<'free' | 'basic' | 'pro'>('free');
-  const [mockupTab, setMockupTab]               = useState<'upload' | 'library'>('upload');
+  const [libraryModalOpen, setLibraryModalOpen] = useState(false);
   const [libraryTemplates, setLibraryTemplates] = useState<LibraryTemplateItem[]>([]);
   const [libraryLoading, setLibraryLoading]     = useState(false);
   const [libraryCategory, setLibraryCategory]   = useState('all');
@@ -436,10 +436,11 @@ export default function Home() {
     });
     setActiveMockupId(id);
     setSelectedLibraryId(String(tpl.id));
+    setLibraryModalOpen(false);
   }, [mockups.length]);
 
   useEffect(() => {
-    if (mockupTab !== 'library') return;
+    if (!libraryModalOpen) return;
     if (libraryTemplates.length > 0) return;
     setLibraryLoading(true);
     fetch('/templates.json')
@@ -447,7 +448,7 @@ export default function Home() {
       .then((data) => Array.isArray(data) && setLibraryTemplates(data))
       .catch(() => null)
       .finally(() => setLibraryLoading(false));
-  }, [mockupTab, libraryTemplates.length]);
+  }, [libraryModalOpen, libraryTemplates.length]);
 
   // ── Generate section (combo info + generate button + clear) ──────────────
   const generateSection = (
@@ -625,6 +626,157 @@ export default function Home() {
   return (
     <div style={{ minHeight: '100vh', background: '#FFFFFF', paddingTop: NAV_H }}>
 
+      {/* ── BROWSE LIBRARY MODAL ───────────────────────────────────────────── */}
+      {libraryModalOpen && (
+        <div
+          onClick={() => setLibraryModalOpen(false)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 200,
+            background: 'rgba(0,0,0,0.45)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: '20px 16px',
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: '100%', maxWidth: 700,
+              maxHeight: '80vh',
+              background: '#fff', borderRadius: 20,
+              display: 'flex', flexDirection: 'column',
+              boxShadow: '0 8px 48px rgba(0,0,0,0.18)',
+              overflow: 'hidden',
+            }}
+          >
+            {/* Modal header */}
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '18px 24px', borderBottom: '1px solid var(--border)', flexShrink: 0,
+            }}>
+              <span style={{
+                fontFamily: "'Clash Display', sans-serif",
+                fontSize: 20, fontWeight: 700, color: '#151515',
+                borderLeft: '3px solid #FF6B35', paddingLeft: 10,
+              }}>
+                {isTR ? 'Kütüphane' : 'Browse Library'}
+              </span>
+              <button
+                onClick={() => setLibraryModalOpen(false)}
+                style={{
+                  width: 32, height: 32, borderRadius: '50%',
+                  background: 'var(--surface-3)', border: 'none', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  transition: 'background 0.15s',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = '#eee')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--surface-3)')}
+              >
+                <svg width="11" height="11" viewBox="0 0 8 8" fill="none" stroke="#555" strokeWidth="1.5" strokeLinecap="round">
+                  <line x1="1" y1="1" x2="7" y2="7" /><line x1="7" y1="1" x2="1" y2="7" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Modal body — scrollable */}
+            <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
+              {/* Category filter */}
+              {libraryCategories.length > 1 && (
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16 }}>
+                  {['all', ...libraryCategories].map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setLibraryCategory(cat)}
+                      style={{
+                        padding: '4px 12px', borderRadius: 8, border: 'none', cursor: 'pointer',
+                        fontSize: 12, fontWeight: 600, fontFamily: 'var(--font-body)',
+                        background: libraryCategory === cat ? '#FF6B35' : 'var(--surface-3)',
+                        color: libraryCategory === cat ? '#fff' : 'var(--text-2)',
+                        transition: 'all 0.15s',
+                      }}
+                    >
+                      {cat === 'all'
+                        ? (isTR ? 'Tümü' : 'All')
+                        : cat.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Grid */}
+              {libraryLoading ? (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 200, color: 'var(--text-2)', fontSize: 14 }}>
+                  {isTR ? 'Yükleniyor...' : 'Loading...'}
+                </div>
+              ) : filteredLibraryTemplates.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--text-2)', fontSize: 14 }}>
+                  {isTR ? 'Şablon bulunamadı' : 'No templates found'}
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+                  {filteredLibraryTemplates.map((tpl) => {
+                    const isSelected = selectedLibraryId === String(tpl.id);
+                    const isDisabled = !isSelected && mockups.length >= MAX_MOCKUPS;
+                    return (
+                      <div
+                        key={tpl.id}
+                        onClick={() => !isDisabled && addFromLibrary(tpl)}
+                        style={{
+                          borderRadius: 10, overflow: 'hidden',
+                          cursor: isDisabled ? 'not-allowed' : 'pointer',
+                          border: `2px solid ${isSelected ? '#FF6B35' : 'var(--border)'}`,
+                          boxShadow: isSelected ? '0 0 0 3px rgba(255,107,53,0.18)' : 'none',
+                          transition: 'all 0.15s',
+                          opacity: isDisabled ? 0.45 : 1,
+                          position: 'relative',
+                        }}
+                        onMouseEnter={(e) => { if (!isDisabled) (e.currentTarget as HTMLDivElement).style.borderColor = '#FF6B35'; }}
+                        onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = isSelected ? '#FF6B35' : 'var(--border)'; }}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={tpl.image}
+                          alt={tpl.name}
+                          style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', display: 'block' }}
+                        />
+                        <div style={{ padding: '5px 8px', background: '#fff' }}>
+                          <p style={{
+                            fontSize: 11, fontWeight: 600, color: '#151515',
+                            margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                          }}>
+                            {tpl.name}
+                          </p>
+                        </div>
+                        {tpl.frames.length > 0 && (
+                          <div style={{
+                            position: 'absolute', top: 6, right: 6,
+                            background: 'rgba(255,107,53,0.90)', color: '#fff',
+                            fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4,
+                          }}>
+                            {tpl.frames.length}f
+                          </div>
+                        )}
+                        {isSelected && (
+                          <div style={{
+                            position: 'absolute', top: 6, left: 6,
+                            width: 18, height: 18, borderRadius: '50%',
+                            background: '#FF6B35',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          }}>
+                            <svg width="9" height="9" viewBox="0 0 8 8" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="1,4 3,6 7,2" />
+                            </svg>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── NAV ────────────────────────────────────────────────────────────── */}
       <header style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
@@ -734,172 +886,98 @@ export default function Home() {
               <div>
                 <SectionLabel badge={mockups.length}>{isTR ? 'Mockup Şablonları' : 'Mockup Templates'}</SectionLabel>
 
-                {/* Tab switcher */}
-                <div style={{ display: 'flex', gap: 3, marginBottom: 12, background: 'var(--surface-3)', borderRadius: 8, padding: 3 }}>
-                  {(['upload', 'library'] as const).map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setMockupTab(tab)}
-                      style={{
-                        flex: 1, height: 28, borderRadius: 6, border: 'none', cursor: 'pointer',
-                        fontSize: 12, fontWeight: 600, fontFamily: 'var(--font-body)',
-                        transition: 'all 0.15s',
-                        background: mockupTab === tab ? '#fff' : 'transparent',
-                        color: mockupTab === tab ? '#FF6B35' : 'var(--text-2)',
-                        boxShadow: mockupTab === tab ? '0 1px 4px rgba(0,0,0,0.08)' : 'none',
-                      }}
-                    >
-                      {tab === 'upload'
-                        ? (isTR ? 'Yükle' : 'Upload Template')
-                        : (isTR ? 'Kütüphane' : 'Browse Library')}
-                    </button>
-                  ))}
-                </div>
+                {/* Upload drop zone */}
+                <DropZone
+                  onFiles={handleMockupUpload}
+                  label={isTR ? 'Şablonları buraya bırakın' : 'Drop templates here'}
+                  sublabel={isTR ? 'Açık/beyaz çerçeve alanları' : 'Light/white frame areas'}
+                  multiple
+                  disabled={mockups.length >= MAX_MOCKUPS}
+                  minHeight={110}
+                />
+                <p style={{
+                  fontSize: 12, marginTop: 8, fontFamily: 'var(--font-mono, monospace)',
+                  color: mockups.length >= MAX_MOCKUPS ? 'var(--danger)' : 'var(--text-2)',
+                }}>
+                  {mockups.length >= MAX_MOCKUPS
+                    ? (isTR ? `Sınıra ulaşıldı (${MAX_MOCKUPS})` : `Limit reached (${MAX_MOCKUPS})`)
+                    : (isTR ? `${mockups.length} / ${MAX_MOCKUPS} dosya` : `${mockups.length} / ${MAX_MOCKUPS} files`)}
+                </p>
 
-                {mockupTab === 'upload' ? (
-                  <>
-                    <DropZone
-                      onFiles={handleMockupUpload}
-                      label={isTR ? 'Şablonları buraya bırakın' : 'Drop templates here'}
-                      sublabel={isTR ? 'Açık/beyaz çerçeve alanları' : 'Light/white frame areas'}
-                      multiple
-                      disabled={mockups.length >= MAX_MOCKUPS}
-                      minHeight={110}
-                    />
-                    <p style={{
-                      fontSize: 12, marginTop: 8, fontFamily: 'var(--font-mono, monospace)',
-                      color: mockups.length >= MAX_MOCKUPS ? 'var(--danger)' : 'var(--text-2)',
-                    }}>
-                      {mockups.length >= MAX_MOCKUPS
-                        ? (isTR ? `Sınıra ulaşıldı (${MAX_MOCKUPS})` : `Limit reached (${MAX_MOCKUPS})`)
-                        : (isTR ? `${mockups.length} / ${MAX_MOCKUPS} dosya` : `${mockups.length} / ${MAX_MOCKUPS} files`)}
-                    </p>
-                  </>
-                ) : (
-                  /* ── BROWSE LIBRARY ── */
-                  <div>
-                    {/* Category filter */}
-                    {libraryCategories.length > 1 && (
-                      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 10 }}>
-                        {['all', ...libraryCategories].map((cat) => (
-                          <button
-                            key={cat}
-                            onClick={() => setLibraryCategory(cat)}
-                            style={{
-                              padding: '3px 10px', borderRadius: 6, border: 'none', cursor: 'pointer',
-                              fontSize: 11, fontWeight: 600, fontFamily: 'var(--font-body)',
-                              background: libraryCategory === cat ? '#FF6B35' : 'var(--surface-3)',
-                              color: libraryCategory === cat ? '#fff' : 'var(--text-2)',
-                              transition: 'all 0.15s',
-                            }}
-                          >
-                            {cat === 'all'
-                              ? (isTR ? 'Tümü' : 'All')
-                              : cat.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-
-                    {libraryLoading ? (
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 110, color: 'var(--text-2)', fontSize: 13 }}>
-                        {isTR ? 'Yükleniyor...' : 'Loading...'}
-                      </div>
-                    ) : filteredLibraryTemplates.length === 0 ? (
-                      <div style={{ textAlign: 'center', padding: '28px 0', color: 'var(--text-2)', fontSize: 13 }}>
-                        {isTR ? 'Şablon bulunamadı' : 'No templates found'}
-                      </div>
-                    ) : (
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 7 }}>
-                        {filteredLibraryTemplates.map((tpl) => {
-                          const isSelected = selectedLibraryId === String(tpl.id);
-                          const isDisabled = !isSelected && mockups.length >= MAX_MOCKUPS;
-                          return (
-                            <div
-                              key={tpl.id}
-                              onClick={() => !isDisabled && addFromLibrary(tpl)}
-                              style={{
-                                borderRadius: 8, overflow: 'hidden',
-                                cursor: isDisabled ? 'not-allowed' : 'pointer',
-                                border: `2px solid ${isSelected ? '#FF6B35' : 'var(--border)'}`,
-                                boxShadow: isSelected ? '0 0 0 3px rgba(255,107,53,0.18)' : 'none',
-                                transition: 'all 0.15s',
-                                opacity: isDisabled ? 0.45 : 1,
-                                position: 'relative',
-                              }}
-                            >
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
-                                src={tpl.image}
-                                alt={tpl.name}
-                                style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', display: 'block' }}
-                              />
-                              <div style={{ padding: '3px 5px', background: '#fff' }}>
-                                <p style={{
-                                  fontSize: 9, fontWeight: 600, color: '#151515',
-                                  margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                                }}>
-                                  {tpl.name.replace(/_/g, ' ').split(' ').slice(-2).join(' ')}
-                                </p>
-                              </div>
-                              {tpl.frames.length > 0 && (
-                                <div style={{
-                                  position: 'absolute', top: 4, right: 4,
-                                  background: 'rgba(255,107,53,0.90)', color: '#fff',
-                                  fontSize: 9, fontWeight: 700, padding: '1px 5px', borderRadius: 4,
-                                }}>
-                                  {tpl.frames.length}f
-                                </div>
-                              )}
-                              {isSelected && (
-                                <div style={{
-                                  position: 'absolute', top: 4, left: 4,
-                                  width: 16, height: 16, borderRadius: '50%',
-                                  background: '#FF6B35',
-                                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                }}>
-                                  <svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <polyline points="1,4 3,6 7,2" />
-                                  </svg>
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-
-                    {selectedLibraryId && artImages.length === 0 && (
-                      <p style={{
-                        marginTop: 10, fontSize: 12, color: '#FF6B35',
-                        fontFamily: 'var(--font-body)', textAlign: 'center',
-                        padding: '8px 10px', borderRadius: 8,
-                        background: 'rgba(255,107,53,0.06)',
-                        border: '1px solid rgba(255,107,53,0.18)',
-                      }}>
-                        {isTR ? 'Sanat görselinizi yükleyin ve Oluştur\'a basın' : 'Upload your artwork and click Generate'}
-                      </p>
-                    )}
-                  </div>
-                )}
-
-                {/* Added mockup thumbnails — always visible */}
+                {/* Selected mockup cards */}
                 {mockups.length > 0 && (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 12 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 12 }}>
                     {mockups.map((m) => (
-                      <AssetThumb
+                      <div
                         key={m.id}
-                        url={m.url}
-                        name={m.name}
-                        onRemove={() => removeMockup(m.id)}
-                        isActive={m.id === activeMockupId}
                         onClick={() => setActiveMockupId(m.id)}
-                        badge={m.frames.length > 0 ? `${m.frames.length}f` : undefined}
-                        isMobile={isMobile}
-                      />
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 10,
+                          padding: '7px 10px', borderRadius: 10,
+                          background: m.id === activeMockupId ? 'rgba(255,107,53,0.06)' : '#fff',
+                          border: `1.5px solid ${m.id === activeMockupId ? '#FF6B35' : 'var(--border)'}`,
+                          cursor: 'pointer', transition: 'all 0.15s',
+                        }}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={m.url}
+                          alt={m.name}
+                          style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 6, flexShrink: 0, border: '1px solid var(--border)' }}
+                        />
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <p style={{
+                            margin: 0, fontSize: 12, fontWeight: 600, color: '#151515',
+                            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                          }}>{m.name}</p>
+                          {m.frames.length > 0 && (
+                            <p style={{ margin: 0, fontSize: 10, color: '#FF6B35', fontFamily: 'monospace', fontWeight: 700 }}>
+                              {m.frames.length}f
+                            </p>
+                          )}
+                        </div>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); removeMockup(m.id); }}
+                          title="Remove"
+                          style={{
+                            width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
+                            background: 'rgba(0,0,0,0.08)', border: 'none', cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          }}
+                        >
+                          <svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#555" strokeWidth="1.5" strokeLinecap="round">
+                            <line x1="1" y1="1" x2="7" y2="7" /><line x1="7" y1="1" x2="1" y2="7" />
+                          </svg>
+                        </button>
+                      </div>
                     ))}
                   </div>
                 )}
+
+                {/* Browse Library button */}
+                <button
+                  onClick={() => setLibraryModalOpen(true)}
+                  disabled={mockups.length >= MAX_MOCKUPS}
+                  style={{
+                    width: '100%', marginTop: 10, height: 38, borderRadius: 10,
+                    border: '1.5px dashed rgba(255,107,53,0.4)',
+                    background: 'transparent',
+                    color: mockups.length >= MAX_MOCKUPS ? 'var(--text-2)' : '#FF6B35',
+                    fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-body)',
+                    cursor: mockups.length >= MAX_MOCKUPS ? 'not-allowed' : 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                    transition: 'all 0.15s',
+                    opacity: mockups.length >= MAX_MOCKUPS ? 0.5 : 1,
+                  }}
+                  onMouseEnter={(e) => { if (mockups.length < MAX_MOCKUPS) e.currentTarget.style.borderColor = '#FF6B35'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,107,53,0.4)'; }}
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
+                    <rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
+                  </svg>
+                  {isTR ? 'Kütüphaneye Gözat' : 'Browse Library'}
+                </button>
               </div>
 
               {/* Spacer — desktop only */}
