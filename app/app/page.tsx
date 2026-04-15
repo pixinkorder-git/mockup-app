@@ -37,10 +37,10 @@ function loadImageDimensions(url: string): Promise<{ w: number; h: number }> {
 }
 
 // ─── Layout constants ─────────────────────────────────────────────────────────
-const CARD_MAX = 1440;
+const CARD_MAX = 9999;
 const CARD_PAD = 16;
 const COL_LEFT = 340;
-const NAV_H    = 64;
+const NAV_H    = 72;
 
 // ─── Section label ────────────────────────────────────────────────────────────
 function SectionLabel({ children, badge }: { children: React.ReactNode; badge?: number }) {
@@ -868,7 +868,7 @@ export default function Home() {
         {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/1logo.png" width="180" height="45" style={{ display: 'block' }} alt="MockPlacer" />
+          <img src="/1logo.png" width="200" height="50" style={{ display: 'block' }} alt="MockPlacer" />
         </Link>
 
         {/* Stats + back link */}
@@ -891,12 +891,14 @@ export default function Home() {
           </a>
           <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
           {user ? (
-            <UserDropdown
-              user={user}
-              plan={plan}
-              lang={lang}
-              onSignOut={() => setUser(null)}
-            />
+            <div style={{ transform: 'scale(1.3)', transformOrigin: 'right center' }}>
+              <UserDropdown
+                user={user}
+                plan={plan}
+                lang={lang}
+                onSignOut={() => setUser(null)}
+              />
+            </div>
           ) : (
             <Link href="/login" style={{ fontSize: 13, fontWeight: 600, color: '#FF6B35', textDecoration: 'none', whiteSpace: 'nowrap' }}>
               {isTR ? 'Giriş Yap' : 'Sign In'}
@@ -906,7 +908,7 @@ export default function Home() {
       </header>
 
       {/* ── MAIN CONTENT ───────────────────────────────────────────────────── */}
-      <div style={{ maxWidth: CARD_MAX, margin: '0 auto', padding: `32px 24px 80px` }}>
+      <div style={{ maxWidth: CARD_MAX, margin: '0 auto', padding: `16px 16px 60px` }}>
 
         {/* ── TOOL CARD ──────────────────────────────────────────────────── */}
         <div style={{
@@ -915,16 +917,18 @@ export default function Home() {
           background: '#FDFCFB',
           overflow: 'hidden',
           boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.06)',
+          minHeight: 'calc(100vh - 100px)',
         }}>
-          <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', minHeight: isMobile ? undefined : 600 }}>
+          <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', minHeight: isMobile ? undefined : 'calc(100vh - 100px)' }}>
 
             {/* ── COL 1: TEMPLATES PANEL ───────────────────────────────── */}
             <div style={{
-              width: isMobile ? '100%' : 220, flexShrink: 0,
+              width: isMobile ? '100%' : 260, flexShrink: 0,
               display: 'flex', flexDirection: 'column',
               background: '#FAFAFA',
               borderRight: isMobile ? 'none' : '1px solid var(--border)',
               borderBottom: isMobile ? '1px solid var(--border)' : 'none',
+              minHeight: isMobile ? undefined : 'calc(100vh - 100px)',
             }}>
               {/* Header */}
               <div style={{ padding: '18px 16px 12px', flexShrink: 0 }}>
@@ -1025,7 +1029,7 @@ export default function Home() {
 
             {/* ── COL 2: CONTROLS ──────────────────────────────────────── */}
             <div style={{
-              width: isMobile ? '100%' : 280, flexShrink: 0,
+              width: isMobile ? '100%' : 320, flexShrink: 0,
               display: 'flex', flexDirection: 'column',
               padding: CARD_PAD, gap: 24,
               background: 'var(--surface-2)',
@@ -1309,10 +1313,10 @@ export default function Home() {
 function NavStat({ label, value, accent = false }: { label: string; value: number; accent?: boolean }) {
   return (
     <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-      <span style={{ fontSize: 14, color: 'var(--text-3)', letterSpacing: '0.06em', fontFamily: 'var(--font-display)', fontWeight: 600, textTransform: 'uppercase' }}>
+      <span style={{ fontSize: 15, color: 'var(--text-3)', letterSpacing: '0.06em', fontFamily: 'var(--font-display)', fontWeight: 600, textTransform: 'uppercase' }}>
         {label}
       </span>
-      <span style={{ fontSize: 20, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-display)' }}>
+      <span style={{ fontSize: 24, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-display)' }}>
         {value}
       </span>
     </div>
