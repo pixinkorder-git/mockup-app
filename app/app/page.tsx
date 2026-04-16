@@ -48,7 +48,7 @@ function SectionLabel({ children, badge }: { children: React.ReactNode; badge?: 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
       <span style={{
-        fontFamily: "var(--font-body)",
+        fontFamily: 'var(--font-body)',
         fontSize: 20, fontWeight: 800,
         letterSpacing: '-0.02em',
         color: '#151515',
@@ -569,7 +569,7 @@ export default function Home() {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12" />
           </svg>
-          <span style={{ fontSize: 13, color: 'var(--success)', fontFamily: "'Clash Display', sans-serif", fontWeight: 600, letterSpacing: '0.04em' }}>
+          <span style={{ fontSize: 13, color: 'var(--success)', fontFamily: 'var(--font-display)', fontWeight: 600, letterSpacing: '0.04em' }}>
             {isTR ? `Tümü oluşturuldu (${results.length})` : `All ${results.length} generated`}
           </span>
         </div>
@@ -580,7 +580,7 @@ export default function Home() {
           style={{
             width: '100%', height: 52, borderRadius: 12,
             fontSize: 15, fontWeight: 700, letterSpacing: '0.04em',
-            fontFamily: "'Clash Display', sans-serif",
+            fontFamily: 'var(--font-display)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
             background: canGenerate ? '#FF6B35' : 'rgba(255,107,53,0.4)',
             color: '#fff',
@@ -728,7 +728,7 @@ export default function Home() {
               padding: '18px 24px', borderBottom: '1px solid var(--border)', flexShrink: 0,
             }}>
               <span style={{
-                fontFamily: "'Clash Display', sans-serif",
+                fontFamily: 'var(--font-display)',
                 fontSize: 20, fontWeight: 700, color: '#151515',
                 borderLeft: '3px solid #FF6B35', paddingLeft: 10,
               }}>
@@ -1270,7 +1270,7 @@ export default function Home() {
                   <line x1="12" y1="16" x2="12.01" y2="16" />
                 </svg>
               </div>
-              <p style={{ fontSize: 15, fontWeight: 600, color: '#1a1a1a', fontFamily: "'Clash Display', sans-serif" }}>
+              <p style={{ fontSize: 15, fontWeight: 600, color: '#1a1a1a', fontFamily: 'var(--font-display)' }}>
                 {isTR ? `Bugünkü ${DAILY_LIMIT ?? 0} ücretsiz üretiminizi kullandınız.` : `You've used your ${DAILY_LIMIT ?? 0} free generates today.`}
               </p>
             </div>

@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 :root {
+  --font-display: 'Clash Display', sans-serif;
+  --font-body: 'Satoshi', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
   --bg: #080808;
   --surface: #0e0e0e;
   --surface-2: #161616;

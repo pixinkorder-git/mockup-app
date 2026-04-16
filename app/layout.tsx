@@ -1,28 +1,6 @@
 import type { Metadata } from 'next';
-import { Bebas_Neue, Syne, JetBrains_Mono } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
-
-const bebasNeue = Bebas_Neue({
-  weight: '400',
-  variable: '--font-display',
-  subsets: ['latin'],
-  display: 'swap',
-});
-
-const syne = Syne({
-  variable: '--font-body',
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: '--font-mono',
-  subsets: ['latin'],
-  weight: ['300', '400', '500'],
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://mockplacer.com'),
@@ -50,6 +28,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
+        {/* Fontshare — Clash Display + Satoshi */}
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link
+          href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700,800&f[]=satoshi@400,500,700&display=swap"
+          rel="stylesheet"
+        />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-E7QGN4W75R"
           strategy="afterInteractive"
@@ -63,7 +49,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={`${bebasNeue.variable} ${syne.variable} ${jetbrainsMono.variable}`}>
+      <body>
         {children}
       </body>
     </html>
