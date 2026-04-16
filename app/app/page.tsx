@@ -786,7 +786,7 @@ export default function Home() {
                           cursor: 'pointer',
                           border: `2px solid ${isSelected ? '#FF6B35' : 'var(--border)'}`,
                           boxShadow: isSelected ? '0 0 0 3px rgba(255,107,53,0.18)' : 'none',
-                          transition: 'all 0.15s',
+                          transition: 'border-color 0.15s, box-shadow 0.15s',
                           opacity: 1,
                           position: 'relative',
                         }}
@@ -907,7 +907,7 @@ export default function Home() {
       </header>
 
       {/* ── MAIN CONTENT ───────────────────────────────────────────────────── */}
-      <div style={{ maxWidth: '100%', margin: '0', padding: '0 0 60px' }}>
+      <div style={{ maxWidth: '100%', width: '100%', margin: '0', padding: '0' }}>
 
         {/* ── TOOL CARD ──────────────────────────────────────────────────── */}
         <div style={{
@@ -916,9 +916,10 @@ export default function Home() {
           background: '#F8F7F5',
           overflow: 'hidden',
           boxShadow: 'none',
+          width: '100%',
           minHeight: 'calc(100vh - 72px)',
         }}>
-          <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', minHeight: isMobile ? undefined : 'calc(100vh - 72px)' }}>
+          <div style={{ display: 'flex', width: '100%', flexDirection: isMobile ? 'column' : 'row', minHeight: isMobile ? undefined : 'calc(100vh - 72px)' }}>
 
             {/* ── COL 1: TEMPLATES PANEL ───────────────────────────────── */}
             <div style={{
@@ -989,7 +990,7 @@ export default function Home() {
                               padding: '6px 7px', borderRadius: 9,
                               background: isActive ? 'rgba(255,107,53,0.06)' : '#fff',
                               border: `1.5px solid ${isActive ? '#FF6B35' : 'var(--border)'}`,
-                              cursor: 'pointer', transition: 'all 0.15s',
+                              cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s',
                             }}
                           >
                             {/* Checkbox */}
