@@ -28,12 +28,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        {/* Fontshare — Clash Display + Satoshi */}
+        {/* Fontshare — Switzer */}
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <link rel="preconnect" href="https://api.fontshare.com" />
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <link
-          href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700,800&f[]=satoshi@400,500,700&display=swap"
+          href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700,800&display=swap"
           rel="stylesheet"
         />
         <Script

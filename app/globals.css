@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --font-display: 'Clash Display', sans-serif;
-  --font-body: 'Satoshi', sans-serif;
+  --font-display: 'Switzer', sans-serif;
+  --font-body: 'Switzer', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --bg: #080808;
   --surface: #0e0e0e;
@@ -54,7 +54,7 @@ html {
 }
 
 body {
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: 'Switzer', sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
