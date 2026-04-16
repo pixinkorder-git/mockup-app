@@ -3216,5 +3216,69 @@ setLang(currentLang);
 })();
 </script>
 
+
+<script>
+// ── Scroll-reveal animations ──────────────────────────────────────────────
+(function() {
+  var style = document.createElement('style');
+  style.textContent =
+    '.reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }' +
+    '.reveal.visible { opacity: 1; transform: translateY(0); }';
+  document.head.appendChild(style);
+
+  // Stagger grid children first so their .reveal class is set before observer runs
+  document.querySelectorAll('.feature-grid, .testi-grid, .steps-grid, .pricing-grid').forEach(function(grid) {
+    Array.prototype.forEach.call(grid.children, function(child, i) {
+      child.classList.add('reveal');
+      child.dataset.delay = (i * 0.1).toString();
+    });
+  });
+
+  // Mark top-level sections (but not grids, already handled above)
+  document.querySelectorAll('section').forEach(function(el) {
+    el.classList.add('reveal');
+  });
+
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      var el = entry.target;
+      var delay = parseFloat(el.dataset.delay || '0');
+      setTimeout(function() { el.classList.add('visible'); }, delay * 1000);
+      io.unobserve(el);
+    });
+  }, { threshold: 0.10 });
+
+  document.querySelectorAll('.reveal').forEach(function(el) { io.observe(el); });
+})();
+</script>
+
+<script>
+// ── Hero 3D depth-on-scroll ───────────────────────────────────────────────
+(function() {
+  var hero = document.querySelector('section.hero');
+  if (!hero) return;
+  hero.style.perspective = '1200px';
+  hero.style.overflow = 'visible';
+
+  // Wrap all direct children in a single transformable div
+  var inner = document.createElement('div');
+  inner.style.cssText = 'transform-origin: center top; will-change: transform;';
+  while (hero.firstChild) inner.appendChild(hero.firstChild);
+  hero.appendChild(inner);
+
+  function onScroll() {
+    var sy = window.scrollY;
+    var heroH = hero.offsetHeight || 600;
+    var ratio = Math.min(Math.max(sy / heroH, 0), 1);
+    var rotX  = -5 * ratio;
+    var scale = 1 - 0.03 * ratio;
+    inner.style.transform = 'rotateX(' + rotX + 'deg) scale(' + scale + ')';
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
+</script>
+
 </body>
 </html>

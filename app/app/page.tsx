@@ -39,8 +39,8 @@ function loadImageDimensions(url: string): Promise<{ w: number; h: number }> {
 // ─── Layout constants ─────────────────────────────────────────────────────────
 const CARD_MAX = 9999;
 const CARD_PAD = 0;
-const COL_TEMPLATES = 220;
-const COL_CONTROLS  = 300;
+const COL_TEMPLATES = 200;
+const COL_CONTROLS  = 280;
 const NAV_H    = 72;
 
 // ─── Section label ────────────────────────────────────────────────────────────
@@ -48,9 +48,9 @@ function SectionLabel({ children, badge }: { children: React.ReactNode; badge?: 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
       <span style={{
-        fontFamily: "'Clash Display', sans-serif",
-        fontSize: 15, fontWeight: 700,
-        letterSpacing: '-0.01em',
+        fontFamily: "var(--font-body)",
+        fontSize: 20, fontWeight: 800,
+        letterSpacing: '-0.02em',
         color: '#151515',
         borderLeft: '3px solid #FF6B35',
         paddingLeft: 10,
@@ -585,21 +585,33 @@ export default function Home() {
             background: canGenerate ? '#FF6B35' : 'rgba(255,107,53,0.4)',
             color: '#fff',
             border: 'none', cursor: canGenerate ? 'pointer' : 'not-allowed',
-            transition: 'background 0.2s, transform 0.15s, box-shadow 0.2s',
-            boxShadow: canGenerate ? '0 4px 20px rgba(255,107,53,0.3)' : 'none',
+            transition: 'background 0.2s, transform 0.1s, box-shadow 0.1s',
+            boxShadow: canGenerate ? '0 1px 0 rgba(255,255,255,0.15) inset, 0 4px 0 #C4521F, 0 4px 16px rgba(255,107,53,0.35)' : 'none',
             flexShrink: 0,
           }}
           onMouseEnter={(e) => {
             if (canGenerate) {
               e.currentTarget.style.transform = 'translateY(-1px)';
-              e.currentTarget.style.boxShadow = '0 8px 28px rgba(255,107,53,0.40)';
-              e.currentTarget.style.background = '#E85A28';
+              e.currentTarget.style.boxShadow = '0 1px 0 rgba(255,255,255,0.15) inset, 0 5px 0 #C4521F, 0 8px 24px rgba(255,107,53,0.45)';
+              e.currentTarget.style.background = '#FF7A48';
             }
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.transform = 'none';
-            e.currentTarget.style.boxShadow = canGenerate ? '0 4px 20px rgba(255,107,53,0.3)' : 'none';
+            e.currentTarget.style.boxShadow = canGenerate ? '0 1px 0 rgba(255,255,255,0.15) inset, 0 4px 0 #C4521F, 0 4px 16px rgba(255,107,53,0.35)' : 'none';
             e.currentTarget.style.background = canGenerate ? '#FF6B35' : 'rgba(255,107,53,0.4)';
+          }}
+          onMouseDown={(e) => {
+            if (canGenerate) {
+              e.currentTarget.style.transform = 'translateY(2px)';
+              e.currentTarget.style.boxShadow = '0 1px 0 rgba(255,255,255,0.10) inset, 0 2px 0 #C4521F, 0 2px 8px rgba(255,107,53,0.25)';
+            }
+          }}
+          onMouseUp={(e) => {
+            if (canGenerate) {
+              e.currentTarget.style.transform = 'translateY(-1px)';
+              e.currentTarget.style.boxShadow = '0 1px 0 rgba(255,255,255,0.15) inset, 0 5px 0 #C4521F, 0 8px 24px rgba(255,107,53,0.45)';
+            }
           }}
         >
           {isGenerating ? (
@@ -934,7 +946,7 @@ export default function Home() {
               {/* Header */}
               <div style={{ flexShrink: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                  <span style={{ fontFamily: "'Clash Display', sans-serif", fontSize: 16, fontWeight: 700, letterSpacing: '-0.01em', color: '#151515', borderLeft: '3px solid #FF6B35', paddingLeft: 10 }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 20, fontWeight: 800, letterSpacing: '-0.02em', color: '#151515', borderLeft: '3px solid #FF6B35', paddingLeft: 10 }}>
                     {isTR ? 'Şablonlarım' : 'My Templates'}
                   </span>
                   {libraryFavorites.length > 0 && (
@@ -1166,20 +1178,21 @@ export default function Home() {
                         style={{
                           display: 'flex', alignItems: 'center', gap: 6,
                           padding: '6px 14px', borderRadius: 8,
-                          fontSize: 14, fontFamily: 'var(--font-body)', fontWeight: 500,
-                          background: 'transparent',
+                          fontSize: 14, fontFamily: 'var(--font-body)',
+                          fontWeight: m.id === activeMockupId ? 700 : 500,
+                          background: m.id === activeMockupId ? '#FF6B35' : 'transparent',
                           border: `1.5px solid ${m.id === activeMockupId ? '#FF6B35' : '#E5E5E5'}`,
-                          borderBottom: m.id === activeMockupId ? '2.5px solid #FF6B35' : '1.5px solid #E5E5E5',
-                          color: m.id === activeMockupId ? '#FF6B35' : 'var(--text-2)',
+                          borderBottom: m.id === activeMockupId ? '2.5px solid #C4521F' : '1.5px solid #E5E5E5',
+                          color: m.id === activeMockupId ? '#fff' : 'var(--text-2)',
                           cursor: 'pointer', transition: 'all 0.15s',
-                          boxShadow: m.id === activeMockupId ? '0 2px 8px rgba(255,107,53,0.15)' : 'none',
+                          boxShadow: m.id === activeMockupId ? '0 2px 8px rgba(255,107,53,0.25)' : 'none',
                         }}
                       >
                         {m.name}
                         {m.frames.length > 0 && (
                           <span style={{
                             fontSize: 10, fontWeight: 700, padding: '1px 5px', borderRadius: 4,
-                            background: m.id === activeMockupId ? 'var(--accent)' : 'var(--surface-3)',
+                            background: m.id === activeMockupId ? 'rgba(0,0,0,0.20)' : 'var(--surface-3)',
                             color: m.id === activeMockupId ? '#fff' : 'var(--text-2)',
                           }}>
                             {m.frames.length}
