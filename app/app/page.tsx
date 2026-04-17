@@ -568,7 +568,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* ── COL 2: Generate + Art Images + Mockup Templates ──────────────── */}
+        {/* ── COL 2: Art Images + Mockup Templates + Generate ──────────────── */}
         <div style={{
           width: isMobile ? '100%' : 320,
           height: isMobile ? 'auto' : '100%',
@@ -578,63 +578,6 @@ export default function Home() {
           borderBottom: isMobile ? `1px solid ${theme.border}` : 'none',
           padding: 16, gap: 12,
         }}>
-
-          {/* Generate block — at the top with big stats */}
-          <div style={{ background: theme.surface, borderRadius: 16, border: `1px solid ${theme.border}`, padding: '20px 16px', flexShrink: 0, boxShadow: '0 2px 12px rgba(0,0,0,0.03)' }}>
-            {/* Big stats */}
-            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 10, marginBottom: 18 }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 44, fontWeight: 800, color: artImages.length > 0 ? theme.textMain : '#D1D5DB', fontFamily: 'var(--font-display)', lineHeight: 1, transition: 'color 0.3s' }}>{artImages.length}</div>
-                <div style={{ fontSize: 10, fontWeight: 700, color: theme.textMuted, textTransform: 'uppercase', letterSpacing: '0.07em', marginTop: 4 }}>{isTR ? 'Sanat' : 'Art'}</div>
-              </div>
-              <div style={{ fontSize: 26, color: '#D1D5DB', fontWeight: 300, paddingBottom: 22, lineHeight: 1 }}>×</div>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 44, fontWeight: 800, color: mockups.filter(m => m.frames.length > 0).length > 0 ? theme.textMain : '#D1D5DB', fontFamily: 'var(--font-display)', lineHeight: 1, transition: 'color 0.3s' }}>{mockups.filter(m => m.frames.length > 0).length}</div>
-                <div style={{ fontSize: 10, fontWeight: 700, color: theme.textMuted, textTransform: 'uppercase', letterSpacing: '0.07em', marginTop: 4 }}>{isTR ? 'Şablon' : 'Tpl'}</div>
-              </div>
-              <div style={{ fontSize: 26, color: '#D1D5DB', fontWeight: 300, paddingBottom: 22, lineHeight: 1 }}>=</div>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 44, fontWeight: 800, color: allCombinations.length > 0 ? theme.accent : '#D1D5DB', fontFamily: 'var(--font-display)', lineHeight: 1, transition: 'color 0.3s' }}>{allCombinations.length}</div>
-                <div style={{ fontSize: 10, fontWeight: 700, color: theme.textMuted, textTransform: 'uppercase', letterSpacing: '0.07em', marginTop: 4 }}>{isTR ? 'Kombo' : 'Combos'}</div>
-              </div>
-            </div>
-
-            {/* 3D Generate button */}
-            <button
-              onClick={handleGenerate}
-              disabled={!canGenerate || isExhausted}
-              style={{
-                width: '100%', height: 52, borderRadius: 12,
-                fontSize: 15, fontWeight: 700, letterSpacing: '0.02em', fontFamily: theme.fontFamily,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                background: canGenerate && !isExhausted ? 'linear-gradient(to bottom, #fb923c 0%, #f97316 100%)' : '#F3F4F6',
-                color: canGenerate && !isExhausted ? '#fff' : '#9CA3AF',
-                border: 'none', cursor: canGenerate && !isExhausted ? 'pointer' : 'not-allowed',
-                boxShadow: canGenerate && !isExhausted ? '0 6px 0 #c2410c, 0 8px 20px rgba(249,115,22,0.28)' : '0 4px 0 #D1D5DB',
-                transform: 'translateY(0)',
-                transition: 'box-shadow 0.1s, transform 0.1s',
-                position: 'relative',
-              }}
-              onMouseEnter={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = '0 4px 0 #c2410c, 0 6px 16px rgba(249,115,22,0.25)'; e.currentTarget.style.transform = 'translateY(2px)'; } }}
-              onMouseLeave={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = '0 6px 0 #c2410c, 0 8px 20px rgba(249,115,22,0.28)'; e.currentTarget.style.transform = 'translateY(0)'; } }}
-              onMouseDown={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = '0 1px 0 #c2410c, 0 2px 8px rgba(249,115,22,0.15)'; e.currentTarget.style.transform = 'translateY(5px)'; } }}
-              onMouseUp={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = '0 4px 0 #c2410c, 0 6px 16px rgba(249,115,22,0.25)'; e.currentTarget.style.transform = 'translateY(2px)'; } }}
-            >
-              {isGenerating ? (
-                <><span style={{ width: 16, height: 16, display: 'inline-block', borderRadius: '50%', border: '2.5px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', animation: 'spin 0.8s linear infinite' }} /> {isTR ? 'Oluşturuluyor...' : 'Generating...'}</>
-              ) : isExhausted ? (
-                <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg> {isTR ? 'Tamamlandı' : 'Completed'}</>
-              ) : (
-                <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> {results.length === 0 ? (isTR ? 'Oluştur' : 'Generate') : (isTR ? `Devam Et (${remainingCount})` : `Generate More (${remainingCount})`)}</>
-              )}
-            </button>
-
-            {!isExhausted && (
-              <p style={{ textAlign: 'center', margin: '10px 0 0', fontSize: 12, color: limitReached ? '#EF4444' : theme.textMuted, fontWeight: 500 }}>
-                {limitReached ? (isTR ? 'Limit doldu.' : 'Limit reached.') : (DAILY_LIMIT ? (isTR ? `${generatesRemaining} ücretsiz hak kaldı` : `${generatesRemaining} free left`) : (isTR ? 'Sınırsız Plan' : 'Unlimited Plan'))}
-              </p>
-            )}
-          </div>
 
           {/* Content card — same rounded style as Frame Editor */}
           <div style={{
@@ -695,6 +638,63 @@ export default function Home() {
               </div>
 
             </div>
+          </div>
+
+          {/* Generate block — below content card, with big stats + 3D button */}
+          <div style={{ background: theme.surface, borderRadius: 16, border: `1px solid ${theme.border}`, padding: '20px 16px', flexShrink: 0, boxShadow: '0 2px 12px rgba(0,0,0,0.03)' }}>
+            {/* Big stats */}
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 10, marginBottom: 18 }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 44, fontWeight: 800, color: artImages.length > 0 ? theme.textMain : '#D1D5DB', fontFamily: 'var(--font-display)', lineHeight: 1, transition: 'color 0.3s' }}>{artImages.length}</div>
+                <div style={{ fontSize: 10, fontWeight: 700, color: theme.textMuted, textTransform: 'uppercase', letterSpacing: '0.07em', marginTop: 4 }}>{isTR ? 'Sanat' : 'Art'}</div>
+              </div>
+              <div style={{ fontSize: 26, color: '#D1D5DB', fontWeight: 300, paddingBottom: 22, lineHeight: 1 }}>×</div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 44, fontWeight: 800, color: mockups.filter(m => m.frames.length > 0).length > 0 ? theme.textMain : '#D1D5DB', fontFamily: 'var(--font-display)', lineHeight: 1, transition: 'color 0.3s' }}>{mockups.filter(m => m.frames.length > 0).length}</div>
+                <div style={{ fontSize: 10, fontWeight: 700, color: theme.textMuted, textTransform: 'uppercase', letterSpacing: '0.07em', marginTop: 4 }}>{isTR ? 'Şablon' : 'Tpl'}</div>
+              </div>
+              <div style={{ fontSize: 26, color: '#D1D5DB', fontWeight: 300, paddingBottom: 22, lineHeight: 1 }}>=</div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 44, fontWeight: 800, color: allCombinations.length > 0 ? theme.accent : '#D1D5DB', fontFamily: 'var(--font-display)', lineHeight: 1, transition: 'color 0.3s' }}>{allCombinations.length}</div>
+                <div style={{ fontSize: 10, fontWeight: 700, color: theme.textMuted, textTransform: 'uppercase', letterSpacing: '0.07em', marginTop: 4 }}>{isTR ? 'Kombo' : 'Combos'}</div>
+              </div>
+            </div>
+
+            {/* 3D Generate button */}
+            <button
+              onClick={handleGenerate}
+              disabled={!canGenerate || isExhausted}
+              style={{
+                width: '100%', height: 52, borderRadius: 12,
+                fontSize: 15, fontWeight: 700, letterSpacing: '0.02em', fontFamily: theme.fontFamily,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                background: canGenerate && !isExhausted ? 'linear-gradient(to bottom, #fb923c 0%, #f97316 100%)' : '#F3F4F6',
+                color: canGenerate && !isExhausted ? '#fff' : '#9CA3AF',
+                border: 'none', cursor: canGenerate && !isExhausted ? 'pointer' : 'not-allowed',
+                boxShadow: canGenerate && !isExhausted ? '0 6px 0 #c2410c, 0 8px 20px rgba(249,115,22,0.28)' : '0 4px 0 #D1D5DB',
+                transform: 'translateY(0)',
+                transition: 'box-shadow 0.1s, transform 0.1s',
+                position: 'relative',
+              }}
+              onMouseEnter={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = '0 4px 0 #c2410c, 0 6px 16px rgba(249,115,22,0.25)'; e.currentTarget.style.transform = 'translateY(2px)'; } }}
+              onMouseLeave={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = '0 6px 0 #c2410c, 0 8px 20px rgba(249,115,22,0.28)'; e.currentTarget.style.transform = 'translateY(0)'; } }}
+              onMouseDown={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = '0 1px 0 #c2410c, 0 2px 8px rgba(249,115,22,0.15)'; e.currentTarget.style.transform = 'translateY(5px)'; } }}
+              onMouseUp={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = '0 4px 0 #c2410c, 0 6px 16px rgba(249,115,22,0.25)'; e.currentTarget.style.transform = 'translateY(2px)'; } }}
+            >
+              {isGenerating ? (
+                <><span style={{ width: 16, height: 16, display: 'inline-block', borderRadius: '50%', border: '2.5px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', animation: 'spin 0.8s linear infinite' }} /> {isTR ? 'Oluşturuluyor...' : 'Generating...'}</>
+              ) : isExhausted ? (
+                <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg> {isTR ? 'Tamamlandı' : 'Completed'}</>
+              ) : (
+                <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> {results.length === 0 ? (isTR ? 'Oluştur' : 'Generate') : (isTR ? `Devam Et (${remainingCount})` : `Generate More (${remainingCount})`)}</>
+              )}
+            </button>
+
+            {!isExhausted && (
+              <p style={{ textAlign: 'center', margin: '10px 0 0', fontSize: 12, color: limitReached ? '#EF4444' : theme.textMuted, fontWeight: 500 }}>
+                {limitReached ? (isTR ? 'Limit doldu.' : 'Limit reached.') : (DAILY_LIMIT ? (isTR ? `${generatesRemaining} ücretsiz hak kaldı` : `${generatesRemaining} free left`) : (isTR ? 'Sınırsız Plan' : 'Unlimited Plan'))}
+              </p>
+            )}
           </div>
         </div>
 
