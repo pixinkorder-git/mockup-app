@@ -38,7 +38,7 @@ function loadImageDimensions(url: string): Promise<{ w: number; h: number }> {
 
 // ─── Layout constants ─────────────────────────────────────────────────────────
 const SIDEBAR_W = 380;
-const NAV_H = 68;
+const NAV_H = 90;
 
 // ─── Shared Theme Styles ──────────────────────────────────────────────────────
 const theme = {
@@ -446,13 +446,13 @@ export default function Home() {
       <header style={{
         position: 'sticky', top: 0, zIndex: 100, height: NAV_H,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 32px', background: 'rgba(255, 255, 255, 0.85)',
+        padding: '0 40px', background: 'rgba(255, 255, 255, 0.85)',
         backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
         borderBottom: `1px solid ${theme.border}`,
       }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/1logo.png" width="160" height="40" style={{ display: 'block', objectFit: 'contain' }} alt="MockPlacer" />
+          <img src="/1logo.png" width="220" height="55" style={{ display: 'block', objectFit: 'contain' }} alt="MockPlacer" />
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
@@ -471,7 +471,7 @@ export default function Home() {
           {user ? (
             <UserDropdown user={user} plan={plan} lang={lang} onSignOut={() => setUser(null)} />
           ) : (
-            <Link href="/login" style={{ fontSize: 14, fontWeight: 600, color: theme.accent, textDecoration: 'none', padding: '8px 16px', borderRadius: 8, background: 'rgba(249, 115, 22, 0.1)' }}>
+            <Link href="/login" style={{ fontSize: 18, fontWeight: 600, color: theme.accent, textDecoration: 'none', padding: '10px 20px', borderRadius: 8, background: 'rgba(249, 115, 22, 0.1)' }}>
               {isTR ? 'Giriş Yap' : 'Sign In'}
             </Link>
           )}
@@ -862,8 +862,8 @@ export default function Home() {
 function NavStat({ label, value, accent = false }: { label: string; value: number; accent?: boolean }) {
   return (
     <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-      <span style={{ fontSize: 12, color: theme.textMuted, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</span>
-      <span style={{ fontSize: 18, fontWeight: 800, color: accent ? theme.accent : theme.textMain }}>{value}</span>
+      <span style={{ fontSize: 16, color: theme.textMuted, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</span>
+      <span style={{ fontSize: 26, fontWeight: 800, color: accent ? theme.accent : theme.textMain }}>{value}</span>
     </div>
   );
 }
