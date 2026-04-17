@@ -15,12 +15,12 @@ const MAX_ART = 6;
 const MAX_MOCKUPS = 6;
 
 const FRAME_COLORS = [
-  'rgba(255,107,53,0.50)',
-  'rgba(66,168,219,0.50)',
-  'rgba(100,200,66,0.50)',
-  'rgba(200,66,168,0.50)',
-  'rgba(66,219,168,0.50)',
-  'rgba(168,66,219,0.50)',
+  'rgba(249, 115, 22, 0.50)', // Tailwind Orange 500
+  'rgba(56, 189, 248, 0.50)', // Sky 400
+  'rgba(74, 222, 128, 0.50)', // Green 400
+  'rgba(167, 139, 250, 0.50)', // Violet 400
+  'rgba(244, 114, 182, 0.50)', // Pink 400
+  'rgba(250, 204, 21, 0.50)', // Yellow 400
 ];
 
 function genId() {
@@ -37,42 +37,50 @@ function loadImageDimensions(url: string): Promise<{ w: number; h: number }> {
 }
 
 // ─── Layout constants ─────────────────────────────────────────────────────────
-const CARD_MAX = 9999;
-const CARD_PAD = 0;
-const COL_TEMPLATES = 200;
-const COL_CONTROLS  = 280;
-const NAV_H    = 72;
+const SIDEBAR_W = 380;
+const NAV_H = 68;
+
+// ─── Shared Theme Styles ──────────────────────────────────────────────────────
+const theme = {
+  bg: '#F9FAFB', // Light gray background for canvas area
+  surface: '#FFFFFF', // White for panels
+  border: '#E5E7EB',
+  accent: '#F97316', // Orange 500
+  accentHover: '#EA580C', // Orange 600
+  textMain: '#111827',
+  textMuted: '#6B7280',
+  fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+};
 
 // ─── Section label ────────────────────────────────────────────────────────────
-function SectionLabel({ children, badge }: { children: React.ReactNode; badge?: number }) {
+function SectionLabel({ children, badge, action }: { children: React.ReactNode; badge?: number; action?: React.ReactNode }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-      <span style={{
-        fontFamily: 'var(--font-body)',
-        fontSize: 20, fontWeight: 800,
-        letterSpacing: '-0.02em',
-        color: '#151515',
-        borderLeft: '3px solid #FF6B35',
-        paddingLeft: 10,
-      }}>
-        {children}
-      </span>
-      {badge !== undefined && badge > 0 && (
-        <span style={{
-          fontSize: 11, fontWeight: 700,
-          padding: '1px 7px', borderRadius: 99,
-          background: 'var(--accent)', color: '#fff',
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <h3 style={{
+          fontFamily: theme.fontFamily,
+          fontSize: 16,
+          fontWeight: 700,
+          color: theme.textMain,
+          margin: 0,
+          letterSpacing: '-0.01em'
         }}>
-          {badge}
-        </span>
-      )}
+          {children}
+        </h3>
+        {badge !== undefined && (
+          <span style={{
+            fontSize: 12, fontWeight: 600, fontFamily: theme.fontFamily,
+            padding: '2px 8px', borderRadius: 99,
+            background: badge > 0 ? 'rgba(249, 115, 22, 0.1)' : '#F3F4F6',
+            color: badge > 0 ? theme.accent : theme.textMuted,
+          }}>
+            {badge}
+          </span>
+        )}
+      </div>
+      {action && <div>{action}</div>}
     </div>
   );
-}
-
-// ─── Divider ──────────────────────────────────────────────────────────────────
-function Divider() {
-  return <div style={{ height: 1, background: 'var(--border)', margin: '20px 0' }} />;
 }
 
 // ─── Asset thumbnail ──────────────────────────────────────────────────────────
@@ -85,47 +93,48 @@ function AssetThumb({
   return (
     <div
       onClick={onClick}
-      className="relative group"
+      className="group relative"
       style={{
-        width: 76, height: 76, flexShrink: 0,
-        borderRadius: 8, overflow: 'hidden',
-        border: `2px solid ${isActive ? 'var(--accent)' : 'var(--border)'}`,
+        width: 72, height: 72, flexShrink: 0,
+        borderRadius: 12, overflow: 'hidden',
+        border: `2px solid ${isActive ? theme.accent : theme.border}`,
         cursor: onClick ? 'pointer' : 'default',
-        boxShadow: isActive ? '0 0 0 3px var(--accent-glow)' : 'none',
-        transition: 'border-color 0.15s, box-shadow 0.15s',
+        boxShadow: isActive ? '0 4px 12px rgba(249, 115, 22, 0.2)' : 'none',
+        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+        background: '#fff'
       }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={url} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
 
-      {/* X button — top-right, circular; always visible on mobile, hover on desktop */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 40%)',
+        opacity: isActive ? 1 : 0, transition: 'opacity 0.2s'
+      }} className="group-hover:opacity-100" />
+
       <button
         onClick={(e) => { e.stopPropagation(); onRemove(); }}
         title="Remove"
         className={isMobile ? '' : 'opacity-0 group-hover:opacity-100 transition-opacity'}
         style={{
           position: 'absolute', top: 4, right: 4,
-          width: 20, height: 20, borderRadius: '50%',
-          background: 'rgba(0,0,0,0.65)', border: 'none', cursor: 'pointer',
+          width: 22, height: 22, borderRadius: '50%',
+          background: 'rgba(255,255,255,0.9)', border: 'none', cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          zIndex: 2,
+          zIndex: 2, color: '#EF4444',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
         }}
       >
-        <svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round">
-          <line x1="1" y1="1" x2="7" y2="7" /><line x1="7" y1="1" x2="1" y2="7" />
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <line x1="1" y1="1" x2="9" y2="9" /><line x1="9" y1="1" x2="1" y2="9" />
         </svg>
       </button>
 
-      <div
-        className="absolute bottom-0 left-0 right-0 truncate opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-        style={{ background: 'rgba(0,0,0,0.80)', color: '#fff', fontSize: 9, padding: '3px 5px' }}
-      >
-        {name}
-      </div>
       {badge && (
         <div
-          className="absolute top-1 left-1"
-          style={{ background: 'var(--accent)', color: '#fff', fontSize: 9, fontWeight: 700, padding: '1px 5px', borderRadius: 3 }}
+          className="absolute bottom-1 right-1"
+          style={{ background: 'rgba(0,0,0,0.7)', color: '#fff', fontSize: 10, fontWeight: 600, padding: '2px 6px', borderRadius: 6, backdropFilter: 'blur(4px)' }}
         >
           {badge}
         </div>
@@ -134,7 +143,7 @@ function AssetThumb({
   );
 }
 
-// ─── Library template type (from DB) ─────────────────────────────────────────
+// ─── Interfaces ─────────────────────────────────────────────────────────────
 interface LibraryTemplateItem {
   id: number;
   name: string;
@@ -143,14 +152,13 @@ interface LibraryTemplateItem {
   frames: { x: number; y: number; w: number; h: number; cornerRadius: number }[];
 }
 
-// ─── Library favorite (saved from Browse Library) ─────────────────────────────
 interface LibraryFav {
   favId: string;
-  tplId: string;   // tpl.image path — unique identifier since JSON has no id field
+  tplId: string;
   name: string;
   image: string;
   mockup: MockupTemplate;
-  checked: boolean; // true = also in mockups[], false = pool only
+  checked: boolean;
 }
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
@@ -158,17 +166,17 @@ export default function Home() {
   const [artImages, setArtImages]             = useState<ArtImage[]>([]);
   const [mockups, setMockups]                 = useState<MockupTemplate[]>([]);
   const [activeMockupId, setActiveMockupId]   = useState<string | null>(null);
-  const [results, setResults]               = useState<GeneratedResult[]>([]);
-  const [generatedIds, setGeneratedIds]     = useState<Set<string>>(new Set());
-  const [isGenerating, setIsGenerating]     = useState(false);
-  const [progress, setProgress]             = useState({ done: 0, total: 0 });
-  const [tolerance, setTolerance]           = useState(60);
-  const [isMobile, setIsMobile]             = useState(false);
-  const [lang, setLang]                     = useState<'tr' | 'en'>('tr');
-  const [user, setUser]                     = useState<{ id?: string; email?: string; name?: string; avatar?: string } | null>(null);
+  const [results, setResults]                 = useState<GeneratedResult[]>([]);
+  const [generatedIds, setGeneratedIds]       = useState<Set<string>>(new Set());
+  const [isGenerating, setIsGenerating]       = useState(false);
+  const [progress, setProgress]               = useState({ done: 0, total: 0 });
+  const [tolerance, setTolerance]             = useState(60);
+  const [isMobile, setIsMobile]               = useState(false);
+  const [lang, setLang]                       = useState<'tr' | 'en'>('tr');
+  const [user, setUser]                       = useState<{ id?: string; email?: string; name?: string; avatar?: string } | null>(null);
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= 700);
+    const check = () => setIsMobile(window.innerWidth <= 900); // Expanded mobile breakpoint for sidebar layout
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
@@ -188,8 +196,7 @@ export default function Home() {
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (user) {
         setUser({
-          id: user.id,
-          email: user.email,
+          id: user.id, email: user.email,
           name: user.user_metadata?.full_name ?? user.user_metadata?.name ?? undefined,
           avatar: user.user_metadata?.avatar_url ?? undefined,
         });
@@ -198,8 +205,7 @@ export default function Home() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
         setUser({
-          id: session.user.id,
-          email: session.user.email,
+          id: session.user.id, email: session.user.email,
           name: session.user.user_metadata?.full_name ?? undefined,
           avatar: session.user.user_metadata?.avatar_url ?? undefined,
         });
@@ -223,11 +229,7 @@ export default function Home() {
   useEffect(() => {
     if (!user?.id) { setPlan('free'); return; }
     const supabase = createClient();
-    supabase
-      .from('profiles')
-      .select('plan')
-      .eq('id', user.id)
-      .single()
+    supabase.from('profiles').select('plan').eq('id', user.id).single()
       .then(({ data }) => {
         const fetched = data?.plan;
         if (fetched === 'basic' || fetched === 'pro') setPlan(fetched);
@@ -235,8 +237,6 @@ export default function Home() {
       });
   }, [user?.id]);
 
-  // ── Daily generate limit ──────────────────────────────────────────────────
-  // null = unlimited (pro plan)
   const DAILY_LIMIT: number | null = plan === 'pro' ? null : plan === 'basic' ? 15 : 3;
   const [generateCount, setGenerateCount] = useState(0);
 
@@ -258,17 +258,12 @@ export default function Home() {
     const today = new Date().toISOString().slice(0, 10);
     setGenerateCount((prev) => {
       const next = prev + 1;
-      try {
-        localStorage.setItem('mockplacer_generates', JSON.stringify({ count: next, date: today }));
-      } catch { /* ignore */ }
+      try { localStorage.setItem('mockplacer_generates', JSON.stringify({ count: next, date: today })); } catch { }
       return next;
     });
   }, []);
 
-  // activeMockups = all mockups[] (only checked library favs + manually uploaded)
   const activeMockups = mockups;
-
-  // Reset results only when the active set actually changes
   const artKey    = artImages.map((a) => a.id).join(',');
   const mockupKey = activeMockups.map((m) => m.id).join(',');
   const prevKeysRef = useRef({ artKey: '', mockupKey: '' });
@@ -277,36 +272,22 @@ export default function Home() {
     if (artKey !== prev.artKey || mockupKey !== prev.mockupKey) {
       prevKeysRef.current = { artKey, mockupKey };
       if (prev.artKey !== '' || prev.mockupKey !== '') {
-        setResults([]);
-        setGeneratedIds(new Set());
+        setResults([]); setGeneratedIds(new Set());
       }
     }
   });
 
-  const allCombinations = useMemo(
-    () => orderCombinations(computeCombinations(activeMockups, artImages), activeMockups),
-    [activeMockups, artImages]
-  );
-  const pendingCombinations = useMemo(
-    () => allCombinations.filter((c) => !generatedIds.has(c.id)),
-    [allCombinations, generatedIds]
-  );
+  const allCombinations = useMemo(() => orderCombinations(computeCombinations(activeMockups, artImages), activeMockups), [activeMockups, artImages]);
+  const pendingCombinations = useMemo(() => allCombinations.filter((c) => !generatedIds.has(c.id)), [allCombinations, generatedIds]);
   const remainingCount    = pendingCombinations.length;
   const isExhausted       = allCombinations.length > 0 && remainingCount === 0;
   const hasNoCombinations = artImages.length > 0 && activeMockups.some((m) => m.frames.length > 0) && allCombinations.length === 0;
   const activeMockup      = mockups.find((m) => m.id === activeMockupId) ?? null;
   const canGenerate       = !isGenerating && pendingCombinations.length > 0 && !limitReached;
 
-  const libraryCategories = useMemo(
-    () => [...new Set(libraryTemplates.map((t) => t.category))].sort(),
-    [libraryTemplates]
-  );
-  const filteredLibraryTemplates = useMemo(
-    () => libraryCategory === 'all' ? libraryTemplates : libraryTemplates.filter((t) => t.category === libraryCategory),
-    [libraryTemplates, libraryCategory]
-  );
+  const libraryCategories = useMemo(() => [...new Set(libraryTemplates.map((t) => t.category))].sort(), [libraryTemplates]);
+  const filteredLibraryTemplates = useMemo(() => libraryCategory === 'all' ? libraryTemplates : libraryTemplates.filter((t) => t.category === libraryCategory), [libraryTemplates, libraryCategory]);
 
-  // ── Upload handlers ───────────────────────────────────────────────────────
   const handleArtUpload = useCallback(async (files: File[]) => {
     const slots = MAX_ART - artImages.length;
     if (slots <= 0) return;
@@ -336,10 +317,7 @@ export default function Home() {
       const slots = MAX_MOCKUPS - prev.length;
       if (slots <= 0) return prev;
       const added: MockupTemplate[] = files.slice(0, slots).map((f) => ({
-        id: genId(),
-        name: f.name.replace(/\.[^.]+$/, ''),
-        url: URL.createObjectURL(f),
-        frames: [],
+        id: genId(), name: f.name.replace(/\.[^.]+$/, ''), url: URL.createObjectURL(f), frames: [],
       }));
       setActiveMockupId((cur) => cur ?? added[0]?.id ?? null);
       return [...prev, ...added];
@@ -347,54 +325,31 @@ export default function Home() {
   }, []);
 
   const removeMockup = useCallback((id: string) => {
-    // If it's a library fav, just uncheck it (keep in pool)
-    setLibraryFavorites((prev) => prev.map((f) =>
-      f.mockup.id === id ? { ...f, checked: false } : f
-    ));
+    setLibraryFavorites((prev) => prev.map((f) => f.mockup.id === id ? { ...f, checked: false } : f));
     setMockups((prev) => {
       const m = prev.find((x) => x.id === id);
-      // Only revoke object URLs (manually uploaded), not static library paths
       if (m && m.url.startsWith('blob:')) URL.revokeObjectURL(m.url);
       return prev.filter((x) => x.id !== id);
     });
-    if (activeMockupId === id) {
-      setActiveMockupId(mockups.find((m) => m.id !== id)?.id ?? null);
-    }
+    if (activeMockupId === id) setActiveMockupId(mockups.find((m) => m.id !== id)?.id ?? null);
   }, [activeMockupId, mockups]);
 
-  // ── Frame handlers ────────────────────────────────────────────────────────
   const handleAddFrame = useCallback((frameData: Omit<Frame, 'id' | 'color'>) => {
     if (!activeMockupId) return;
-    setMockups((prev) =>
-      prev.map((m) => {
-        if (m.id !== activeMockupId) return m;
-        return {
-          ...m,
-          frames: [...m.frames, {
-            ...frameData,
-            id: genId(),
-            color: FRAME_COLORS[m.frames.length % FRAME_COLORS.length],
-          }],
-        };
-      })
-    );
+    setMockups((prev) => prev.map((m) => {
+      if (m.id !== activeMockupId) return m;
+      return { ...m, frames: [...m.frames, { ...frameData, id: genId(), color: FRAME_COLORS[m.frames.length % FRAME_COLORS.length] }] };
+    }));
   }, [activeMockupId]);
 
   const handleRemoveFrame = useCallback((frameId: string) => {
     if (!activeMockupId) return;
-    setMockups((prev) =>
-      prev.map((m) => m.id !== activeMockupId ? m : { ...m, frames: m.frames.filter((f) => f.id !== frameId) })
-    );
+    setMockups((prev) => prev.map((m) => m.id !== activeMockupId ? m : { ...m, frames: m.frames.filter((f) => f.id !== frameId) }));
   }, [activeMockupId]);
 
   const handleUpdateFrame = useCallback((frameId: string, changes: Partial<Pick<import('@/app/utils/types').Frame, 'x' | 'y' | 'w' | 'h'>>) => {
     if (!activeMockupId) return;
-    setMockups((prev) =>
-      prev.map((m) => m.id !== activeMockupId ? m : {
-        ...m,
-        frames: m.frames.map((f) => f.id === frameId ? { ...f, ...changes } : f),
-      })
-    );
+    setMockups((prev) => prev.map((m) => m.id !== activeMockupId ? m : { ...m, frames: m.frames.map((f) => f.id === frameId ? { ...f, ...changes } : f) }));
   }, [activeMockupId]);
 
   const clearAllFrames = useCallback(() => {
@@ -402,88 +357,52 @@ export default function Home() {
     setMockups((prev) => prev.map((m) => m.id === activeMockupId ? { ...m, frames: [] } : m));
   }, [activeMockupId]);
 
-  // ── Generate ──────────────────────────────────────────────────────────────
   const handleGenerate = useCallback(async () => {
     if (!canGenerate) return;
     const batch = pendingCombinations.slice(0, BATCH_SIZE);
-    setIsGenerating(true);
-    setProgress({ done: 0, total: batch.length });
+    setIsGenerating(true); setProgress({ done: 0, total: batch.length });
     try {
-      const newResults = await generateBatch(batch, mockups, artImages, (done, total) =>
-        setProgress({ done, total })
-      );
+      const newResults = await generateBatch(batch, mockups, artImages, (done, total) => setProgress({ done, total }));
       setResults((prev) => [...prev, ...newResults]);
       incrementGenerateCount();
-      setGeneratedIds((prev) => {
-        const next = new Set(prev);
-        batch.forEach((c) => next.add(c.id));
-        return next;
-      });
-    } finally {
-      setIsGenerating(false);
-    }
+      setGeneratedIds((prev) => { const next = new Set(prev); batch.forEach((c) => next.add(c.id)); return next; });
+    } finally { setIsGenerating(false); }
   }, [canGenerate, pendingCombinations, mockups, artImages, incrementGenerateCount]);
 
-  const handleClearResults = useCallback(() => {
-    setResults([]);
-    setGeneratedIds(new Set());
-  }, []);
+  const handleClearResults = useCallback(() => { setResults([]); setGeneratedIds(new Set()); }, []);
 
-  // ── Browse Library ────────────────────────────────────────────────────────
   const addFromLibrary = useCallback(async (tpl: LibraryTemplateItem) => {
-    // Already in pool — use image path as unique key (JSON has no id field)
-    if (libraryFavorites.some((f) => f.tplId === tpl.image)) {
-      setToast(isTR ? 'Zaten kayıtlı' : 'Already in your templates');
-      return;
-    }
+    if (libraryFavorites.some((f) => f.tplId === tpl.image)) { setToast(isTR ? 'Zaten kayıtlı' : 'Already in your templates'); return; }
     const { w: imgW, h: imgH } = await loadImageDimensions(tpl.image);
     if (imgW === 0) return;
     const mockupId = genId();
     const newMockup: MockupTemplate = {
-      id: mockupId,
-      name: tpl.name,
-      url: tpl.image,
+      id: mockupId, name: tpl.name, url: tpl.image,
       frames: tpl.frames.map((f, i) => ({
-        id: genId(),
-        color: FRAME_COLORS[i % FRAME_COLORS.length],
-        x: f.x * imgW,
-        y: f.y * imgH,
-        w: f.w * imgW,
-        h: f.h * imgH,
-        cornerRadius: f.cornerRadius,
+        id: genId(), color: FRAME_COLORS[i % FRAME_COLORS.length],
+        x: f.x * imgW, y: f.y * imgH, w: f.w * imgW, h: f.h * imgH, cornerRadius: f.cornerRadius,
       })),
     };
-    // Add to pool only — unchecked by default, not in mockups[]
     const newFav: LibraryFav = { favId: genId(), tplId: tpl.image, name: tpl.name, image: tpl.image, mockup: newMockup, checked: false };
     setLibraryFavorites((prev) => [...prev, newFav]);
     setToast(isTR ? 'Şablonlarınıza eklendi' : 'Added to My Templates');
-    // Keep modal open so user can keep browsing
   }, [libraryFavorites, isTR]);
 
-  // ── Toggle fav checked state ──────────────────────────────────────────────
   const toggleFav = useCallback((favId: string) => {
     const fav = libraryFavorites.find((f) => f.favId === favId);
     if (!fav) return;
     if (fav.checked) {
-      // Uncheck: remove from mockups[]
       setLibraryFavorites((prev) => prev.map((f) => f.favId === favId ? { ...f, checked: false } : f));
       setMockups((prev) => prev.filter((m) => m.id !== fav.mockup.id));
-      if (activeMockupId === fav.mockup.id) {
-        setActiveMockupId(mockups.find((m) => m.id !== fav.mockup.id)?.id ?? null);
-      }
+      if (activeMockupId === fav.mockup.id) setActiveMockupId(mockups.find((m) => m.id !== fav.mockup.id)?.id ?? null);
     } else {
-      // Check: add to mockups[]
-      if (mockups.length >= MAX_MOCKUPS) {
-        setToast(isTR ? 'En fazla 6 aktif şablon' : 'Max 6 active templates');
-        return;
-      }
+      if (mockups.length >= MAX_MOCKUPS) { setToast(isTR ? 'En fazla 6 aktif şablon' : 'Max 6 active templates'); return; }
       setLibraryFavorites((prev) => prev.map((f) => f.favId === favId ? { ...f, checked: true } : f));
       setMockups((prev) => [...prev, fav.mockup]);
       setActiveMockupId(fav.mockup.id);
     }
   }, [libraryFavorites, mockups, activeMockupId, isTR]);
 
-  // ── Remove favorite entirely from pool ───────────────────────────────────
   const removeFav = useCallback((favId: string) => {
     const fav = libraryFavorites.find((f) => f.favId === favId);
     if (!fav) return;
@@ -494,7 +413,6 @@ export default function Home() {
     }
   }, [libraryFavorites, activeMockupId]);
 
-  // ── Toast auto-dismiss ────────────────────────────────────────────────────
   useEffect(() => {
     if (!toast) return;
     const t = setTimeout(() => setToast(null), 2500);
@@ -502,8 +420,7 @@ export default function Home() {
   }, [toast]);
 
   useEffect(() => {
-    if (!libraryModalOpen) return;
-    if (libraryTemplates.length > 0) return;
+    if (!libraryModalOpen || libraryTemplates.length > 0) return;
     setLibraryLoading(true);
     fetch('/templates.json')
       .then((r) => r.json())
@@ -512,334 +429,368 @@ export default function Home() {
       .finally(() => setLibraryLoading(false));
   }, [libraryModalOpen, libraryTemplates.length]);
 
-  // ── Generate section (combo info + generate button + clear) ──────────────
-  const generateSection = (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      {/* Combination info */}
-      {(artImages.length > 0 || mockups.length > 0) && (
+  // suppress unused variable warning
+  void hasNoCombinations;
+  void progress;
+
+  return (
+    <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: theme.fontFamily }}>
+
+      {/* ── NAVBAR ───────────────────────────────────────────────────────────── */}
+      <header style={{
+        position: 'sticky', top: 0, zIndex: 100, height: NAV_H,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '0 32px', background: 'rgba(255, 255, 255, 0.85)',
+        backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
+        borderBottom: `1px solid ${theme.border}`,
+      }}>
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/1logo.png" width="160" height="40" style={{ display: 'block', objectFit: 'contain' }} alt="MockPlacer" />
+        </Link>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+          <div style={{ display: 'flex', gap: 16 }}>
+            <NavStat label={isTR ? 'Görsel' : 'Art'} value={artImages.length} />
+            <div style={{ width: 1, height: 24, background: theme.border, alignSelf: 'center' }} />
+            <NavStat label={isTR ? 'Şablon' : 'Templates'} value={mockups.length} />
+            {results.length > 0 && (
+              <>
+                <div style={{ width: 1, height: 24, background: theme.border, alignSelf: 'center' }} />
+                <NavStat label={isTR ? 'Sonuç' : 'Results'} value={results.length} accent />
+              </>
+            )}
+          </div>
+          <div style={{ width: 1, height: 24, background: theme.border }} />
+          {user ? (
+            <UserDropdown user={user} plan={plan} lang={lang} onSignOut={() => setUser(null)} />
+          ) : (
+            <Link href="/login" style={{ fontSize: 14, fontWeight: 600, color: theme.accent, textDecoration: 'none', padding: '8px 16px', borderRadius: 8, background: 'rgba(249, 115, 22, 0.1)' }}>
+              {isTR ? 'Giriş Yap' : 'Sign In'}
+            </Link>
+          )}
+        </div>
+      </header>
+
+      {/* ── MAIN WORKSPACE ─────────────────────────────────────────────────── */}
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', height: `calc(100vh - ${NAV_H}px)` }}>
+
+        {/* ── LEFT SIDEBAR (Assets & Settings) ─────────────────────────────── */}
         <div style={{
-          padding: '12px 14px', borderRadius: 10,
-          background: '#fff',
-          border: '1px solid var(--border)',
-          display: 'flex', flexDirection: 'column', gap: 8,
+          width: isMobile ? '100%' : SIDEBAR_W,
+          background: theme.surface,
+          borderRight: isMobile ? 'none' : `1px solid ${theme.border}`,
+          display: 'flex', flexDirection: 'column',
+          height: isMobile ? 'auto' : '100%',
+          overflow: 'hidden'
         }}>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, flexWrap: 'wrap' }}>
-            <ComboChip value={artImages.length} label="art" />
-            <span style={{ fontSize: 13, color: 'var(--text-3)', fontFamily: 'monospace' }}>×</span>
-            <ComboChip value={mockups.filter((m) => m.frames.length > 0).length} label="templates" />
-            <span style={{ fontSize: 13, color: 'var(--text-3)', fontFamily: 'monospace' }}>=</span>
-            <ComboChip value={allCombinations.length} label="combos" accent />
+
+          <div style={{ flex: 1, overflowY: 'auto', padding: '24px 24px 40px', display: 'flex', flexDirection: 'column', gap: 32 }}>
+
+            {/* Art Images Section */}
+            <div>
+              <SectionLabel badge={artImages.length}>{isTR ? 'Sanat Görselleri' : 'Art Images'}</SectionLabel>
+              <DropZone
+                onFiles={handleArtUpload}
+                label={isTR ? 'Görselleri sürükleyin' : 'Drop artwork here'}
+                sublabel="PNG · JPG · WEBP"
+                multiple disabled={artImages.length >= MAX_ART} minHeight={100}
+              />
+              <p style={{ fontSize: 12, marginTop: 10, color: artImages.length >= MAX_ART ? '#EF4444' : theme.textMuted, fontWeight: 500 }}>
+                {artImages.length >= MAX_ART ? (isTR ? `Sınıra ulaşıldı (${MAX_ART})` : `Limit reached (${MAX_ART})`) : `${artImages.length} / ${MAX_ART} files`}
+              </p>
+              {artImages.length > 0 && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 12 }}>
+                  {artImages.map((art) => (
+                    <AssetThumb key={art.id} url={art.url} name={art.name} onRemove={() => removeArt(art.id)} isMobile={isMobile} />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* My Templates Section */}
+            <div>
+              <SectionLabel
+                badge={libraryFavorites.length}
+                action={
+                  <button
+                    onClick={() => setLibraryModalOpen(true)}
+                    style={{
+                      background: 'rgba(249, 115, 22, 0.1)', color: theme.accent, border: 'none',
+                      padding: '6px 12px', borderRadius: 8, fontSize: 13, fontWeight: 600,
+                      cursor: 'pointer', transition: 'background 0.2s',
+                      display: 'flex', alignItems: 'center', gap: 6
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(249, 115, 22, 0.15)'}
+                    onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(249, 115, 22, 0.1)'}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    {isTR ? 'Ekle' : 'Add'}
+                  </button>
+                }
+              >
+                {isTR ? 'Şablonlarım' : 'My Templates'}
+              </SectionLabel>
+
+              {libraryFavorites.length === 0 ? (
+                <div style={{ padding: '24px 16px', borderRadius: 12, border: `2px dashed ${theme.border}`, background: '#FAFAFA', textAlign: 'center' }}>
+                  <p style={{ fontSize: 13, color: theme.textMuted, margin: 0, fontWeight: 500 }}>
+                    {isTR ? 'Kütüphaneden şablon seçerek başlayın.' : 'Start by adding templates from the library.'}
+                  </p>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {libraryFavorites.map((fav) => {
+                    const isActive = fav.checked;
+                    return (
+                      <div
+                        key={fav.favId}
+                        onClick={() => setActiveMockupId(fav.mockup.id)}
+                        className="group"
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 12, padding: '8px 12px', borderRadius: 12,
+                          background: isActive ? 'rgba(249, 115, 22, 0.04)' : theme.surface,
+                          border: `1px solid ${isActive ? theme.accent : theme.border}`,
+                          cursor: 'pointer', transition: 'all 0.2s ease',
+                          boxShadow: isActive ? '0 2px 8px rgba(249, 115, 22, 0.08)' : 'none'
+                        }}
+                      >
+                        <div
+                          onClick={(e) => { e.stopPropagation(); toggleFav(fav.favId); }}
+                          style={{
+                            width: 20, height: 20, borderRadius: 6, flexShrink: 0,
+                            border: `2px solid ${isActive ? theme.accent : '#D1D5DB'}`,
+                            background: isActive ? theme.accent : '#fff',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            transition: 'all 0.2s', cursor: 'pointer'
+                          }}
+                        >
+                          {isActive && <svg width="12" height="12" viewBox="0 0 12 12"><polyline points="2.5,6 5,8.5 9.5,3.5" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                        </div>
+
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={fav.image} alt={fav.name} style={{ width: 44, height: 44, objectFit: 'cover', borderRadius: 8, border: `1px solid ${theme.border}`, opacity: isActive ? 1 : 0.6, transition: 'opacity 0.2s' }} />
+
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: isActive ? theme.textMain : theme.textMuted, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{fav.name}</p>
+                          <p style={{ margin: 0, fontSize: 11, color: theme.textMuted, marginTop: 2, fontWeight: 500 }}>{fav.mockup.frames.length} {isTR ? 'çerçeve' : 'frames'}</p>
+                        </div>
+
+                        <button
+                          onClick={(e) => { e.stopPropagation(); removeFav(fav.favId); }}
+                          className="opacity-0 group-hover:opacity-100"
+                          style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#9CA3AF', padding: 4, transition: 'color 0.2s, opacity 0.2s', display: 'flex' }}
+                          onMouseEnter={(e) => e.currentTarget.style.color = '#EF4444'}
+                          onMouseLeave={(e) => e.currentTarget.style.color = '#9CA3AF'}
+                        >
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Manual Upload Fallback */}
+              <div style={{ marginTop: 20 }}>
+                <DropZone onFiles={handleMockupUpload} label={isTR ? 'Kendi şablonunuzu yükleyin' : 'Upload custom template'} multiple={false} minHeight={80} disabled={mockups.length >= MAX_MOCKUPS} />
+              </div>
+            </div>
+
           </div>
 
-          {isGenerating && progress.total > 0 && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <div style={{ flex: 1, height: 3, borderRadius: 2, background: 'var(--border)', overflow: 'hidden' }}>
-                <div style={{
-                  height: '100%', borderRadius: 2, background: 'var(--accent)',
-                  width: `${(progress.done / progress.total) * 100}%`,
-                  transition: 'width 0.3s',
-                }} />
+          {/* Sticky Generate Section */}
+          <div style={{
+            padding: 24, background: theme.surface, borderTop: `1px solid ${theme.border}`,
+            boxShadow: '0 -4px 20px rgba(0,0,0,0.02)', zIndex: 10
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              <div style={{ fontSize: 12, color: theme.textMuted, fontWeight: 500 }}>
+                {artImages.length} {isTR ? 'Sanat' : 'Art'} × {mockups.filter((m) => m.frames.length > 0).length} {isTR ? 'Şablon' : 'Tpl'}
               </div>
-              <span style={{ fontSize: 11, color: 'var(--text-2)', flexShrink: 0, fontFamily: 'monospace' }}>
-                {progress.done}/{progress.total}
-              </span>
+              <div style={{ fontSize: 14, fontWeight: 700, color: theme.textMain }}>
+                {allCombinations.length} {isTR ? 'Kombinasyon' : 'Combos'}
+              </div>
+            </div>
+
+            <button
+              onClick={handleGenerate}
+              disabled={!canGenerate || isExhausted}
+              style={{
+                width: '100%', height: 52, borderRadius: 12,
+                fontSize: 15, fontWeight: 700, letterSpacing: '0.02em', fontFamily: theme.fontFamily,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                background: canGenerate && !isExhausted ? theme.accent : '#F3F4F6',
+                color: canGenerate && !isExhausted ? '#fff' : '#9CA3AF',
+                border: 'none', cursor: canGenerate && !isExhausted ? 'pointer' : 'not-allowed',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                boxShadow: canGenerate && !isExhausted ? '0 4px 14px rgba(249, 115, 22, 0.3)' : 'none',
+              }}
+              onMouseEnter={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.background = theme.accentHover; e.currentTarget.style.transform = 'translateY(-1px)'; } }}
+              onMouseLeave={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.background = theme.accent; e.currentTarget.style.transform = 'none'; } }}
+              onMouseDown={(e) => { if (canGenerate && !isExhausted) e.currentTarget.style.transform = 'translateY(1px)'; }}
+              onMouseUp={(e) => { if (canGenerate && !isExhausted) e.currentTarget.style.transform = 'translateY(-1px)'; }}
+            >
+              {isGenerating ? (
+                <><span style={{ width: 16, height: 16, display: 'inline-block', borderRadius: '50%', border: '2.5px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', animation: 'spin 0.8s linear infinite' }} /> {isTR ? 'Oluşturuluyor...' : 'Generating...'}</>
+              ) : isExhausted ? (
+                <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg> {isTR ? 'Tamamlandı' : 'Completed'}</>
+              ) : (
+                <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> {results.length === 0 ? (isTR ? 'Oluştur' : 'Generate') : (isTR ? `Devam Et (${remainingCount})` : `Generate More (${remainingCount})`)}</>
+              )}
+            </button>
+
+            {!isExhausted && (
+              <p style={{ textAlign: 'center', margin: '12px 0 0', fontSize: 12, color: limitReached ? '#EF4444' : theme.textMuted, fontWeight: 500 }}>
+                {limitReached ? (isTR ? 'Limit doldu.' : 'Limit reached.') : (DAILY_LIMIT ? (isTR ? `${generatesRemaining} ücretsiz hak kaldı` : `${generatesRemaining} free left`) : (isTR ? 'Sınırsız Plan' : 'Unlimited Plan'))}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* ── RIGHT MAIN CANVAS AREA ───────────────────────────────────────── */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: isMobile ? 'auto' : '100%', overflowY: 'auto', padding: isMobile ? 16 : 40 }}>
+
+          {/* Active Templates Tab Bar */}
+          {mockups.length > 0 && (
+            <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 16, marginBottom: 24, borderBottom: `1px solid ${theme.border}` }}>
+              {mockups.map((m) => (
+                <button
+                  key={m.id}
+                  onClick={() => setActiveMockupId(m.id)}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', borderRadius: 99,
+                    fontSize: 14, fontWeight: 600, fontFamily: theme.fontFamily,
+                    background: m.id === activeMockupId ? theme.accent : theme.surface,
+                    color: m.id === activeMockupId ? '#fff' : theme.textMuted,
+                    border: `1px solid ${m.id === activeMockupId ? theme.accent : theme.border}`,
+                    cursor: 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap',
+                    boxShadow: m.id === activeMockupId ? '0 2px 8px rgba(249, 115, 22, 0.2)' : 'none'
+                  }}
+                >
+                  {m.name}
+                  {m.frames.length > 0 && (
+                    <span style={{ fontSize: 11, background: m.id === activeMockupId ? 'rgba(0,0,0,0.2)' : '#F3F4F6', color: m.id === activeMockupId ? '#fff' : theme.textMuted, padding: '2px 6px', borderRadius: 10 }}>
+                      {m.frames.length}
+                    </span>
+                  )}
+                </button>
+              ))}
             </div>
           )}
 
-          {hasNoCombinations && (
-            <p style={{ fontSize: 12, color: 'var(--danger)', fontFamily: 'monospace' }}>
-              {isTR ? 'Sanat ve çerçeveler arasında uygun oryantasyon bulunamadı.' : 'No orientation matches between art and frames.'}
-            </p>
-          )}
-          {artImages.length > 0 && mockups.length > 0 && !mockups.some((m) => m.frames.length > 0) && (
-            <p style={{ fontSize: 12, color: 'var(--text-2)', fontFamily: 'monospace' }}>
-              {isTR ? 'Oluşturmayı etkinleştirmek için şablona çerçeve ekleyin.' : 'Pin frames on a template to enable generation.'}
-            </p>
-          )}
-        </div>
-      )}
-
-      {/* Generate / exhausted button */}
-      {isExhausted ? (
-        <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          gap: 8, height: 50, borderRadius: 12,
-          background: '#F0FBF0', border: '1px solid #B7DFB7',
-        }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-          <span style={{ fontSize: 13, color: 'var(--success)', fontFamily: 'var(--font-display)', fontWeight: 600, letterSpacing: '0.04em' }}>
-            {isTR ? `Tümü oluşturuldu (${results.length})` : `All ${results.length} generated`}
-          </span>
-        </div>
-      ) : (
-        <button
-          onClick={handleGenerate}
-          disabled={!canGenerate}
-          style={{
-            width: '100%', height: 52, borderRadius: 12,
-            fontSize: 15, fontWeight: 700, letterSpacing: '0.04em',
-            fontFamily: 'var(--font-display)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-            background: canGenerate ? '#FF6B35' : 'rgba(255,107,53,0.4)',
-            color: '#fff',
-            border: 'none', cursor: canGenerate ? 'pointer' : 'not-allowed',
-            transition: 'background 0.2s, transform 0.1s, box-shadow 0.1s',
-            boxShadow: canGenerate ? '0 1px 0 rgba(255,255,255,0.15) inset, 0 4px 0 #C4521F, 0 4px 16px rgba(255,107,53,0.35)' : 'none',
-            flexShrink: 0,
-          }}
-          onMouseEnter={(e) => {
-            if (canGenerate) {
-              e.currentTarget.style.transform = 'translateY(-1px)';
-              e.currentTarget.style.boxShadow = '0 1px 0 rgba(255,255,255,0.15) inset, 0 5px 0 #C4521F, 0 8px 24px rgba(255,107,53,0.45)';
-              e.currentTarget.style.background = '#FF7A48';
-            }
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'none';
-            e.currentTarget.style.boxShadow = canGenerate ? '0 1px 0 rgba(255,255,255,0.15) inset, 0 4px 0 #C4521F, 0 4px 16px rgba(255,107,53,0.35)' : 'none';
-            e.currentTarget.style.background = canGenerate ? '#FF6B35' : 'rgba(255,107,53,0.4)';
-          }}
-          onMouseDown={(e) => {
-            if (canGenerate) {
-              e.currentTarget.style.transform = 'translateY(2px)';
-              e.currentTarget.style.boxShadow = '0 1px 0 rgba(255,255,255,0.10) inset, 0 2px 0 #C4521F, 0 2px 8px rgba(255,107,53,0.25)';
-            }
-          }}
-          onMouseUp={(e) => {
-            if (canGenerate) {
-              e.currentTarget.style.transform = 'translateY(-1px)';
-              e.currentTarget.style.boxShadow = '0 1px 0 rgba(255,255,255,0.15) inset, 0 5px 0 #C4521F, 0 8px 24px rgba(255,107,53,0.45)';
-            }
-          }}
-        >
-          {isGenerating ? (
-            <>
-              <span style={{
-                width: 15, height: 15, display: 'inline-block', borderRadius: '50%',
-                border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff',
-                animation: 'spin 0.8s linear infinite',
-              }} />
-              {isTR ? 'Oluşturuluyor…' : 'Generating…'}
-            </>
-          ) : (
-            <>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="5 3 19 12 5 21 5 3" />
-              </svg>
-              {results.length === 0
-                ? (isTR ? 'Oluştur' : 'Generate')
-                : (isTR ? `Daha Fazla Oluştur (${remainingCount})` : `Generate More (${remainingCount})`)
-              }
-            </>
-          )}
-        </button>
-      )}
-
-      {/* Plan badge + daily limit indicator */}
-      {!isExhausted && (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, margin: '-4px 0' }}>
-          <span style={{
-            display: 'inline-flex', alignItems: 'center', gap: 5,
-            fontSize: 11, fontFamily: 'monospace', fontWeight: 600,
-            padding: '2px 8px', borderRadius: 99,
-            background: plan === 'pro' ? 'rgba(255,107,53,0.12)' : plan === 'basic' ? 'rgba(66,168,219,0.10)' : 'var(--surface-3)',
-            color: plan === 'pro' ? '#FF6B35' : plan === 'basic' ? '#2A8FC2' : 'var(--text-2)',
-            border: plan === 'pro' ? '1px solid rgba(255,107,53,0.25)' : plan === 'basic' ? '1px solid rgba(66,168,219,0.25)' : '1px solid var(--border)',
+          {/* Canvas Container */}
+          <div style={{
+            background: theme.surface, borderRadius: 20, border: `1px solid ${theme.border}`,
+            boxShadow: '0 4px 24px rgba(0,0,0,0.04)', overflow: 'hidden', display: 'flex', flexDirection: 'column'
           }}>
-            {plan === 'pro'
-              ? (isTR ? 'Pro Plan (Sınırsız)' : 'Pro Plan (Unlimited)')
-              : plan === 'basic'
-                ? (isTR ? 'Basic Plan (15/gün)' : 'Basic Plan (15/day)')
-                : (isTR ? 'Ücretsiz Plan (3/gün)' : 'Free Plan (3/day)')
-            }
-          </span>
-          {DAILY_LIMIT !== null && (
-            <p style={{
-              fontSize: 12, textAlign: 'center', fontFamily: 'monospace',
-              color: limitReached ? 'var(--danger)' : 'var(--text-2)',
-              margin: 0,
-            }}>
-              {limitReached
-                ? (isTR ? 'Günlük üretim limitine ulaştınız.' : 'Daily limit reached.')
-                : (isTR
-                    ? `Bugün ${generatesRemaining} / ${DAILY_LIMIT} ücretsiz üretim hakkınız kaldı`
-                    : `${generatesRemaining} of ${DAILY_LIMIT} free generates remaining today`)
-              }
-            </p>
+            {/* Editor Toolbar */}
+            <div style={{ padding: '16px 24px', borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#FAFAFA' }}>
+              <div style={{ fontWeight: 600, color: theme.textMain }}>{isTR ? 'Çerçeve Düzenleyici' : 'Frame Editor'}</div>
+              {activeMockup && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                  {activeMockup.frames.length > 0 && (
+                    <button onClick={clearAllFrames} style={{ fontSize: 13, fontWeight: 600, color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                      {isTR ? 'Temizle' : 'Clear all'}
+                    </button>
+                  )}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontSize: 13, fontWeight: 500, color: theme.textMuted }}>{isTR ? 'Tolerans' : 'Tolerance'}</span>
+                    <input type="range" min={10} max={120} value={tolerance} onChange={(e) => setTolerance(Number(e.target.value))} style={{ width: 100, accentColor: theme.accent }} />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* The Editor */}
+            <div style={{ padding: 24, minHeight: 500, display: 'flex', justifyContent: 'center', background: '#f5f5f5' }}>
+              {activeMockup ? (
+                <MockupEditor key={activeMockup.id} mockupUrl={activeMockup.url} frames={activeMockup.frames} tolerance={tolerance} lang={lang} onAddFrame={handleAddFrame} onRemoveFrame={handleRemoveFrame} onUpdateFrame={handleUpdateFrame} />
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: theme.textMuted, gap: 16 }}>
+                  <div style={{ width: 64, height: 64, borderRadius: 16, background: 'rgba(249, 115, 22, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: theme.accent }}>
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 21V9" /></svg>
+                  </div>
+                  <p style={{ fontWeight: 500 }}>{isTR ? 'Düzenlemek için sol taraftan bir şablon seçin veya ekleyin.' : 'Select or add a template from the left to start editing.'}</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Results Area */}
+          {results.length > 0 && (
+            <div style={{ marginTop: 48 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+                <h2 style={{ margin: 0, fontSize: 24, fontWeight: 800, color: theme.textMain, letterSpacing: '-0.02em' }}>
+                  {isTR ? 'Sonuçlar' : 'Results'}
+                </h2>
+                <button onClick={handleClearResults} style={{ padding: '8px 16px', borderRadius: 8, background: '#FEE2E2', color: '#DC2626', border: 'none', fontWeight: 600, cursor: 'pointer', fontSize: 13 }}>
+                  {isTR ? 'Temizle' : 'Clear All'}
+                </button>
+              </div>
+              <ResultsGrid results={results} lang={lang} plan={plan} />
+            </div>
           )}
+
+          <div style={{ flex: 1 }} />
+          <p style={{ textAlign: 'center', margin: '40px 0 0', fontSize: 12, color: theme.textMuted, fontWeight: 500 }}>
+            MockPlacer · {isTR ? 'Tarayıcıda çalışır, sunucuya veri gitmez.' : 'Runs in browser, no server uploads.'}
+          </p>
         </div>
-      )}
-
-      {results.length > 0 && (
-        <button
-          onClick={handleClearResults}
-          style={{
-            width: '100%', height: 36, borderRadius: 8, fontSize: 13,
-            border: '1px solid var(--border)',
-            color: 'var(--text-2)', background: 'transparent',
-            cursor: 'pointer', transition: 'all 0.15s',
-            fontFamily: 'var(--font-body)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'var(--danger)';
-            e.currentTarget.style.color = 'var(--danger)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'var(--border)';
-            e.currentTarget.style.color = 'var(--text-2)';
-          }}
-        >
-          {isTR ? `${results.length} sonucu temizle` : `Clear ${results.length} results`}
-        </button>
-      )}
-    </div>
-  );
-
-  return (
-    <div style={{ minHeight: '100vh', background: '#FFFFFF', paddingTop: NAV_H }}>
+      </div>
 
       {/* ── BROWSE LIBRARY MODAL ───────────────────────────────────────────── */}
       {libraryModalOpen && (
         <div
-          onClick={() => { console.log('closing modal (backdrop)'); setLibraryModalOpen(false); }}
-          style={{
-            position: 'fixed', inset: 0, zIndex: 200,
-            background: 'rgba(0,0,0,0.45)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            padding: '20px 16px',
-          }}
+          onClick={() => setLibraryModalOpen(false)}
+          style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(17, 24, 39, 0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            style={{
-              width: '100%', maxWidth: 700,
-              maxHeight: '80vh',
-              background: '#fff', borderRadius: 20,
-              display: 'flex', flexDirection: 'column',
-              boxShadow: '0 8px 48px rgba(0,0,0,0.18)',
-              overflow: 'hidden',
-            }}
+            style={{ width: '100%', maxWidth: 800, maxHeight: '85vh', background: theme.surface, borderRadius: 24, display: 'flex', flexDirection: 'column', boxShadow: '0 24px 48px rgba(0,0,0,0.2)', overflow: 'hidden' }}
           >
-            {/* Modal header */}
-            <div style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '18px 24px', borderBottom: '1px solid var(--border)', flexShrink: 0,
-            }}>
-              <span style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 20, fontWeight: 700, color: '#151515',
-                borderLeft: '3px solid #FF6B35', paddingLeft: 10,
-              }}>
-                {isTR ? 'Kütüphane' : 'Browse Library'}
-              </span>
-              <button
-                onClick={() => { console.log('closing modal (X button)'); setLibraryModalOpen(false); }}
-                style={{
-                  width: 32, height: 32, borderRadius: '50%',
-                  background: 'var(--surface-3)', border: 'none', cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  transition: 'background 0.15s',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = '#eee')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--surface-3)')}
-              >
-                <svg width="11" height="11" viewBox="0 0 8 8" fill="none" stroke="#555" strokeWidth="1.5" strokeLinecap="round">
-                  <line x1="1" y1="1" x2="7" y2="7" /><line x1="7" y1="1" x2="1" y2="7" />
-                </svg>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '24px 32px', borderBottom: `1px solid ${theme.border}` }}>
+              <h2 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: theme.textMain }}>{isTR ? 'Kütüphane' : 'Browse Library'}</h2>
+              <button onClick={() => setLibraryModalOpen(false)} style={{ width: 36, height: 36, borderRadius: '50%', background: '#F3F4F6', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: theme.textMuted, transition: 'background 0.2s' }} onMouseEnter={e => e.currentTarget.style.background = '#E5E7EB'} onMouseLeave={e => e.currentTarget.style.background = '#F3F4F6'}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
               </button>
             </div>
 
-            {/* Modal body — scrollable */}
-            <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
-              {/* Category filter */}
+            <div style={{ flex: 1, overflowY: 'auto', padding: 32 }}>
               {libraryCategories.length > 1 && (
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16 }}>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 24 }}>
                   {['all', ...libraryCategories].map((cat) => (
-                    <button
-                      key={cat}
-                      onClick={() => setLibraryCategory(cat)}
-                      style={{
-                        padding: '4px 12px', borderRadius: 8, border: 'none', cursor: 'pointer',
-                        fontSize: 12, fontWeight: 600, fontFamily: 'var(--font-body)',
-                        background: libraryCategory === cat ? '#FF6B35' : 'var(--surface-3)',
-                        color: libraryCategory === cat ? '#fff' : 'var(--text-2)',
-                        transition: 'all 0.15s',
-                      }}
-                    >
-                      {cat === 'all'
-                        ? (isTR ? 'Tümü' : 'All')
-                        : cat.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
+                    <button key={cat} onClick={() => setLibraryCategory(cat)} style={{ padding: '8px 16px', borderRadius: 99, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600, background: libraryCategory === cat ? theme.textMain : '#F3F4F6', color: libraryCategory === cat ? '#fff' : theme.textMuted, transition: 'all 0.2s' }}>
+                      {cat === 'all' ? (isTR ? 'Tümü' : 'All') : cat.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
                     </button>
                   ))}
                 </div>
               )}
 
-              {/* Grid */}
               {libraryLoading ? (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 200, color: 'var(--text-2)', fontSize: 14 }}>
-                  {isTR ? 'Yükleniyor...' : 'Loading...'}
-                </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 200, color: theme.textMuted, fontWeight: 500 }}>{isTR ? 'Yükleniyor...' : 'Loading...'}</div>
               ) : filteredLibraryTemplates.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--text-2)', fontSize: 14 }}>
-                  {isTR ? 'Şablon bulunamadı' : 'No templates found'}
-                </div>
+                <div style={{ textAlign: 'center', padding: '64px 0', color: theme.textMuted, fontWeight: 500 }}>{isTR ? 'Şablon bulunamadı' : 'No templates found'}</div>
               ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 20 }}>
                   {filteredLibraryTemplates.map((tpl) => {
                     const isSelected = libraryFavorites.some((f) => f.tplId === tpl.image);
                     return (
                       <div
-                        key={tpl.id}
-                        onClick={() => addFromLibrary(tpl)}
-                        style={{
-                          borderRadius: 10, overflow: 'hidden',
-                          cursor: 'pointer',
-                          border: `2px solid ${isSelected ? '#FF6B35' : 'var(--border)'}`,
-                          boxShadow: isSelected ? '0 0 0 3px rgba(255,107,53,0.18)' : 'none',
-                          transition: 'border-color 0.15s, box-shadow 0.15s',
-                          opacity: 1,
-                          position: 'relative',
-                        }}
-                        onMouseEnter={(e) => { if (!isSelected) (e.currentTarget as HTMLDivElement).style.borderColor = '#FF6B35'; }}
-                        onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = isSelected ? '#FF6B35' : 'var(--border)'; }}
+                        key={tpl.id} onClick={() => addFromLibrary(tpl)} className="group"
+                        style={{ borderRadius: 16, overflow: 'hidden', cursor: 'pointer', border: `2px solid ${isSelected ? theme.accent : theme.border}`, boxShadow: isSelected ? '0 8px 24px rgba(249, 115, 22, 0.15)' : 'none', transition: 'all 0.2s', position: 'relative', background: theme.surface }}
+                        onMouseEnter={(e) => { if (!isSelected) (e.currentTarget as HTMLDivElement).style.borderColor = theme.accent; (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)'; }}
+                        onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = isSelected ? theme.accent : theme.border; (e.currentTarget as HTMLDivElement).style.transform = 'none'; }}
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={tpl.image}
-                          alt={tpl.name}
-                          style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', display: 'block' }}
-                        />
-                        <div style={{ padding: '5px 8px', background: '#fff' }}>
-                          <p style={{
-                            fontSize: 11, fontWeight: 600, color: '#151515',
-                            margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                          }}>
-                            {tpl.name}
-                          </p>
+                        <img src={tpl.image} alt={tpl.name} style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', display: 'block' }} />
+                        <div style={{ padding: '12px 16px', background: theme.surface }}>
+                          <p style={{ fontSize: 13, fontWeight: 700, color: theme.textMain, margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{tpl.name}</p>
                         </div>
-                        {tpl.frames.length > 0 && (
-                          <div style={{
-                            position: 'absolute', top: 6, right: 6,
-                            background: 'rgba(255,107,53,0.90)', color: '#fff',
-                            fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4,
-                          }}>
-                            {tpl.frames.length}f
-                          </div>
-                        )}
-                        {isSelected && (
-                          <div style={{
-                            position: 'absolute', top: 6, left: 6,
-                            width: 18, height: 18, borderRadius: '50%',
-                            background: '#FF6B35',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          }}>
-                            <svg width="9" height="9" viewBox="0 0 8 8" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="1,4 3,6 7,2" />
-                            </svg>
-                          </div>
-                        )}
+                        {tpl.frames.length > 0 && <div style={{ position: 'absolute', top: 10, right: 10, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', color: '#fff', fontSize: 11, fontWeight: 700, padding: '4px 8px', borderRadius: 8 }}>{tpl.frames.length}f</div>}
+                        {isSelected && <div style={{ position: 'absolute', top: 10, left: 10, width: 24, height: 24, borderRadius: '50%', background: theme.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }}><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="2.5,6 5,8.5 9.5,3.5" /></svg></div>}
                       </div>
                     );
                   })}
@@ -852,500 +803,20 @@ export default function Home() {
 
       {/* ── TOAST ─────────────────────────────────────────────────────────── */}
       {toast && (
-        <div style={{
-          position: 'fixed', bottom: 28, left: '50%', transform: 'translateX(-50%)',
-          zIndex: 300, pointerEvents: 'none',
-          background: '#151515', color: '#fff',
-          fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-body)',
-          padding: '10px 20px', borderRadius: 99,
-          boxShadow: '0 4px 24px rgba(0,0,0,0.22)',
-          whiteSpace: 'nowrap',
-          animation: 'fadeUp 0.2s ease',
-        }}>
+        <div style={{ position: 'fixed', bottom: 32, left: '50%', transform: 'translateX(-50%)', zIndex: 300, pointerEvents: 'none', background: '#111827', color: '#fff', fontSize: 14, fontWeight: 600, fontFamily: theme.fontFamily, padding: '12px 24px', borderRadius: 99, boxShadow: '0 8px 32px rgba(0,0,0,0.2)', animation: 'fadeUp 0.2s ease' }}>
           {toast}
         </div>
       )}
-
-      {/* ── NAV ────────────────────────────────────────────────────────────── */}
-      <header style={{
-        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-        height: NAV_H,
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 clamp(16px, 3vw, 40px)',
-        background: 'rgba(255,255,255,0.90)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(0,0,0,0.05)',
-        boxShadow: '0 1px 8px rgba(0,0,0,0.03)',
-      }}>
-        {/* Logo */}
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/1logo.png" width="190" height="48" style={{ display: 'block' }} alt="MockPlacer" />
-        </Link>
-
-        {/* Stats + back link */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <NavStat label={isTR ? 'Görsel' : 'Art'} value={artImages.length} />
-          <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
-          <NavStat label={isTR ? 'Şablon' : 'Templates'} value={mockups.length} />
-          {results.length > 0 && (
-            <>
-              <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
-              <NavStat label={isTR ? 'Sonuç' : 'Results'} value={results.length} accent />
-            </>
-          )}
-          <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
-          <a
-            href="/"
-            style={{ fontSize: 15, fontWeight: 600, color: '#FF6B35', textDecoration: 'none' }}
-          >
-            {isTR ? '← Ana Sayfa' : '← Home'}
-          </a>
-          <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
-          {user ? (
-            <UserDropdown
-              user={user}
-              plan={plan}
-              lang={lang}
-              onSignOut={() => setUser(null)}
-            />
-          ) : (
-            <Link href="/login" style={{ fontSize: 13, fontWeight: 600, color: '#FF6B35', textDecoration: 'none', whiteSpace: 'nowrap' }}>
-              {isTR ? 'Giriş Yap' : 'Sign In'}
-            </Link>
-          )}
-        </div>
-      </header>
-
-      {/* ── MAIN CONTENT ───────────────────────────────────────────────────── */}
-      <div style={{ maxWidth: '100%', width: '100%', margin: '0', padding: '0' }}>
-
-        {/* ── TOOL CARD ──────────────────────────────────────────────────── */}
-        <div style={{
-          borderRadius: 0,
-          border: 'none',
-          background: '#F8F7F5',
-          overflow: 'hidden',
-          boxShadow: 'none',
-          width: '100%',
-          minHeight: 'calc(100vh - 72px)',
-        }}>
-          <div style={{ display: 'flex', width: '100%', flexDirection: isMobile ? 'column' : 'row', minHeight: isMobile ? undefined : 'calc(100vh - 72px)' }}>
-
-            {/* ── COL 1: TEMPLATES PANEL ───────────────────────────────── */}
-            <div style={{
-              width: isMobile ? '100%' : COL_TEMPLATES, flexShrink: 0,
-              display: 'flex', flexDirection: 'column', gap: 12,
-              background: '#FFFFFF',
-              borderRight: isMobile ? 'none' : '1px solid #E8E4DF',
-              borderBottom: isMobile ? '1px solid #E8E4DF' : 'none',
-              padding: '28px 16px',
-              ...(isMobile ? {} : { height: 'calc(100vh - 72px)', overflowY: 'auto' as const, position: 'sticky' as const, top: 72 }),
-            }}>
-              {/* Header */}
-              <div style={{ flexShrink: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 20, fontWeight: 800, letterSpacing: '-0.02em', color: '#151515', borderLeft: '3px solid #FF6B35', paddingLeft: 10 }}>
-                    {isTR ? 'Şablonlarım' : 'My Templates'}
-                  </span>
-                  {libraryFavorites.length > 0 && (
-                    <span style={{ fontSize: 10, fontWeight: 700, padding: '1px 6px', borderRadius: 99, background: '#FF6B35', color: '#fff' }}>
-                      {libraryFavorites.length}
-                    </span>
-                  )}
-                </div>
-                {/* Browse Library — solid orange button */}
-                <button
-                  onClick={() => setLibraryModalOpen(true)}
-                  style={{
-                    width: '100%', height: 44, borderRadius: 10,
-                    border: '1.5px dashed rgba(255,107,53,0.5)', background: 'transparent', color: '#FF6B35',
-                    fontSize: 13, fontWeight: 700, fontFamily: 'var(--font-body)',
-                    cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                    transition: 'border-color 0.15s, background 0.15s',
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#FF6B35'; e.currentTarget.style.background = 'rgba(255,107,53,0.04)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,107,53,0.5)'; e.currentTarget.style.background = 'transparent'; }}
-                >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
-                    <rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
-                  </svg>
-                  {isTR ? 'Kütüphaneye Gözat' : 'Browse Library'}
-                </button>
-              </div>
-
-              {/* Fav list */}
-              <div style={{ flex: 1 }}>
-                {libraryFavorites.length === 0 ? (
-                  <div style={{ margin: '4px 0', padding: '20px 12px', borderRadius: 10, border: '1.5px dashed rgba(255,107,53,0.3)', background: 'rgba(255,107,53,0.02)', textAlign: 'center' }}>
-                    <p style={{ fontSize: 11, color: 'var(--text-2)', margin: 0, lineHeight: 1.5 }}>
-                      {isTR ? 'Kütüphaneden\nşablon ekleyin' : 'Add from\nlibrary above'}
-                    </p>
-                  </div>
-                ) : (
-                  <>
-                    <p style={{ fontSize: 10, color: 'var(--text-2)', fontFamily: 'monospace', margin: '0 2px 6px', paddingTop: 2 }}>
-                      {libraryFavorites.filter(f => f.checked).length}/{libraryFavorites.length} {isTR ? 'aktif' : 'active'}
-                    </p>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                      {libraryFavorites.map((fav) => {
-                        const isActive = fav.checked;
-                        return (
-                          <div
-                            key={fav.favId}
-                            onClick={() => setActiveMockupId(fav.mockup.id)}
-                            style={{
-                              display: 'flex', alignItems: 'center', gap: 7,
-                              padding: '6px 7px', borderRadius: 9,
-                              background: isActive ? 'rgba(255,107,53,0.06)' : '#fff',
-                              border: `1.5px solid ${isActive ? '#FF6B35' : 'var(--border)'}`,
-                              cursor: 'pointer', transition: 'background 0.15s, border-color 0.15s',
-                            }}
-                          >
-                            {/* Checkbox */}
-                            <div
-                              onClick={(e) => { e.stopPropagation(); toggleFav(fav.favId); }}
-                              style={{
-                                width: 16, height: 16, borderRadius: 4, flexShrink: 0,
-                                border: `2px solid ${isActive ? '#FF6B35' : '#ccc'}`,
-                                background: isActive ? '#FF6B35' : '#fff',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                transition: 'all 0.15s',
-                              }}
-                            >
-                              {isActive && <svg width="9" height="9" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round"/></svg>}
-                            </div>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={fav.image} alt={fav.name} style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 6, flexShrink: 0, opacity: isActive ? 1 : 0.5 }} />
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                              <p style={{ margin: 0, fontSize: 11, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: isActive ? '#151515' : 'var(--text-2)' }}>{fav.name}</p>
-                              <p style={{ margin: 0, fontSize: 10, color: 'var(--text-2)', fontFamily: 'monospace' }}>{fav.mockup.frames.length}f</p>
-                            </div>
-                            <button
-                              onClick={(e) => { e.stopPropagation(); removeFav(fav.favId); }}
-                              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ccc', fontSize: 16, padding: '0 2px', lineHeight: 1, flexShrink: 0 }}
-                              onMouseEnter={(e) => (e.currentTarget.style.color = '#EF4444')}
-                              onMouseLeave={(e) => (e.currentTarget.style.color = '#ccc')}
-                            >×</button>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-
-            {/* ── COL 2: CONTROLS ──────────────────────────────────────── */}
-            <div style={{
-              width: isMobile ? '100%' : COL_CONTROLS, flexShrink: 0,
-              display: 'flex', flexDirection: 'column',
-              padding: '28px 20px', gap: 24,
-              background: '#FDFCFB',
-              borderRight: isMobile ? 'none' : '1px solid #E8E4DF',
-              borderBottom: isMobile ? '1px solid #E8E4DF' : 'none',
-              ...(isMobile ? {} : { height: 'calc(100vh - 72px)', overflowY: 'auto' as const, position: 'sticky' as const, top: 72 }),
-            }}>
-
-              {/* ART IMAGES */}
-              <div>
-                <SectionLabel badge={artImages.length}>{isTR ? 'Sanat Görselleri' : 'Art Images'}</SectionLabel>
-                <DropZone
-                  onFiles={handleArtUpload}
-                  label={isTR ? 'Görselleri buraya bırakın' : 'Drop artwork here'}
-                  sublabel="PNG · JPG · WEBP"
-                  multiple
-                  disabled={artImages.length >= MAX_ART}
-                  minHeight={130}
-                />
-                <p style={{
-                  fontSize: 12, marginTop: 8, fontFamily: 'var(--font-mono, monospace)',
-                  color: artImages.length >= MAX_ART ? 'var(--danger)' : 'var(--text-2)',
-                }}>
-                  {artImages.length >= MAX_ART
-                    ? (isTR ? `Sınıra ulaşıldı (${MAX_ART})` : `Limit reached (${MAX_ART})`)
-                    : (isTR ? `${artImages.length} / ${MAX_ART} dosya` : `${artImages.length} / ${MAX_ART} files`)}
-                </p>
-                {artImages.length > 0 && (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 12 }}>
-                    {artImages.map((art) => (
-                      <AssetThumb key={art.id} url={art.url} name={art.name} onRemove={() => removeArt(art.id)} isMobile={isMobile} />
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <Divider />
-
-              {/* MOCKUP TEMPLATES — manual upload only */}
-              <div>
-                <SectionLabel badge={mockups.length}>{isTR ? 'Mockup Şablonları' : 'Mockup Templates'}</SectionLabel>
-                <DropZone
-                  onFiles={handleMockupUpload}
-                  label={isTR ? 'Şablonları buraya bırakın' : 'Drop templates here'}
-                  sublabel={isTR ? 'Açık/beyaz çerçeve alanları' : 'Light/white frame areas'}
-                  multiple
-                  disabled={mockups.length >= MAX_MOCKUPS}
-                  minHeight={110}
-                />
-                {/* Uploaded (non-library) mockup thumbs */}
-                {(() => {
-                  const uploaded = mockups;
-                  return uploaded.length > 0 ? (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
-                      {uploaded.map((m) => (
-                        <AssetThumb
-                          key={m.id}
-                          url={m.url}
-                          name={m.name}
-                          onRemove={() => removeMockup(m.id)}
-                          isActive={m.id === activeMockupId}
-                          onClick={() => setActiveMockupId(m.id)}
-                          badge={m.frames.length > 0 ? `${m.frames.length}f` : undefined}
-                          isMobile={isMobile}
-                        />
-                      ))}
-                    </div>
-                  ) : null;
-                })()}
-              </div>
-
-              {/* Spacer — desktop only */}
-              {!isMobile && <div style={{ flex: 1 }} />}
-
-              {/* Generate section — desktop: render inline in sidebar */}
-              {!isMobile && generateSection}
-            </div>
-
-            {/* ── RIGHT COLUMN: frame editor ──────────────────────────── */}
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, background: '#F0EDE8', minHeight: 'calc(100vh - 72px)', overflowY: 'auto' }}>
-
-              {/* Top bar */}
-              <div style={{ padding: '28px 28px 0', flexShrink: 0 }}>
-                <div style={{
-                  display: 'flex', alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: 16, flexWrap: 'wrap', gap: 12,
-                }}>
-                  <SectionLabel>{isTR ? 'Çerçeve Düzenleyici' : 'Frame Editor'}</SectionLabel>
-
-                  {/* Tolerance + clear */}
-                  {activeMockup && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      {activeMockup.frames.length > 0 && (
-                        <>
-                          <button
-                            onClick={clearAllFrames}
-                            style={{
-                              fontSize: 12, color: 'var(--text-2)',
-                              background: 'none', border: 'none', cursor: 'pointer',
-                              transition: 'color 0.15s', padding: 0,
-                              fontFamily: 'var(--font-body)',
-                            }}
-                            onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--danger)')}
-                            onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-2)')}
-                          >
-                            {isTR ? 'Çerçeveleri temizle' : 'Clear frames'}
-                          </button>
-                          <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
-                        </>
-                      )}
-                      <span style={{ fontSize: 12, color: 'var(--text-2)', letterSpacing: '0.06em', fontFamily: 'var(--font-display)', fontWeight: 600 }}>
-                        {isTR ? 'Tolerans' : 'Tolerance'}
-                      </span>
-                      <input
-                        type="range" min={10} max={120} value={tolerance}
-                        onChange={(e) => setTolerance(Number(e.target.value))}
-                        style={{ width: 100, accentColor: 'var(--accent)', cursor: 'pointer' }}
-                      />
-                      <span style={{ fontSize: 13, color: 'var(--accent)', width: 28, textAlign: 'right', fontFamily: 'monospace', fontWeight: 700 }}>
-                        {tolerance}
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Mockup tabs */}
-                {mockups.length > 0 && (
-                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 20 }}>
-                    {mockups.map((m) => (
-                      <button
-                        key={m.id}
-                        onClick={() => setActiveMockupId(m.id)}
-                        style={{
-                          display: 'flex', alignItems: 'center', gap: 6,
-                          padding: '6px 14px', borderRadius: 8,
-                          fontSize: 14, fontFamily: 'var(--font-body)',
-                          fontWeight: m.id === activeMockupId ? 700 : 500,
-                          background: m.id === activeMockupId ? '#FF6B35' : 'transparent',
-                          border: `1.5px solid ${m.id === activeMockupId ? '#FF6B35' : '#E5E5E5'}`,
-                          borderBottom: m.id === activeMockupId ? '2.5px solid #C4521F' : '1.5px solid #E5E5E5',
-                          color: m.id === activeMockupId ? '#fff' : 'var(--text-2)',
-                          cursor: 'pointer', transition: 'all 0.15s',
-                          boxShadow: m.id === activeMockupId ? '0 2px 8px rgba(255,107,53,0.25)' : 'none',
-                        }}
-                      >
-                        {m.name}
-                        {m.frames.length > 0 && (
-                          <span style={{
-                            fontSize: 10, fontWeight: 700, padding: '1px 5px', borderRadius: 4,
-                            background: m.id === activeMockupId ? 'rgba(0,0,0,0.20)' : 'var(--surface-3)',
-                            color: m.id === activeMockupId ? '#fff' : 'var(--text-2)',
-                          }}>
-                            {m.frames.length}
-                          </span>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Canvas area */}
-              <div style={{ flex: 1, padding: '0 28px 28px', minHeight: 400 }}>
-                {activeMockup ? (
-                  <MockupEditor
-                    key={activeMockup.id}
-                    mockupUrl={activeMockup.url}
-                    frames={activeMockup.frames}
-                    tolerance={tolerance}
-                    lang={lang}
-                    onAddFrame={handleAddFrame}
-                    onRemoveFrame={handleRemoveFrame}
-                    onUpdateFrame={handleUpdateFrame}
-                  />
-                ) : (
-                  <div style={{
-                    height: '100%', minHeight: 400,
-                    display: 'flex', flexDirection: 'column',
-                    alignItems: 'center', justifyContent: 'center', gap: 16,
-                    borderRadius: 12,
-                    border: '1.5px dashed var(--border)',
-                    background: 'var(--surface-2)',
-                  }}>
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,107,53,0.3)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="3" y="3" width="18" height="18" rx="2" />
-                      <path d="M3 9h18M9 21V9" />
-                    </svg>
-                    <p style={{ fontSize: 14, color: '#737373', textAlign: 'center', lineHeight: 1.6, fontFamily: 'var(--font-body)' }}>
-                      {mockups.length === 0
-                        ? (isTR ? 'Başlamak için mockup şablonu yükleyin' : 'Upload a mockup template to begin')
-                        : (isTR ? 'Çerçeve eklemek için yukarıdan şablon seçin' : 'Select a template above to pin frames')}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* ── MOBILE: Generate section below Frame Editor ──────────── */}
-            {isMobile && (
-              <div style={{ padding: '20px', borderTop: '1px solid var(--border)' }}>
-                {generateSection}
-              </div>
-            )}
-
-          </div>
-        </div>
-
-        {/* ── RESULTS ────────────────────────────────────────────────────── */}
-        {limitReached && results.length === 0 && (
-          <div style={{
-            marginTop: 40, padding: '28px 32px', borderRadius: 16,
-            background: 'rgba(255,107,53,0.06)',
-            border: '1px solid rgba(255,107,53,0.25)',
-            display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'flex-start',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{
-                width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-                background: 'rgba(255,107,53,0.12)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="8" x2="12" y2="12" />
-                  <line x1="12" y1="16" x2="12.01" y2="16" />
-                </svg>
-              </div>
-              <p style={{ fontSize: 15, fontWeight: 600, color: '#1a1a1a', fontFamily: 'var(--font-display)' }}>
-                {isTR ? `Bugünkü ${DAILY_LIMIT ?? 0} ücretsiz üretiminizi kullandınız.` : `You've used your ${DAILY_LIMIT ?? 0} free generates today.`}
-              </p>
-            </div>
-            <p style={{ fontSize: 13, color: '#666', lineHeight: 1.6, paddingLeft: 46 }}>
-              {isTR
-                ? 'Yarın tekrar gelin veya daha fazlası için yükseltin.'
-                : 'Come back tomorrow or upgrade for more.'}
-            </p>
-            <a
-              href="/pricing?upgrade=true"
-              style={{
-                marginLeft: 46,
-                display: 'inline-flex', alignItems: 'center', gap: 6,
-                padding: '9px 18px', borderRadius: 10,
-                background: '#FF6B35', color: '#fff',
-                fontSize: 13, fontWeight: 600,
-                textDecoration: 'none',
-                boxShadow: '0 4px 16px rgba(255,107,53,0.28)',
-                transition: 'background 0.2s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = '#E85A28')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = '#FF6B35')}
-            >
-              {isTR ? 'Planları Gör' : 'View Plans'}
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </a>
-          </div>
-        )}
-
-        {results.length > 0 && (
-          <div style={{ marginTop: 40 }}>
-            <ResultsGrid results={results} lang={lang} plan={plan} />
-          </div>
-        )}
-
-        {/* Footer note */}
-        <p style={{
-          textAlign: 'center', marginTop: 48,
-          fontSize: 12, color: '#A3A3A3',
-          letterSpacing: '0.04em', fontFamily: 'monospace',
-        }}>
-          {isTR ? 'Tüm işlemler tarayıcıda · Yükleme yok · Sunucu yok' : 'All processing is client-side · No uploads · No backend'}
-        </p>
-      </div>
     </div>
   );
 }
 
 // ─── Micro-components ─────────────────────────────────────────────────────────
-
 function NavStat({ label, value, accent = false }: { label: string; value: number; accent?: boolean }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-      <span style={{ fontSize: 13, color: 'var(--text-3)', letterSpacing: '0.06em', fontFamily: 'var(--font-display)', fontWeight: 600, textTransform: 'uppercase' }}>
-        {label}
-      </span>
-      <span style={{ fontSize: 20, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-display)' }}>
-        {value}
-      </span>
+    <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+      <span style={{ fontSize: 12, color: theme.textMuted, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</span>
+      <span style={{ fontSize: 18, fontWeight: 800, color: accent ? theme.accent : theme.textMain }}>{value}</span>
     </div>
-  );
-}
-
-function ComboChip({ value, label, accent = false }: { value: number; label: string; accent?: boolean }) {
-  return (
-    <span style={{ display: 'flex', alignItems: 'baseline', gap: 3 }}>
-      <span style={{ fontSize: 18, fontWeight: 700, color: accent ? 'var(--accent)' : 'var(--text)', fontFamily: 'var(--font-display)' }}>
-        {value}
-      </span>
-      <span style={{ fontSize: 11, color: 'var(--text-2)', fontFamily: 'monospace' }}>
-        {label}
-      </span>
-    </span>
   );
 }
