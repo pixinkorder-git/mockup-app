@@ -471,7 +471,14 @@ export default function Home() {
           {user ? (
             <UserDropdown user={user} plan={plan} lang={lang} onSignOut={() => setUser(null)} />
           ) : (
-            <Link href="/login" style={{ fontSize: 18, fontWeight: 600, color: theme.accent, textDecoration: 'none', padding: '10px 20px', borderRadius: 8, background: 'rgba(249, 115, 22, 0.1)' }}>
+            <Link
+              href="/login"
+              style={{ fontSize: 18, fontWeight: 600, color: theme.accent, textDecoration: 'none', padding: '10px 24px', borderRadius: 8, background: 'rgba(249, 115, 22, 0.1)', display: 'inline-block', boxShadow: '0 5px 0 rgba(234,88,12,0.45), 0 6px 16px rgba(249,115,22,0.18)', transform: 'translateY(0)', transition: 'transform 0.1s, box-shadow 0.1s' }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(2px)'; e.currentTarget.style.boxShadow = '0 3px 0 rgba(234,88,12,0.4), 0 4px 10px rgba(249,115,22,0.14)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 5px 0 rgba(234,88,12,0.45), 0 6px 16px rgba(249,115,22,0.18)'; }}
+              onMouseDown={(e) => { e.currentTarget.style.transform = 'translateY(5px)'; e.currentTarget.style.boxShadow = '0 1px 0 rgba(234,88,12,0.4), 0 2px 6px rgba(249,115,22,0.10)'; }}
+              onMouseUp={(e) => { e.currentTarget.style.transform = 'translateY(2px)'; e.currentTarget.style.boxShadow = '0 3px 0 rgba(234,88,12,0.4), 0 4px 10px rgba(249,115,22,0.14)'; }}
+            >
               {isTR ? 'Giriş Yap' : 'Sign In'}
             </Link>
           )}

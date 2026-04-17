@@ -142,16 +142,23 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
 .nav-cta {
   background: var(--black) !important;
   color: white !important;
-  padding: 12px 26px;
+  padding: 12px 32px;
   border-radius: 10px;
   font-weight: 600 !important;
   font-size: 1.35rem !important;
-  transition: all 0.25s !important;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.15s !important;
+  box-shadow: 0 6px 0 rgba(0,0,0,0.55), 0 8px 20px rgba(0,0,0,0.18);
+  transform: translateY(0);
+  display: inline-block;
 }
-
 .nav-cta:hover {
   background: var(--accent) !important;
-  transform: translateY(-1px);
+  transform: translateY(2px) !important;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.45), 0 6px 14px rgba(0,0,0,0.14) !important;
+}
+.nav-cta:active {
+  transform: translateY(5px) !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.4), 0 2px 6px rgba(0,0,0,0.10) !important;
 }
 
 .nav-sign-in {
@@ -161,13 +168,22 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
   text-decoration: none;
   border: 1.5px solid #FF6B35;
   border-radius: 8px;
-  padding: 9px 18px;
-  transition: all 0.2s;
+  padding: 9px 22px;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.1s, color 0.1s;
   white-space: nowrap;
+  box-shadow: 0 5px 0 #b33000, 0 6px 16px rgba(255,107,53,0.22);
+  transform: translateY(0);
+  display: inline-block;
 }
 .nav-sign-in:hover {
   background: #FF6B35 !important;
   color: white !important;
+  box-shadow: 0 3px 0 #b33000, 0 4px 12px rgba(255,107,53,0.18) !important;
+  transform: translateY(2px) !important;
+}
+.nav-sign-in:active {
+  transform: translateY(5px) !important;
+  box-shadow: 0 1px 0 #b33000, 0 2px 6px rgba(255,107,53,0.10) !important;
 }
 .nav-user {
   position: relative;
@@ -410,13 +426,20 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
 .btn-primary {
   background: var(--accent);
   color: white;
-  box-shadow: 0 4px 20px rgba(255,107,53,0.3);
+  padding: 14px 38px;
+  box-shadow: 0 6px 0 #b33000, 0 8px 24px rgba(255,107,53,0.30);
+  transform: translateY(0);
+  transition: transform 0.1s, box-shadow 0.1s, background 0.15s !important;
 }
 
 .btn-primary:hover {
   background: var(--accent-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(255,107,53,0.35);
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 #b33000, 0 6px 16px rgba(255,107,53,0.25);
+}
+.btn-primary:active {
+  transform: translateY(5px);
+  box-shadow: 0 1px 0 #b33000, 0 2px 8px rgba(255,107,53,0.15);
 }
 
 .btn-primary svg { transition: transform 0.3s; }
