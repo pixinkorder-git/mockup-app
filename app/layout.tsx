@@ -28,12 +28,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        {/* Fontshare — Switzer */}
+        {/* Google Fonts — Outfit (display) + Plus Jakarta Sans (body) */}
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <link
-          href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700,800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
           rel="stylesheet"
         />
         <Script

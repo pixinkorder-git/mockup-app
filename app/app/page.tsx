@@ -480,24 +480,99 @@ export default function Home() {
       {/* ── MAIN WORKSPACE ─────────────────────────────────────────────────── */}
       <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', height: `calc(100vh - ${NAV_H}px)` }}>
 
-        {/* ── LEFT SIDEBAR (Assets & Settings) ─────────────────────────────── */}
+        {/* ── COL 1: My Templates (Library Favorites) ──────────────────────── */}
         <div style={{
-          width: isMobile ? '100%' : SIDEBAR_W,
+          width: isMobile ? '100%' : 260,
+          height: isMobile ? 'auto' : '100%',
+          overflowY: 'auto',
           background: theme.surface,
           borderRight: isMobile ? 'none' : `1px solid ${theme.border}`,
+          borderBottom: isMobile ? `1px solid ${theme.border}` : 'none',
           display: 'flex', flexDirection: 'column',
-          height: isMobile ? 'auto' : '100%',
-          overflow: 'hidden'
+          padding: '28px 20px',
         }}>
+          <SectionLabel
+            badge={libraryFavorites.length}
+            action={
+              <button
+                onClick={() => setLibraryModalOpen(true)}
+                style={{ background: 'rgba(249, 115, 22, 0.1)', color: '#F97316', border: 'none', padding: '6px 12px', borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 5, whiteSpace: 'nowrap' }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(249, 115, 22, 0.18)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(249, 115, 22, 0.1)'}
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" />
+                </svg>
+                {isTR ? 'Kütüphane' : 'Mockup Library'}
+              </button>
+            }
+          >
+            {isTR ? 'Kayıtlı Şablonlar' : 'My Templates'}
+          </SectionLabel>
 
-          <div style={{ flex: 1, overflowY: 'auto', padding: '32px 24px', display: 'flex', flexDirection: 'column', gap: 32 }}>
+          {libraryFavorites.length === 0 ? (
+            <div style={{ padding: '28px 16px', borderRadius: 12, border: '2px dashed #E5E7EB', background: '#FAFAFA', textAlign: 'center', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <p style={{ fontSize: 13, color: '#6B7280', margin: 0, fontWeight: 500, lineHeight: 1.5 }}>
+                {isTR ? 'Kütüphaneden şablon ekleyin.' : 'Add templates from the library.'}
+              </p>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {libraryFavorites.map((fav) => {
+                const isActive = fav.checked;
+                return (
+                  <div
+                    key={fav.favId}
+                    onClick={() => setActiveMockupId(fav.mockup.id)}
+                    className="group"
+                    style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 12, background: isActive ? 'rgba(249, 115, 22, 0.04)' : '#FFFFFF', border: `1.5px solid ${isActive ? '#F97316' : '#E5E7EB'}`, cursor: 'pointer', transition: 'all 0.2s ease', boxShadow: isActive ? '0 2px 8px rgba(249, 115, 22, 0.08)' : 'none' }}
+                  >
+                    <div
+                      onClick={(e) => { e.stopPropagation(); toggleFav(fav.favId); }}
+                      style={{ width: 20, height: 20, borderRadius: 6, flexShrink: 0, border: `2px solid ${isActive ? '#F97316' : '#D1D5DB'}`, background: isActive ? '#F97316' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', cursor: 'pointer' }}
+                    >
+                      {isActive && <svg width="12" height="12" viewBox="0 0 12 12"><polyline points="2.5,6 5,8.5 9.5,3.5" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                    </div>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={fav.image} alt={fav.name} style={{ width: 44, height: 44, objectFit: 'cover', borderRadius: 8, border: '1px solid #E5E7EB', opacity: isActive ? 1 : 0.6, transition: 'opacity 0.2s', flexShrink: 0 }} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: isActive ? '#111827' : '#6B7280', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{fav.name}</p>
+                      <p style={{ margin: 0, fontSize: 11, color: '#6B7280', marginTop: 3, fontWeight: 500 }}>{fav.mockup.frames.length} {isTR ? 'çerçeve' : 'frames'}</p>
+                    </div>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); removeFav(fav.favId); }}
+                      className="opacity-0 group-hover:opacity-100"
+                      style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#9CA3AF', padding: 4, transition: 'color 0.2s, opacity 0.2s', display: 'flex', flexShrink: 0 }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = '#EF4444'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = '#9CA3AF'}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
 
-            {/* 1. ART IMAGES */}
+        {/* ── COL 2: Art Images + Mockup Templates + sticky Generate ────────── */}
+        <div style={{
+          width: isMobile ? '100%' : 320,
+          height: isMobile ? 'auto' : '100%',
+          display: 'flex', flexDirection: 'column',
+          background: theme.surface,
+          borderRight: isMobile ? 'none' : `1px solid ${theme.border}`,
+          borderBottom: isMobile ? `1px solid ${theme.border}` : 'none',
+        }}>
+          {/* Scrollable content area */}
+          <div style={{ flex: 1, overflowY: 'auto', padding: '28px 20px', display: 'flex', flexDirection: 'column', gap: 28 }}>
+
+            {/* Art Images */}
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <SectionLabel badge={artImages.length}>{isTR ? 'Sanat Görselleri' : 'Art Images'}</SectionLabel>
-              <DropZone onFiles={handleArtUpload} label={isTR ? 'Görselleri sürükleyin' : 'Drop artwork here'} sublabel="PNG · JPG · WEBP" multiple disabled={artImages.length >= MAX_ART} minHeight={160} />
+              <DropZone onFiles={handleArtUpload} label={isTR ? 'Görselleri sürükleyin' : 'Drop artwork here'} sublabel="PNG · JPG · WEBP" multiple disabled={artImages.length >= MAX_ART} minHeight={140} />
               {artImages.length > 0 && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 16 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 14 }}>
                   {artImages.map((art) => (
                     <AssetThumb key={art.id} url={art.url} name={art.name} onRemove={() => removeArt(art.id)} isMobile={isMobile} />
                   ))}
@@ -507,16 +582,16 @@ export default function Home() {
 
             <Divider />
 
-            {/* 2. MOCKUP TEMPLATES (MANUAL UPLOAD) */}
+            {/* Mockup Templates — manual uploads only */}
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <SectionLabel badge={mockups.filter(m => !libraryFavorites.some(f => f.mockup.id === m.id)).length}>
                 {isTR ? 'Mockup Şablonları' : 'Mockup Templates'}
               </SectionLabel>
-              <DropZone onFiles={handleMockupUpload} label={isTR ? 'Kendi şablonunuzu yükleyin' : 'Upload custom template'} sublabel={isTR ? 'Açık/beyaz çerçeve alanları' : 'Light/white frame areas'} multiple={false} minHeight={160} disabled={mockups.length >= MAX_MOCKUPS} />
+              <DropZone onFiles={handleMockupUpload} label={isTR ? 'Kendi şablonunuzu yükleyin' : 'Upload custom template'} sublabel={isTR ? 'Açık/beyaz çerçeve alanları' : 'Light/white frame areas'} multiple={false} minHeight={140} disabled={mockups.length >= MAX_MOCKUPS} />
               {(() => {
                 const uploaded = mockups.filter((m) => !libraryFavorites.some((f) => f.mockup.id === m.id));
                 return uploaded.length > 0 ? (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 16 }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 14 }}>
                     {uploaded.map((m) => (
                       <AssetThumb key={m.id} url={m.url} name={m.name} onRemove={() => removeMockup(m.id)} isActive={m.id === activeMockupId} onClick={() => setActiveMockupId(m.id)} badge={m.frames.length > 0 ? `${m.frames.length}f` : undefined} isMobile={isMobile} />
                     ))}
@@ -525,82 +600,11 @@ export default function Home() {
               })()}
             </div>
 
-            <Divider />
-
-            {/* 3. MY TEMPLATES (LIBRARY FAVORITES) */}
-            <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-              <SectionLabel
-                badge={libraryFavorites.length}
-                action={
-                  <button
-                    onClick={() => setLibraryModalOpen(true)}
-                    style={{ background: 'rgba(249, 115, 22, 0.1)', color: '#F97316', border: 'none', padding: '8px 14px', borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 6 }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(249, 115, 22, 0.18)'}
-                    onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(249, 115, 22, 0.1)'}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    {isTR ? 'Ekle' : 'Add'}
-                  </button>
-                }
-              >
-                {isTR ? 'Kayıtlı Şablonlar' : 'My Templates'}
-              </SectionLabel>
-
-              {libraryFavorites.length === 0 ? (
-                <div style={{ padding: '32px 20px', borderRadius: 12, border: '2px dashed #E5E7EB', background: '#FAFAFA', textAlign: 'center', minHeight: 160, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <p style={{ fontSize: 14, color: '#6B7280', margin: 0, fontWeight: 500 }}>
-                    {isTR ? 'Kütüphaneden şablon seçerek başlayın.' : 'Start by adding templates from the library.'}
-                  </p>
-                </div>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  {libraryFavorites.map((fav) => {
-                    const isActive = fav.checked;
-                    return (
-                      <div
-                        key={fav.favId}
-                        onClick={() => setActiveMockupId(fav.mockup.id)}
-                        className="group"
-                        style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 14px', borderRadius: 12, background: isActive ? 'rgba(249, 115, 22, 0.04)' : '#FFFFFF', border: `1.5px solid ${isActive ? '#F97316' : '#E5E7EB'}`, cursor: 'pointer', transition: 'all 0.2s ease', boxShadow: isActive ? '0 2px 8px rgba(249, 115, 22, 0.08)' : 'none' }}
-                      >
-                        <div
-                          onClick={(e) => { e.stopPropagation(); toggleFav(fav.favId); }}
-                          style={{ width: 22, height: 22, borderRadius: 6, flexShrink: 0, border: `2px solid ${isActive ? '#F97316' : '#D1D5DB'}`, background: isActive ? '#F97316' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', cursor: 'pointer' }}
-                        >
-                          {isActive && <svg width="14" height="14" viewBox="0 0 12 12"><polyline points="2.5,6 5,8.5 9.5,3.5" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>}
-                        </div>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={fav.image} alt={fav.name} style={{ width: 52, height: 52, objectFit: 'cover', borderRadius: 8, border: '1px solid #E5E7EB', opacity: isActive ? 1 : 0.6, transition: 'opacity 0.2s' }} />
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: isActive ? '#111827' : '#6B7280', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{fav.name}</p>
-                          <p style={{ margin: 0, fontSize: 12, color: '#6B7280', marginTop: 4, fontWeight: 500 }}>{fav.mockup.frames.length} {isTR ? 'çerçeve' : 'frames'}</p>
-                        </div>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); removeFav(fav.favId); }}
-                          className="opacity-0 group-hover:opacity-100"
-                          style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#9CA3AF', padding: 6, transition: 'color 0.2s, opacity 0.2s', display: 'flex' }}
-                          onMouseEnter={(e) => e.currentTarget.style.color = '#EF4444'}
-                          onMouseLeave={(e) => e.currentTarget.style.color = '#9CA3AF'}
-                        >
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
           </div>
 
-          {/* Sticky Generate Section */}
-          <div style={{
-            padding: 24, background: theme.surface, borderTop: `1px solid ${theme.border}`,
-            boxShadow: '0 -4px 20px rgba(0,0,0,0.02)', zIndex: 10
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          {/* Sticky Generate block — pinned to bottom of COL 2 */}
+          <div style={{ padding: '20px 20px', background: theme.surface, borderTop: `1px solid ${theme.border}`, boxShadow: '0 -4px 20px rgba(0,0,0,0.02)', flexShrink: 0 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
               <div style={{ fontSize: 12, color: theme.textMuted, fontWeight: 500 }}>
                 {artImages.length} {isTR ? 'Sanat' : 'Art'} × {mockups.filter((m) => m.frames.length > 0).length} {isTR ? 'Şablon' : 'Tpl'}
               </div>
@@ -613,7 +617,7 @@ export default function Home() {
               onClick={handleGenerate}
               disabled={!canGenerate || isExhausted}
               style={{
-                width: '100%', height: 52, borderRadius: 12,
+                width: '100%', height: 50, borderRadius: 12,
                 fontSize: 15, fontWeight: 700, letterSpacing: '0.02em', fontFamily: theme.fontFamily,
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
                 background: canGenerate && !isExhausted ? theme.accent : '#F3F4F6',
@@ -637,15 +641,15 @@ export default function Home() {
             </button>
 
             {!isExhausted && (
-              <p style={{ textAlign: 'center', margin: '12px 0 0', fontSize: 12, color: limitReached ? '#EF4444' : theme.textMuted, fontWeight: 500 }}>
+              <p style={{ textAlign: 'center', margin: '10px 0 0', fontSize: 12, color: limitReached ? '#EF4444' : theme.textMuted, fontWeight: 500 }}>
                 {limitReached ? (isTR ? 'Limit doldu.' : 'Limit reached.') : (DAILY_LIMIT ? (isTR ? `${generatesRemaining} ücretsiz hak kaldı` : `${generatesRemaining} free left`) : (isTR ? 'Sınırsız Plan' : 'Unlimited Plan'))}
               </p>
             )}
           </div>
         </div>
 
-        {/* ── RIGHT MAIN CANVAS AREA ───────────────────────────────────────── */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: isMobile ? 'auto' : '100%', overflowY: 'auto', padding: isMobile ? 16 : 40 }}>
+        {/* ── COL 3: Frame Editor + Results ───────────────────────────────────── */}
+        <div style={{ flex: 1, height: isMobile ? 'auto' : '100%', overflowY: 'auto', background: theme.bg, padding: isMobile ? 16 : 32 }}>
 
           {/* Active Templates Tab Bar */}
           {mockups.length > 0 && (
@@ -675,7 +679,7 @@ export default function Home() {
             </div>
           )}
 
-          {/* Canvas Container */}
+          {/* Frame Editor Card */}
           <div style={{
             background: theme.surface, borderRadius: 20, border: `1px solid ${theme.border}`,
             boxShadow: '0 4px 24px rgba(0,0,0,0.04)', overflow: 'hidden', display: 'flex', flexDirection: 'column'
@@ -715,7 +719,7 @@ export default function Home() {
 
           {/* Results Area */}
           {results.length > 0 && (
-            <div style={{ marginTop: 48 }}>
+            <div style={{ marginTop: 40 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
                 <h2 style={{ margin: 0, fontSize: 24, fontWeight: 800, color: theme.textMain, letterSpacing: '-0.02em', fontFamily: 'var(--font-display)' }}>
                   {isTR ? 'Sonuçlar' : 'Results'}
@@ -728,7 +732,6 @@ export default function Home() {
             </div>
           )}
 
-          <div style={{ flex: 1 }} />
           <p style={{ textAlign: 'center', margin: '40px 0 0', fontSize: 12, color: theme.textMuted, fontWeight: 500 }}>
             MockPlacer · {isTR ? 'Tarayıcıda çalışır, sunucuya veri gitmez.' : 'Runs in browser, no server uploads.'}
           </p>

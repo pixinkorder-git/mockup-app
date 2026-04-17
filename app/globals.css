@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --font-display: 'Switzer', sans-serif;
-  --font-body: 'Switzer', sans-serif;
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --bg: #080808;
   --surface: #0e0e0e;
@@ -54,7 +54,7 @@ html {
 }
 
 body {
-  font-family: 'Switzer', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
