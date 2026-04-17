@@ -58,8 +58,8 @@ export default function UserDropdown({ user, plan, lang = 'en', onSignOut }: Use
   };
 
   const itemStyle: React.CSSProperties = {
-    display: 'flex', alignItems: 'center', gap: 10,
-    padding: '9px 16px', fontSize: 13, color: '#333',
+    display: 'flex', alignItems: 'center', gap: 15,
+    padding: '13px 24px', fontSize: 19, color: '#333',
     textDecoration: 'none', fontFamily: 'inherit',
     background: 'transparent', border: 'none', width: '100%',
     textAlign: 'left', cursor: 'pointer', transition: 'background 0.1s',
@@ -82,9 +82,9 @@ export default function UserDropdown({ user, plan, lang = 'en', onSignOut }: Use
         style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
       >
         <div style={{ borderRadius: '50%', border: open ? '2px solid #FF6B35' : '2px solid transparent', transition: 'border-color 0.15s', lineHeight: 0 }}>
-          <Avatar size={28} />
+          <Avatar size={42} />
         </div>
-        <svg width="11" height="11" viewBox="0 0 12 12" fill="none" style={{ color: '#888', transition: 'transform 0.2s', transform: open ? 'rotate(180deg)' : 'none', flexShrink: 0 }}>
+        <svg width="16" height="16" viewBox="0 0 12 12" fill="none" style={{ color: '#888', transition: 'transform 0.2s', transform: open ? 'rotate(180deg)' : 'none', flexShrink: 0 }}>
           <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </button>
@@ -93,7 +93,7 @@ export default function UserDropdown({ user, plan, lang = 'en', onSignOut }: Use
       {open && (
         <div style={{
           position: 'absolute', top: 'calc(100% + 10px)', right: 0,
-          width: 252, background: '#fff',
+          width: 378, background: '#fff',
           border: '1px solid #E5E5E5', borderRadius: 12,
           boxShadow: '0 4px 24px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)',
           zIndex: 500, overflow: 'hidden',
@@ -101,18 +101,18 @@ export default function UserDropdown({ user, plan, lang = 'en', onSignOut }: Use
         }}>
 
           {/* User info header */}
-          <div style={{ padding: '14px 16px', borderBottom: '1px solid #F0F0F0', display: 'flex', gap: 10, alignItems: 'center' }}>
-            <Avatar size={38} />
+          <div style={{ padding: '21px 24px', borderBottom: '1px solid #F0F0F0', display: 'flex', gap: 15, alignItems: 'center' }}>
+            <Avatar size={57} />
             <div style={{ minWidth: 0, flex: 1 }}>
               {user.name && (
-                <p style={{ fontSize: 13, fontWeight: 600, color: '#1a1a1a', margin: '0 0 1px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: "'Clash Display', sans-serif" }}>
+                <p style={{ fontSize: 19, fontWeight: 600, color: '#1a1a1a', margin: '0 0 1px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: "'Clash Display', sans-serif" }}>
                   {user.name}
                 </p>
               )}
-              <p style={{ fontSize: 11, color: '#888', margin: '0 0 5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <p style={{ fontSize: 16, color: '#888', margin: '0 0 5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {user.email}
               </p>
-              <span style={{ display: 'inline-block', fontSize: 10, fontWeight: 700, fontFamily: 'monospace', padding: '1px 7px', borderRadius: 99, background: planBg, color: planColor, border: `1px solid ${planBorder}` }}>
+              <span style={{ display: 'inline-block', fontSize: 15, fontWeight: 700, fontFamily: 'monospace', padding: '1px 7px', borderRadius: 99, background: planBg, color: planColor, border: `1px solid ${planBorder}` }}>
                 {planLabel}
               </span>
             </div>
@@ -121,16 +121,16 @@ export default function UserDropdown({ user, plan, lang = 'en', onSignOut }: Use
           <div style={{ padding: '6px 0' }}>
 
             {/* Plan details row */}
-            <div style={{ padding: '8px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={planColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <div style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 15 }}>
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke={planColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
                 </svg>
-                <span style={{ fontSize: 13, color: '#333' }}>{planLabel}</span>
-                <span style={{ fontSize: 11, color: '#999', fontFamily: 'monospace' }}>{planDetail}</span>
+                <span style={{ fontSize: 19, color: '#333' }}>{planLabel}</span>
+                <span style={{ fontSize: 16, color: '#999', fontFamily: 'monospace' }}>{planDetail}</span>
               </div>
               {plan === 'free' && (
-                <a href="/pricing" onClick={() => setOpen(false)} style={{ fontSize: 11, fontWeight: 700, color: '#FF6B35', textDecoration: 'none', whiteSpace: 'nowrap', fontFamily: "'Clash Display', sans-serif" }}>
+                <a href="/pricing" onClick={() => setOpen(false)} style={{ fontSize: 16, fontWeight: 700, color: '#FF6B35', textDecoration: 'none', whiteSpace: 'nowrap', fontFamily: "'Clash Display', sans-serif" }}>
                   {isTR ? 'Yükselt' : 'Upgrade'}
                 </a>
               )}
@@ -143,7 +143,7 @@ export default function UserDropdown({ user, plan, lang = 'en', onSignOut }: Use
               style={itemStyle}
               onClick={() => setOpen(false)}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
               </svg>
               {isTR ? 'Profil Ayarları' : 'Profile Settings'}
@@ -151,7 +151,7 @@ export default function UserDropdown({ user, plan, lang = 'en', onSignOut }: Use
 
             {/* Share */}
             <button className="mp-dd-item" style={itemStyle} onClick={handleShare}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
                 <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
               </svg>
@@ -165,7 +165,7 @@ export default function UserDropdown({ user, plan, lang = 'en', onSignOut }: Use
               style={itemStyle}
               onClick={() => setOpen(false)}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
               </svg>
               {isTR ? 'Yorum Bırak' : 'Leave a Review'}
@@ -179,7 +179,7 @@ export default function UserDropdown({ user, plan, lang = 'en', onSignOut }: Use
               style={itemStyle}
               onClick={() => setOpen(false)}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
               </svg>
               {isTR ? 'Faturalandırma' : 'Billing'}
@@ -198,7 +198,7 @@ export default function UserDropdown({ user, plan, lang = 'en', onSignOut }: Use
                 onSignOut();
               }}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
                 <polyline points="16 17 21 12 16 7"/>
                 <line x1="21" y1="12" x2="9" y2="12"/>

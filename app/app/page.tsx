@@ -198,25 +198,33 @@ export default function Home() {
 
   useEffect(() => {
     const supabase = createClient();
+
+    const applyProfile = async (authUser: { id: string; email?: string; user_metadata?: Record<string, string> }) => {
+      const base = {
+        id: authUser.id, email: authUser.email,
+        name: authUser.user_metadata?.full_name ?? authUser.user_metadata?.name ?? undefined,
+        avatar: authUser.user_metadata?.avatar_url ?? undefined,
+      };
+      try {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('avatar_url, display_name')
+          .eq('id', authUser.id)
+          .single();
+        // profiles.avatar_url (user-uploaded) takes priority over OAuth metadata
+        if (profile?.avatar_url) base.avatar = profile.avatar_url;
+        if (profile?.display_name) base.name = profile.display_name;
+      } catch { /* profile row may not exist */ }
+      setUser(base);
+    };
+
     supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) {
-        setUser({
-          id: user.id, email: user.email,
-          name: user.user_metadata?.full_name ?? user.user_metadata?.name ?? undefined,
-          avatar: user.user_metadata?.avatar_url ?? undefined,
-        });
-      }
+      if (user) applyProfile(user);
     });
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        setUser({
-          id: session.user.id, email: session.user.email,
-          name: session.user.user_metadata?.full_name ?? undefined,
-          avatar: session.user.user_metadata?.avatar_url ?? undefined,
-        });
-      } else {
-        setUser(null);
-      }
+      if (session?.user) applyProfile(session.user);
+      else setUser(null);
     });
     return () => subscription.unsubscribe();
   }, []);

@@ -134,8 +134,8 @@ export default function LandingNavAuth({ initialUser }: Props) {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={user.avatar} className="nav-user-avatar" alt="" />
         ) : (
-          <div style={{ width: 30, height: 30, borderRadius: '50%', background: '#FF6B35', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <span style={{ color: '#fff', fontSize: 12, fontWeight: 700 }}>{initials}</span>
+          <div style={{ width: 45, height: 45, borderRadius: '50%', background: '#FF6B35', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <span style={{ color: '#fff', fontSize: 18, fontWeight: 700 }}>{initials}</span>
           </div>
         )}
         <svg className="nav-user-chevron" width="11" height="11" viewBox="0 0 12 12" fill="none">
@@ -150,8 +150,8 @@ export default function LandingNavAuth({ initialUser }: Props) {
             // eslint-disable-next-line @next/next/no-img-element
             <img src={user.avatar} className="nav-dd-avatar" alt="" />
           ) : (
-            <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#FF6B35', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <span style={{ color: '#fff', fontSize: 15, fontWeight: 700 }}>{initials}</span>
+            <div style={{ width: 57, height: 57, borderRadius: '50%', background: '#FF6B35', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <span style={{ color: '#fff', fontSize: 22, fontWeight: 700 }}>{initials}</span>
             </div>
           )}
           <div className="nav-dd-info">
