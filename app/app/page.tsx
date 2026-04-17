@@ -481,11 +481,11 @@ export default function Home() {
           ) : (
             <Link
               href="/login"
-              style={{ fontSize: 18, fontWeight: 600, color: theme.accent, textDecoration: 'none', padding: '10px 24px', borderRadius: 8, background: 'rgba(249, 115, 22, 0.1)', display: 'inline-block', boxShadow: '0 5px 0 rgba(234,88,12,0.45), 0 6px 16px rgba(249,115,22,0.18)', transform: 'translateY(0)', transition: 'transform 0.1s, box-shadow 0.1s' }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(2px)'; e.currentTarget.style.boxShadow = '0 3px 0 rgba(234,88,12,0.4), 0 4px 10px rgba(249,115,22,0.14)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 5px 0 rgba(234,88,12,0.45), 0 6px 16px rgba(249,115,22,0.18)'; }}
-              onMouseDown={(e) => { e.currentTarget.style.transform = 'translateY(5px)'; e.currentTarget.style.boxShadow = '0 1px 0 rgba(234,88,12,0.4), 0 2px 6px rgba(249,115,22,0.10)'; }}
-              onMouseUp={(e) => { e.currentTarget.style.transform = 'translateY(2px)'; e.currentTarget.style.boxShadow = '0 3px 0 rgba(234,88,12,0.4), 0 4px 10px rgba(249,115,22,0.14)'; }}
+              style={{ fontSize: 18, fontWeight: 700, fontFamily: 'var(--font-display)', color: theme.accent, textDecoration: 'none', padding: '10px 24px', borderRadius: 8, background: 'rgba(249, 115, 22, 0.08)', display: 'inline-block', boxShadow: 'inset 0 1px 0 rgba(249,115,22,0.10), 0 4px 0 rgba(234,88,12,0.45), 0 5px 0 rgba(234,88,12,0.18), 0 8px 16px rgba(249,115,22,0.14)', transform: 'translateY(0)', transition: 'transform 0.1s, box-shadow 0.1s' }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(2px)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(249,115,22,0.10), 0 2px 0 rgba(234,88,12,0.40), 0 3px 0 rgba(234,88,12,0.14), 0 5px 10px rgba(249,115,22,0.12)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(249,115,22,0.10), 0 4px 0 rgba(234,88,12,0.45), 0 5px 0 rgba(234,88,12,0.18), 0 8px 16px rgba(249,115,22,0.14)'; }}
+              onMouseDown={(e) => { e.currentTarget.style.transform = 'translateY(5px)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(249,115,22,0.08), 0 0px 0 rgba(234,88,12,0.40), 0 2px 6px rgba(249,115,22,0.10)'; }}
+              onMouseUp={(e) => { e.currentTarget.style.transform = 'translateY(2px)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(249,115,22,0.10), 0 2px 0 rgba(234,88,12,0.40), 0 3px 0 rgba(234,88,12,0.14), 0 5px 10px rgba(249,115,22,0.12)'; }}
             >
               {isTR ? 'Giriş Yap' : 'Sign In'}
             </Link>
@@ -630,7 +630,7 @@ export default function Home() {
                     width: '100%', marginTop: 10, padding: '11px 16px',
                     background: 'rgba(249, 115, 22, 0.07)',
                     color: '#F97316', border: '1.5px dashed rgba(249, 115, 22, 0.35)',
-                    borderRadius: 10, fontSize: 14, fontWeight: 700, cursor: 'pointer',
+                    borderRadius: 10, fontSize: 14, fontWeight: 700, fontFamily: 'var(--font-display)', cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                     transition: 'all 0.2s',
                   }}
@@ -681,20 +681,20 @@ export default function Home() {
               disabled={!canGenerate || isExhausted}
               style={{
                 width: '100%', height: 52, borderRadius: 12,
-                fontSize: 15, fontWeight: 700, letterSpacing: '0.02em', fontFamily: theme.fontFamily,
+                fontSize: 15, fontWeight: 700, letterSpacing: '0.02em', fontFamily: 'var(--font-display)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
                 background: canGenerate && !isExhausted ? 'linear-gradient(to bottom, #fb923c 0%, #f97316 100%)' : '#F3F4F6',
                 color: canGenerate && !isExhausted ? '#fff' : '#9CA3AF',
                 border: 'none', cursor: canGenerate && !isExhausted ? 'pointer' : 'not-allowed',
-                boxShadow: canGenerate && !isExhausted ? '0 6px 0 #c2410c, 0 8px 20px rgba(249,115,22,0.28)' : '0 4px 0 #D1D5DB',
+                boxShadow: canGenerate && !isExhausted ? 'inset 0 1px 0 rgba(255,255,255,0.18), 0 5px 0 #c2410c, 0 6px 0 rgba(194,65,12,0.28), 0 10px 22px rgba(249,115,22,0.22)' : '0 3px 0 #D1D5DB, 0 5px 10px rgba(0,0,0,0.05)',
                 transform: 'translateY(0)',
                 transition: 'box-shadow 0.1s, transform 0.1s',
                 position: 'relative',
               }}
-              onMouseEnter={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = '0 4px 0 #c2410c, 0 6px 16px rgba(249,115,22,0.25)'; e.currentTarget.style.transform = 'translateY(2px)'; } }}
-              onMouseLeave={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = '0 6px 0 #c2410c, 0 8px 20px rgba(249,115,22,0.28)'; e.currentTarget.style.transform = 'translateY(0)'; } }}
-              onMouseDown={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = '0 1px 0 #c2410c, 0 2px 8px rgba(249,115,22,0.15)'; e.currentTarget.style.transform = 'translateY(5px)'; } }}
-              onMouseUp={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = '0 4px 0 #c2410c, 0 6px 16px rgba(249,115,22,0.25)'; e.currentTarget.style.transform = 'translateY(2px)'; } }}
+              onMouseEnter={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,0.18), 0 3px 0 #c2410c, 0 4px 0 rgba(194,65,12,0.22), 0 7px 16px rgba(249,115,22,0.18)'; e.currentTarget.style.transform = 'translateY(2px)'; } }}
+              onMouseLeave={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,0.18), 0 5px 0 #c2410c, 0 6px 0 rgba(194,65,12,0.28), 0 10px 22px rgba(249,115,22,0.22)'; e.currentTarget.style.transform = 'translateY(0)'; } }}
+              onMouseDown={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,0.12), 0 0px 0 #c2410c, 0 2px 8px rgba(249,115,22,0.12)'; e.currentTarget.style.transform = 'translateY(5px)'; } }}
+              onMouseUp={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,0.18), 0 3px 0 #c2410c, 0 4px 0 rgba(194,65,12,0.22), 0 7px 16px rgba(249,115,22,0.18)'; e.currentTarget.style.transform = 'translateY(2px)'; } }}
             >
               {isGenerating ? (
                 <><span style={{ width: 16, height: 16, display: 'inline-block', borderRadius: '50%', border: '2.5px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', animation: 'spin 0.8s linear infinite' }} /> {isTR ? 'Oluşturuluyor...' : 'Generating...'}</>
@@ -725,12 +725,12 @@ export default function Home() {
                   onClick={() => setActiveMockupId(m.id)}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', borderRadius: 99,
-                    fontSize: 14, fontWeight: 600, fontFamily: theme.fontFamily,
-                    background: m.id === activeMockupId ? theme.accent : theme.surface,
+                    fontSize: 14, fontWeight: 700, fontFamily: 'var(--font-display)',
+                    background: m.id === activeMockupId ? 'linear-gradient(to bottom, #fb923c 0%, #f97316 100%)' : theme.surface,
                     color: m.id === activeMockupId ? '#fff' : theme.textMuted,
                     border: `1px solid ${m.id === activeMockupId ? theme.accent : theme.border}`,
-                    cursor: 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap',
-                    boxShadow: m.id === activeMockupId ? '0 2px 8px rgba(249, 115, 22, 0.2)' : 'none'
+                    cursor: 'pointer', transition: 'all 0.15s', whiteSpace: 'nowrap',
+                    boxShadow: m.id === activeMockupId ? 'inset 0 1px 0 rgba(255,255,255,0.18), 0 3px 0 #c2410c, 0 4px 0 rgba(194,65,12,0.22), 0 6px 14px rgba(249,115,22,0.18)' : '0 2px 0 rgba(0,0,0,0.08), 0 3px 8px rgba(0,0,0,0.04)'
                   }}
                 >
                   {m.name}
@@ -789,7 +789,7 @@ export default function Home() {
                 <h2 style={{ margin: 0, fontSize: 24, fontWeight: 800, color: theme.textMain, letterSpacing: '-0.02em', fontFamily: 'var(--font-display)' }}>
                   {isTR ? 'Sonuçlar' : 'Results'}
                 </h2>
-                <button onClick={handleClearResults} style={{ padding: '8px 16px', borderRadius: 8, background: '#FEE2E2', color: '#DC2626', border: 'none', fontWeight: 600, cursor: 'pointer', fontSize: 13 }}>
+                <button onClick={handleClearResults} style={{ padding: '8px 16px', borderRadius: 8, background: '#FEE2E2', color: '#DC2626', border: 'none', fontWeight: 700, fontFamily: 'var(--font-display)', cursor: 'pointer', fontSize: 13, boxShadow: '0 2px 0 rgba(220,38,38,0.28), 0 4px 10px rgba(220,38,38,0.10)', transform: 'translateY(0)', transition: 'transform 0.1s, box-shadow 0.1s' }}>
                   {isTR ? 'Temizle' : 'Clear All'}
                 </button>
               </div>
