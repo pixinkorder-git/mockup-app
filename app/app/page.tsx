@@ -49,7 +49,7 @@ const theme = {
   accentHover: '#EA580C', // Orange 600
   textMain: '#111827',
   textMuted: '#6B7280',
-  fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  fontFamily: "'Plus Jakarta Sans', sans-serif",
 };
 
 // ─── Divider ──────────────────────────────────────────────────────────────────
@@ -63,7 +63,7 @@ function SectionLabel({ children, badge, action }: { children: React.ReactNode; 
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <h3 style={{
-          fontFamily: 'var(--font-display)',
+          fontFamily: theme.fontFamily,
           fontSize: 22,
           fontWeight: 800,
           color: theme.textMain,
@@ -481,7 +481,7 @@ export default function Home() {
           ) : (
             <Link
               href="/login"
-              style={{ fontSize: 18, fontWeight: 700, fontFamily: 'var(--font-display)', color: theme.accent, textDecoration: 'none', padding: '10px 24px', borderRadius: 8, background: 'rgba(249, 115, 22, 0.08)', display: 'inline-block', boxShadow: 'inset 0 1px 0 rgba(249,115,22,0.10), 0 4px 0 rgba(234,88,12,0.45), 0 5px 0 rgba(234,88,12,0.18), 0 8px 16px rgba(249,115,22,0.14)', transform: 'translateY(0)', transition: 'transform 0.1s, box-shadow 0.1s' }}
+              style={{ fontSize: 18, fontWeight: 700, fontFamily: theme.fontFamily, color: theme.accent, textDecoration: 'none', padding: '10px 24px', borderRadius: 8, background: 'rgba(249, 115, 22, 0.08)', display: 'inline-block', boxShadow: 'inset 0 1px 0 rgba(249,115,22,0.10), 0 4px 0 rgba(234,88,12,0.45), 0 5px 0 rgba(234,88,12,0.18), 0 8px 16px rgba(249,115,22,0.14)', transform: 'translateY(0)', transition: 'transform 0.1s, box-shadow 0.1s' }}
               onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(2px)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(249,115,22,0.10), 0 2px 0 rgba(234,88,12,0.40), 0 3px 0 rgba(234,88,12,0.14), 0 5px 10px rgba(249,115,22,0.12)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(249,115,22,0.10), 0 4px 0 rgba(234,88,12,0.45), 0 5px 0 rgba(234,88,12,0.18), 0 8px 16px rgba(249,115,22,0.14)'; }}
               onMouseDown={(e) => { e.currentTarget.style.transform = 'translateY(5px)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(249,115,22,0.08), 0 0px 0 rgba(234,88,12,0.40), 0 2px 6px rgba(249,115,22,0.10)'; }}
@@ -630,7 +630,7 @@ export default function Home() {
                     width: '100%', marginTop: 10, padding: '11px 16px',
                     background: 'rgba(249, 115, 22, 0.07)',
                     color: '#F97316', border: '1.5px dashed rgba(249, 115, 22, 0.35)',
-                    borderRadius: 10, fontSize: 14, fontWeight: 700, fontFamily: 'var(--font-display)', cursor: 'pointer',
+                    borderRadius: 10, fontSize: 14, fontWeight: 700, fontFamily: theme.fontFamily, cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                     transition: 'all 0.2s',
                   }}
@@ -660,17 +660,17 @@ export default function Home() {
             {/* Big stats */}
             <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 10, marginBottom: 18 }}>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 44, fontWeight: 800, color: artImages.length > 0 ? theme.textMain : '#D1D5DB', fontFamily: 'var(--font-display)', lineHeight: 1, transition: 'color 0.3s' }}>{artImages.length}</div>
+                <div style={{ fontSize: 44, fontWeight: 800, color: artImages.length > 0 ? theme.textMain : '#D1D5DB', fontFamily: theme.fontFamily, lineHeight: 1, transition: 'color 0.3s' }}>{artImages.length}</div>
                 <div style={{ fontSize: 10, fontWeight: 700, color: theme.textMuted, textTransform: 'uppercase', letterSpacing: '0.07em', marginTop: 4 }}>{isTR ? 'Sanat' : 'Art'}</div>
               </div>
               <div style={{ fontSize: 26, color: '#D1D5DB', fontWeight: 300, paddingBottom: 22, lineHeight: 1 }}>×</div>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 44, fontWeight: 800, color: mockups.filter(m => m.frames.length > 0).length > 0 ? theme.textMain : '#D1D5DB', fontFamily: 'var(--font-display)', lineHeight: 1, transition: 'color 0.3s' }}>{mockups.filter(m => m.frames.length > 0).length}</div>
+                <div style={{ fontSize: 44, fontWeight: 800, color: mockups.filter(m => m.frames.length > 0).length > 0 ? theme.textMain : '#D1D5DB', fontFamily: theme.fontFamily, lineHeight: 1, transition: 'color 0.3s' }}>{mockups.filter(m => m.frames.length > 0).length}</div>
                 <div style={{ fontSize: 10, fontWeight: 700, color: theme.textMuted, textTransform: 'uppercase', letterSpacing: '0.07em', marginTop: 4 }}>{isTR ? 'Şablon' : 'Tpl'}</div>
               </div>
               <div style={{ fontSize: 26, color: '#D1D5DB', fontWeight: 300, paddingBottom: 22, lineHeight: 1 }}>=</div>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 44, fontWeight: 800, color: allCombinations.length > 0 ? theme.accent : '#D1D5DB', fontFamily: 'var(--font-display)', lineHeight: 1, transition: 'color 0.3s' }}>{allCombinations.length}</div>
+                <div style={{ fontSize: 44, fontWeight: 800, color: allCombinations.length > 0 ? theme.accent : '#D1D5DB', fontFamily: theme.fontFamily, lineHeight: 1, transition: 'color 0.3s' }}>{allCombinations.length}</div>
                 <div style={{ fontSize: 10, fontWeight: 700, color: theme.textMuted, textTransform: 'uppercase', letterSpacing: '0.07em', marginTop: 4 }}>{isTR ? 'Kombo' : 'Combos'}</div>
               </div>
             </div>
@@ -681,7 +681,7 @@ export default function Home() {
               disabled={!canGenerate || isExhausted}
               style={{
                 width: '100%', height: 52, borderRadius: 12,
-                fontSize: 15, fontWeight: 700, letterSpacing: '0.02em', fontFamily: 'var(--font-display)',
+                fontSize: 15, fontWeight: 700, letterSpacing: '0.02em', fontFamily: theme.fontFamily,
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
                 background: canGenerate && !isExhausted ? 'linear-gradient(to bottom, #fb923c 0%, #f97316 100%)' : '#F3F4F6',
                 color: canGenerate && !isExhausted ? '#fff' : '#9CA3AF',
@@ -725,7 +725,7 @@ export default function Home() {
                   onClick={() => setActiveMockupId(m.id)}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', borderRadius: 99,
-                    fontSize: 14, fontWeight: 700, fontFamily: 'var(--font-display)',
+                    fontSize: 14, fontWeight: 700, fontFamily: theme.fontFamily,
                     background: m.id === activeMockupId ? 'linear-gradient(to bottom, #fb923c 0%, #f97316 100%)' : theme.surface,
                     color: m.id === activeMockupId ? '#fff' : theme.textMuted,
                     border: `1px solid ${m.id === activeMockupId ? theme.accent : theme.border}`,
@@ -751,7 +751,7 @@ export default function Home() {
           }}>
             {/* Editor Toolbar */}
             <div style={{ padding: '16px 24px', borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#FAFAFA' }}>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 800, color: theme.textMain, letterSpacing: '-0.02em' }}>{isTR ? 'Çerçeve Düzenleyici' : 'Frame Editor'}</div>
+              <div style={{ fontFamily: theme.fontFamily, fontSize: 20, fontWeight: 800, color: theme.textMain, letterSpacing: '-0.02em' }}>{isTR ? 'Çerçeve Düzenleyici' : 'Frame Editor'}</div>
               {activeMockup && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                   {activeMockup.frames.length > 0 && (
@@ -786,10 +786,10 @@ export default function Home() {
           {results.length > 0 && (
             <div style={{ marginTop: 40 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-                <h2 style={{ margin: 0, fontSize: 24, fontWeight: 800, color: theme.textMain, letterSpacing: '-0.02em', fontFamily: 'var(--font-display)' }}>
+                <h2 style={{ margin: 0, fontSize: 24, fontWeight: 800, color: theme.textMain, letterSpacing: '-0.02em', fontFamily: theme.fontFamily }}>
                   {isTR ? 'Sonuçlar' : 'Results'}
                 </h2>
-                <button onClick={handleClearResults} style={{ padding: '8px 16px', borderRadius: 8, background: '#FEE2E2', color: '#DC2626', border: 'none', fontWeight: 700, fontFamily: 'var(--font-display)', cursor: 'pointer', fontSize: 13, boxShadow: '0 2px 0 rgba(220,38,38,0.28), 0 4px 10px rgba(220,38,38,0.10)', transform: 'translateY(0)', transition: 'transform 0.1s, box-shadow 0.1s' }}>
+                <button onClick={handleClearResults} style={{ padding: '8px 16px', borderRadius: 8, background: '#FEE2E2', color: '#DC2626', border: 'none', fontWeight: 700, fontFamily: theme.fontFamily, cursor: 'pointer', fontSize: 13, boxShadow: '0 2px 0 rgba(220,38,38,0.28), 0 4px 10px rgba(220,38,38,0.10)', transform: 'translateY(0)', transition: 'transform 0.1s, box-shadow 0.1s' }}>
                   {isTR ? 'Temizle' : 'Clear All'}
                 </button>
               </div>

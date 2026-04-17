@@ -173,7 +173,7 @@ export default function LandingNavAuth({ initialUser }: Props) {
             <span style={{ fontSize: 13, color: '#333' }}>{planLabel}</span>
             <span style={{ fontSize: 11, color: '#999', fontFamily: 'monospace' }}>{planDetail}</span>
             {plan === 'free' && (
-              <a href="/pricing" style={{ fontSize: 11, fontWeight: 700, color: '#FF6B35', textDecoration: 'none', marginLeft: 'auto', whiteSpace: 'nowrap', fontFamily: "'Clash Display', sans-serif" }}>
+              <a href="/pricing" style={{ fontSize: 11, fontWeight: 700, color: '#FF6B35', textDecoration: 'none', marginLeft: 'auto', whiteSpace: 'nowrap', fontFamily: "'Satoshi', sans-serif" }}>
                 {isTR ? 'Yükselt' : 'Upgrade'}
               </a>
             )}

@@ -105,7 +105,7 @@ export default function UserDropdown({ user, plan, lang = 'en', onSignOut }: Use
             <Avatar size={57} />
             <div style={{ minWidth: 0, flex: 1 }}>
               {user.name && (
-                <p style={{ fontSize: 19, fontWeight: 600, color: '#1a1a1a', margin: '0 0 1px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: "'Clash Display', sans-serif" }}>
+                <p style={{ fontSize: 19, fontWeight: 700, color: '#1a1a1a', margin: '0 0 1px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                   {user.name}
                 </p>
               )}
@@ -130,7 +130,7 @@ export default function UserDropdown({ user, plan, lang = 'en', onSignOut }: Use
                 <span style={{ fontSize: 16, color: '#999', fontFamily: 'monospace' }}>{planDetail}</span>
               </div>
               {plan === 'free' && (
-                <a href="/pricing" onClick={() => setOpen(false)} style={{ fontSize: 16, fontWeight: 700, color: '#FF6B35', textDecoration: 'none', whiteSpace: 'nowrap', fontFamily: "'Clash Display', sans-serif" }}>
+                <a href="/pricing" onClick={() => setOpen(false)} style={{ fontSize: 16, fontWeight: 700, color: '#FF6B35', textDecoration: 'none', whiteSpace: 'nowrap', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                   {isTR ? 'Yükselt' : 'Upgrade'}
                 </a>
               )}
