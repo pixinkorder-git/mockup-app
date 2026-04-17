@@ -381,14 +381,15 @@ export default function Home() {
     const { w: imgW, h: imgH } = await loadImageDimensions(tpl.image);
     if (imgW === 0) return;
     const mockupId = genId();
+    const fileName = tpl.image.split('/').pop() || tpl.name;
     const newMockup: MockupTemplate = {
-      id: mockupId, name: tpl.name, url: tpl.image,
+      id: mockupId, name: fileName, url: tpl.image,
       frames: tpl.frames.map((f, i) => ({
         id: genId(), color: FRAME_COLORS[i % FRAME_COLORS.length],
         x: f.x * imgW, y: f.y * imgH, w: f.w * imgW, h: f.h * imgH, cornerRadius: f.cornerRadius,
       })),
     };
-    const newFav: LibraryFav = { favId: genId(), tplId: tpl.image, name: tpl.name, image: tpl.image, mockup: newMockup, checked: false };
+    const newFav: LibraryFav = { favId: genId(), tplId: tpl.image, name: fileName, image: tpl.image, mockup: newMockup, checked: false };
     setLibraryFavorites((prev) => [...prev, newFav]);
     setToast(isTR ? 'Şablonlarınıza eklendi' : 'Added to My Templates');
   }, [libraryFavorites, isTR]);
@@ -484,175 +485,140 @@ export default function Home() {
         <div style={{
           width: isMobile ? '100%' : 300,
           height: isMobile ? 'auto' : '100%',
-          overflowY: 'auto',
-          background: theme.surface,
+          background: theme.bg,
           borderRight: isMobile ? 'none' : `1px solid ${theme.border}`,
           borderBottom: isMobile ? `1px solid ${theme.border}` : 'none',
           display: 'flex', flexDirection: 'column',
-          padding: '28px 16px',
+          padding: 16,
         }}>
-          <SectionLabel badge={libraryFavorites.length}>
-            {isTR ? 'Kayıtlı Şablonlar' : 'My Templates'}
-          </SectionLabel>
+          {/* Card — same rounded style as Frame Editor */}
+          <div style={{
+            flex: 1, background: theme.surface, borderRadius: 20, border: `1px solid ${theme.border}`,
+            boxShadow: '0 4px 24px rgba(0,0,0,0.04)', overflow: 'hidden', display: 'flex', flexDirection: 'column',
+          }}>
+            <div style={{ flex: 1, overflowY: 'auto', padding: '24px 20px' }}>
+              <SectionLabel badge={libraryFavorites.length}>
+                {isTR ? 'Kayıtlı Şablonlar' : 'My Templates'}
+              </SectionLabel>
 
-          {libraryFavorites.length === 0 ? (
-            <div style={{ padding: '28px 16px', borderRadius: 12, border: '2px dashed #E5E7EB', background: '#FAFAFA', textAlign: 'center', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <p style={{ fontSize: 13, color: '#6B7280', margin: 0, fontWeight: 500, lineHeight: 1.5 }}>
-                {isTR ? 'Kütüphaneden şablon ekleyin.' : 'Add templates from the library.'}
-              </p>
+              {libraryFavorites.length === 0 ? (
+                <div style={{ padding: '28px 16px', borderRadius: 12, border: '2px dashed #E5E7EB', background: '#FAFAFA', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 120 }}>
+                  <p style={{ fontSize: 13, color: '#6B7280', margin: 0, fontWeight: 500, lineHeight: 1.5 }}>
+                    {isTR ? 'Kütüphaneden şablon ekleyin.' : 'Add templates from the library.'}
+                  </p>
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+                  {libraryFavorites.map((fav) => {
+                    const isActive = fav.checked;
+                    return (
+                      <div
+                        key={fav.favId}
+                        onClick={() => toggleFav(fav.favId)}
+                        className="group"
+                        style={{
+                          position: 'relative', aspectRatio: '1', borderRadius: 10, overflow: 'hidden',
+                          cursor: 'pointer',
+                          border: `2px solid ${isActive ? '#F97316' : '#E5E7EB'}`,
+                          boxShadow: isActive ? '0 2px 10px rgba(249, 115, 22, 0.22)' : 'none',
+                          transition: 'all 0.2s ease',
+                        }}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={fav.image} alt={fav.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', opacity: isActive ? 1 : 0.55, transition: 'opacity 0.2s' }} />
+
+                        {/* Tik overlay — always visible */}
+                        <div style={{
+                          position: 'absolute', top: 5, left: 5,
+                          width: 20, height: 20, borderRadius: '50%',
+                          background: isActive ? '#F97316' : 'rgba(255,255,255,0.88)',
+                          border: `2px solid ${isActive ? '#F97316' : '#C9CDD4'}`,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          transition: 'all 0.2s',
+                          boxShadow: '0 1px 4px rgba(0,0,0,0.15)',
+                        }}>
+                          <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                            <polyline points="2.5,6 5,8.5 9.5,3.5" stroke={isActive ? '#fff' : '#9CA3AF'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+
+                        {/* X button — hover only */}
+                        <button
+                          onClick={(e) => { e.stopPropagation(); removeFav(fav.favId); }}
+                          className="opacity-0 group-hover:opacity-100"
+                          style={{
+                            position: 'absolute', top: 5, right: 5,
+                            width: 20, height: 20, borderRadius: '50%',
+                            background: 'rgba(255,255,255,0.92)', border: 'none', cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            color: '#EF4444', transition: 'opacity 0.2s',
+                            boxShadow: '0 1px 4px rgba(0,0,0,0.12)',
+                          }}
+                        >
+                          <svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                            <line x1="1" y1="1" x2="9" y2="9" /><line x1="9" y1="1" x2="1" y2="9" />
+                          </svg>
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
-          ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-              {libraryFavorites.map((fav) => {
-                const isActive = fav.checked;
-                return (
-                  <div
-                    key={fav.favId}
-                    onClick={() => toggleFav(fav.favId)}
-                    className="group"
-                    style={{
-                      position: 'relative', aspectRatio: '1', borderRadius: 10, overflow: 'hidden',
-                      cursor: 'pointer',
-                      border: `2px solid ${isActive ? '#F97316' : '#E5E7EB'}`,
-                      boxShadow: isActive ? '0 2px 10px rgba(249, 115, 22, 0.22)' : 'none',
-                      transition: 'all 0.2s ease',
-                    }}
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={fav.image} alt={fav.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', opacity: isActive ? 1 : 0.55, transition: 'opacity 0.2s' }} />
-
-                    {/* Tik overlay — always visible */}
-                    <div style={{
-                      position: 'absolute', top: 5, left: 5,
-                      width: 20, height: 20, borderRadius: '50%',
-                      background: isActive ? '#F97316' : 'rgba(255,255,255,0.88)',
-                      border: `2px solid ${isActive ? '#F97316' : '#C9CDD4'}`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      transition: 'all 0.2s',
-                      boxShadow: '0 1px 4px rgba(0,0,0,0.15)',
-                    }}>
-                      <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
-                        <polyline points="2.5,6 5,8.5 9.5,3.5" stroke={isActive ? '#fff' : '#9CA3AF'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-
-                    {/* X button — hover only */}
-                    <button
-                      onClick={(e) => { e.stopPropagation(); removeFav(fav.favId); }}
-                      className="opacity-0 group-hover:opacity-100"
-                      style={{
-                        position: 'absolute', top: 5, right: 5,
-                        width: 20, height: 20, borderRadius: '50%',
-                        background: 'rgba(255,255,255,0.92)', border: 'none', cursor: 'pointer',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        color: '#EF4444', transition: 'opacity 0.2s',
-                        boxShadow: '0 1px 4px rgba(0,0,0,0.12)',
-                      }}
-                    >
-                      <svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                        <line x1="1" y1="1" x2="9" y2="9" /><line x1="9" y1="1" x2="1" y2="9" />
-                      </svg>
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+          </div>
         </div>
 
-        {/* ── COL 2: Art Images + Mockup Templates + sticky Generate ────────── */}
+        {/* ── COL 2: Generate + Art Images + Mockup Templates ──────────────── */}
         <div style={{
           width: isMobile ? '100%' : 320,
           height: isMobile ? 'auto' : '100%',
           display: 'flex', flexDirection: 'column',
-          background: theme.surface,
+          background: theme.bg,
           borderRight: isMobile ? 'none' : `1px solid ${theme.border}`,
           borderBottom: isMobile ? `1px solid ${theme.border}` : 'none',
+          padding: 16, gap: 12,
         }}>
-          {/* Scrollable content area */}
-          <div style={{ flex: 1, overflowY: 'auto', padding: '28px 20px', display: 'flex', flexDirection: 'column', gap: 28 }}>
 
-            {/* Art Images */}
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <SectionLabel badge={artImages.length}>{isTR ? 'Sanat Görselleri' : 'Art Images'}</SectionLabel>
-              <DropZone onFiles={handleArtUpload} label={isTR ? 'Görselleri sürükleyin' : 'Drop artwork here'} sublabel="PNG · JPG · WEBP" multiple disabled={artImages.length >= MAX_ART} minHeight={140} />
-              {artImages.length > 0 && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 14 }}>
-                  {artImages.map((art) => (
-                    <AssetThumb key={art.id} url={art.url} name={art.name} onRemove={() => removeArt(art.id)} isMobile={isMobile} />
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <Divider />
-
-            {/* Mockup Templates — manual uploads + active library ones */}
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <SectionLabel badge={mockups.length}>
-                {isTR ? 'Mockup Şablonları' : 'Mockup Templates'}
-              </SectionLabel>
-              <DropZone onFiles={handleMockupUpload} label={isTR ? 'Kendi şablonunuzu yükleyin' : 'Upload custom template'} sublabel={isTR ? 'Açık/beyaz çerçeve alanları' : 'Light/white frame areas'} multiple={false} minHeight={140} disabled={mockups.length >= MAX_MOCKUPS} />
-
-              {/* Mockup Library button — below the dropzone */}
-              <button
-                onClick={() => setLibraryModalOpen(true)}
-                style={{
-                  width: '100%', marginTop: 10, padding: '11px 16px',
-                  background: 'rgba(249, 115, 22, 0.07)',
-                  color: '#F97316', border: '1.5px dashed rgba(249, 115, 22, 0.35)',
-                  borderRadius: 10, fontSize: 14, fontWeight: 700, cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                  transition: 'all 0.2s',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(249, 115, 22, 0.13)'; e.currentTarget.style.borderColor = '#F97316'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(249, 115, 22, 0.07)'; e.currentTarget.style.borderColor = 'rgba(249, 115, 22, 0.35)'; }}
-              >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" />
-                </svg>
-                {isTR ? 'Kütüphaneden Şablon Ekle' : 'Browse Mockup Library'}
-              </button>
-
-              {mockups.length > 0 && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 14 }}>
-                  {mockups.map((m) => (
-                    <AssetThumb key={m.id} url={m.url} name={m.name} onRemove={() => removeMockup(m.id)} isActive={m.id === activeMockupId} onClick={() => setActiveMockupId(m.id)} badge={m.frames.length > 0 ? `${m.frames.length}f` : undefined} isMobile={isMobile} />
-                  ))}
-                </div>
-              )}
-            </div>
-
-          </div>
-
-          {/* Sticky Generate block — pinned to bottom of COL 2 */}
-          <div style={{ padding: '20px 20px', background: theme.surface, borderTop: `1px solid ${theme.border}`, boxShadow: '0 -4px 20px rgba(0,0,0,0.02)', flexShrink: 0 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-              <div style={{ fontSize: 12, color: theme.textMuted, fontWeight: 500 }}>
-                {artImages.length} {isTR ? 'Sanat' : 'Art'} × {mockups.filter((m) => m.frames.length > 0).length} {isTR ? 'Şablon' : 'Tpl'}
+          {/* Generate block — at the top with big stats */}
+          <div style={{ background: theme.surface, borderRadius: 16, border: `1px solid ${theme.border}`, padding: '20px 16px', flexShrink: 0, boxShadow: '0 2px 12px rgba(0,0,0,0.03)' }}>
+            {/* Big stats */}
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 10, marginBottom: 18 }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 44, fontWeight: 800, color: artImages.length > 0 ? theme.textMain : '#D1D5DB', fontFamily: 'var(--font-display)', lineHeight: 1, transition: 'color 0.3s' }}>{artImages.length}</div>
+                <div style={{ fontSize: 10, fontWeight: 700, color: theme.textMuted, textTransform: 'uppercase', letterSpacing: '0.07em', marginTop: 4 }}>{isTR ? 'Sanat' : 'Art'}</div>
               </div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: theme.textMain }}>
-                {allCombinations.length} {isTR ? 'Kombinasyon' : 'Combos'}
+              <div style={{ fontSize: 26, color: '#D1D5DB', fontWeight: 300, paddingBottom: 22, lineHeight: 1 }}>×</div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 44, fontWeight: 800, color: mockups.filter(m => m.frames.length > 0).length > 0 ? theme.textMain : '#D1D5DB', fontFamily: 'var(--font-display)', lineHeight: 1, transition: 'color 0.3s' }}>{mockups.filter(m => m.frames.length > 0).length}</div>
+                <div style={{ fontSize: 10, fontWeight: 700, color: theme.textMuted, textTransform: 'uppercase', letterSpacing: '0.07em', marginTop: 4 }}>{isTR ? 'Şablon' : 'Tpl'}</div>
+              </div>
+              <div style={{ fontSize: 26, color: '#D1D5DB', fontWeight: 300, paddingBottom: 22, lineHeight: 1 }}>=</div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 44, fontWeight: 800, color: allCombinations.length > 0 ? theme.accent : '#D1D5DB', fontFamily: 'var(--font-display)', lineHeight: 1, transition: 'color 0.3s' }}>{allCombinations.length}</div>
+                <div style={{ fontSize: 10, fontWeight: 700, color: theme.textMuted, textTransform: 'uppercase', letterSpacing: '0.07em', marginTop: 4 }}>{isTR ? 'Kombo' : 'Combos'}</div>
               </div>
             </div>
 
+            {/* 3D Generate button */}
             <button
               onClick={handleGenerate}
               disabled={!canGenerate || isExhausted}
               style={{
-                width: '100%', height: 50, borderRadius: 12,
+                width: '100%', height: 52, borderRadius: 12,
                 fontSize: 15, fontWeight: 700, letterSpacing: '0.02em', fontFamily: theme.fontFamily,
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                background: canGenerate && !isExhausted ? theme.accent : '#F3F4F6',
+                background: canGenerate && !isExhausted ? 'linear-gradient(to bottom, #fb923c 0%, #f97316 100%)' : '#F3F4F6',
                 color: canGenerate && !isExhausted ? '#fff' : '#9CA3AF',
                 border: 'none', cursor: canGenerate && !isExhausted ? 'pointer' : 'not-allowed',
-                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                boxShadow: canGenerate && !isExhausted ? '0 4px 14px rgba(249, 115, 22, 0.3)' : 'none',
+                boxShadow: canGenerate && !isExhausted ? '0 6px 0 #c2410c, 0 8px 20px rgba(249,115,22,0.28)' : '0 4px 0 #D1D5DB',
+                transform: 'translateY(0)',
+                transition: 'box-shadow 0.1s, transform 0.1s',
+                position: 'relative',
               }}
-              onMouseEnter={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.background = theme.accentHover; e.currentTarget.style.transform = 'translateY(-1px)'; } }}
-              onMouseLeave={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.background = theme.accent; e.currentTarget.style.transform = 'none'; } }}
-              onMouseDown={(e) => { if (canGenerate && !isExhausted) e.currentTarget.style.transform = 'translateY(1px)'; }}
-              onMouseUp={(e) => { if (canGenerate && !isExhausted) e.currentTarget.style.transform = 'translateY(-1px)'; }}
+              onMouseEnter={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = '0 4px 0 #c2410c, 0 6px 16px rgba(249,115,22,0.25)'; e.currentTarget.style.transform = 'translateY(2px)'; } }}
+              onMouseLeave={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = '0 6px 0 #c2410c, 0 8px 20px rgba(249,115,22,0.28)'; e.currentTarget.style.transform = 'translateY(0)'; } }}
+              onMouseDown={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = '0 1px 0 #c2410c, 0 2px 8px rgba(249,115,22,0.15)'; e.currentTarget.style.transform = 'translateY(5px)'; } }}
+              onMouseUp={(e) => { if (canGenerate && !isExhausted) { e.currentTarget.style.boxShadow = '0 4px 0 #c2410c, 0 6px 16px rgba(249,115,22,0.25)'; e.currentTarget.style.transform = 'translateY(2px)'; } }}
             >
               {isGenerating ? (
                 <><span style={{ width: 16, height: 16, display: 'inline-block', borderRadius: '50%', border: '2.5px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', animation: 'spin 0.8s linear infinite' }} /> {isTR ? 'Oluşturuluyor...' : 'Generating...'}</>
@@ -668,6 +634,67 @@ export default function Home() {
                 {limitReached ? (isTR ? 'Limit doldu.' : 'Limit reached.') : (DAILY_LIMIT ? (isTR ? `${generatesRemaining} ücretsiz hak kaldı` : `${generatesRemaining} free left`) : (isTR ? 'Sınırsız Plan' : 'Unlimited Plan'))}
               </p>
             )}
+          </div>
+
+          {/* Content card — same rounded style as Frame Editor */}
+          <div style={{
+            flex: 1, background: theme.surface, borderRadius: 20, border: `1px solid ${theme.border}`,
+            boxShadow: '0 4px 24px rgba(0,0,0,0.04)', overflow: 'hidden', display: 'flex', flexDirection: 'column',
+          }}>
+            <div style={{ flex: 1, overflowY: 'auto', padding: '24px 20px', display: 'flex', flexDirection: 'column', gap: 24 }}>
+
+              {/* Art Images */}
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <SectionLabel badge={artImages.length}>{isTR ? 'Sanat Görselleri' : 'Art Images'}</SectionLabel>
+                <DropZone onFiles={handleArtUpload} label={isTR ? 'Görselleri sürükleyin' : 'Drop artwork here'} sublabel="PNG · JPG · WEBP" multiple disabled={artImages.length >= MAX_ART} minHeight={120} />
+                {artImages.length > 0 && (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 14 }}>
+                    {artImages.map((art) => (
+                      <AssetThumb key={art.id} url={art.url} name={art.name} onRemove={() => removeArt(art.id)} isMobile={isMobile} />
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <Divider />
+
+              {/* Mockup Templates — manual uploads + active library ones */}
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <SectionLabel badge={mockups.length}>
+                  {isTR ? 'Mockup Şablonları' : 'Mockup Templates'}
+                </SectionLabel>
+                <DropZone onFiles={handleMockupUpload} label={isTR ? 'Kendi şablonunuzu yükleyin' : 'Upload custom template'} sublabel={isTR ? 'Açık/beyaz çerçeve alanları' : 'Light/white frame areas'} multiple={false} minHeight={120} disabled={mockups.length >= MAX_MOCKUPS} />
+
+                {/* Mockup Library button */}
+                <button
+                  onClick={() => setLibraryModalOpen(true)}
+                  style={{
+                    width: '100%', marginTop: 10, padding: '11px 16px',
+                    background: 'rgba(249, 115, 22, 0.07)',
+                    color: '#F97316', border: '1.5px dashed rgba(249, 115, 22, 0.35)',
+                    borderRadius: 10, fontSize: 14, fontWeight: 700, cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    transition: 'all 0.2s',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(249, 115, 22, 0.13)'; e.currentTarget.style.borderColor = '#F97316'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(249, 115, 22, 0.07)'; e.currentTarget.style.borderColor = 'rgba(249, 115, 22, 0.35)'; }}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" />
+                  </svg>
+                  {isTR ? 'Kütüphaneden Şablon Ekle' : 'Browse Mockup Library'}
+                </button>
+
+                {mockups.length > 0 && (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 14 }}>
+                    {mockups.map((m) => (
+                      <AssetThumb key={m.id} url={m.url} name={m.name} onRemove={() => removeMockup(m.id)} isActive={m.id === activeMockupId} onClick={() => setActiveMockupId(m.id)} badge={m.frames.length > 0 ? `${m.frames.length}f` : undefined} isMobile={isMobile} />
+                    ))}
+                  </div>
+                )}
+              </div>
+
+            </div>
           </div>
         </div>
 
@@ -807,7 +834,7 @@ export default function Home() {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={tpl.image} alt={tpl.name} style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', display: 'block' }} />
                         <div style={{ padding: '12px 16px', background: theme.surface }}>
-                          <p style={{ fontSize: 13, fontWeight: 700, color: theme.textMain, margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{tpl.name}</p>
+                          <p style={{ fontSize: 13, fontWeight: 700, color: theme.textMain, margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{tpl.image.split('/').pop() || tpl.name}</p>
                         </div>
                         {tpl.frames.length > 0 && <div style={{ position: 'absolute', top: 10, right: 10, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', color: '#fff', fontSize: 11, fontWeight: 700, padding: '4px 8px', borderRadius: 8 }}>{tpl.frames.length}f</div>}
                         {isSelected && <div style={{ position: 'absolute', top: 10, left: 10, width: 24, height: 24, borderRadius: '50%', background: theme.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }}><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="2.5,6 5,8.5 9.5,3.5" /></svg></div>}
