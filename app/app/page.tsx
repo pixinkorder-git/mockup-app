@@ -52,18 +52,23 @@ const theme = {
   fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
 };
 
+// ─── Divider ──────────────────────────────────────────────────────────────────
+function Divider() {
+  return <div style={{ height: 1, background: '#E5E7EB', margin: '4px 0' }} />;
+}
+
 // ─── Section label ────────────────────────────────────────────────────────────
 function SectionLabel({ children, badge, action }: { children: React.ReactNode; badge?: number; action?: React.ReactNode }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <h3 style={{
-          fontFamily: theme.fontFamily,
-          fontSize: 16,
-          fontWeight: 700,
+          fontFamily: 'var(--font-display)',
+          fontSize: 22,
+          fontWeight: 800,
           color: theme.textMain,
           margin: 0,
-          letterSpacing: '-0.01em'
+          letterSpacing: '-0.02em'
         }}>
           {children}
         </h3>
@@ -485,22 +490,14 @@ export default function Home() {
           overflow: 'hidden'
         }}>
 
-          <div style={{ flex: 1, overflowY: 'auto', padding: '24px 24px 40px', display: 'flex', flexDirection: 'column', gap: 32 }}>
+          <div style={{ flex: 1, overflowY: 'auto', padding: '32px 24px', display: 'flex', flexDirection: 'column', gap: 32 }}>
 
-            {/* Art Images Section */}
-            <div>
+            {/* 1. ART IMAGES */}
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
               <SectionLabel badge={artImages.length}>{isTR ? 'Sanat Görselleri' : 'Art Images'}</SectionLabel>
-              <DropZone
-                onFiles={handleArtUpload}
-                label={isTR ? 'Görselleri sürükleyin' : 'Drop artwork here'}
-                sublabel="PNG · JPG · WEBP"
-                multiple disabled={artImages.length >= MAX_ART} minHeight={100}
-              />
-              <p style={{ fontSize: 12, marginTop: 10, color: artImages.length >= MAX_ART ? '#EF4444' : theme.textMuted, fontWeight: 500 }}>
-                {artImages.length >= MAX_ART ? (isTR ? `Sınıra ulaşıldı (${MAX_ART})` : `Limit reached (${MAX_ART})`) : `${artImages.length} / ${MAX_ART} files`}
-              </p>
+              <DropZone onFiles={handleArtUpload} label={isTR ? 'Görselleri sürükleyin' : 'Drop artwork here'} sublabel="PNG · JPG · WEBP" multiple disabled={artImages.length >= MAX_ART} minHeight={160} />
               {artImages.length > 0 && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 12 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 16 }}>
                   {artImages.map((art) => (
                     <AssetThumb key={art.id} url={art.url} name={art.name} onRemove={() => removeArt(art.id)} isMobile={isMobile} />
                   ))}
@@ -508,20 +505,37 @@ export default function Home() {
               )}
             </div>
 
-            {/* My Templates Section */}
-            <div>
+            <Divider />
+
+            {/* 2. MOCKUP TEMPLATES (MANUAL UPLOAD) */}
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <SectionLabel badge={mockups.filter(m => !libraryFavorites.some(f => f.mockup.id === m.id)).length}>
+                {isTR ? 'Mockup Şablonları' : 'Mockup Templates'}
+              </SectionLabel>
+              <DropZone onFiles={handleMockupUpload} label={isTR ? 'Kendi şablonunuzu yükleyin' : 'Upload custom template'} sublabel={isTR ? 'Açık/beyaz çerçeve alanları' : 'Light/white frame areas'} multiple={false} minHeight={160} disabled={mockups.length >= MAX_MOCKUPS} />
+              {(() => {
+                const uploaded = mockups.filter((m) => !libraryFavorites.some((f) => f.mockup.id === m.id));
+                return uploaded.length > 0 ? (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 16 }}>
+                    {uploaded.map((m) => (
+                      <AssetThumb key={m.id} url={m.url} name={m.name} onRemove={() => removeMockup(m.id)} isActive={m.id === activeMockupId} onClick={() => setActiveMockupId(m.id)} badge={m.frames.length > 0 ? `${m.frames.length}f` : undefined} isMobile={isMobile} />
+                    ))}
+                  </div>
+                ) : null;
+              })()}
+            </div>
+
+            <Divider />
+
+            {/* 3. MY TEMPLATES (LIBRARY FAVORITES) */}
+            <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
               <SectionLabel
                 badge={libraryFavorites.length}
                 action={
                   <button
                     onClick={() => setLibraryModalOpen(true)}
-                    style={{
-                      background: 'rgba(249, 115, 22, 0.1)', color: theme.accent, border: 'none',
-                      padding: '6px 12px', borderRadius: 8, fontSize: 13, fontWeight: 600,
-                      cursor: 'pointer', transition: 'background 0.2s',
-                      display: 'flex', alignItems: 'center', gap: 6
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(249, 115, 22, 0.15)'}
+                    style={{ background: 'rgba(249, 115, 22, 0.1)', color: '#F97316', border: 'none', padding: '8px 14px', borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 6 }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(249, 115, 22, 0.18)'}
                     onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(249, 115, 22, 0.1)'}
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -531,17 +545,17 @@ export default function Home() {
                   </button>
                 }
               >
-                {isTR ? 'Şablonlarım' : 'My Templates'}
+                {isTR ? 'Kayıtlı Şablonlar' : 'My Templates'}
               </SectionLabel>
 
               {libraryFavorites.length === 0 ? (
-                <div style={{ padding: '24px 16px', borderRadius: 12, border: `2px dashed ${theme.border}`, background: '#FAFAFA', textAlign: 'center' }}>
-                  <p style={{ fontSize: 13, color: theme.textMuted, margin: 0, fontWeight: 500 }}>
+                <div style={{ padding: '32px 20px', borderRadius: 12, border: '2px dashed #E5E7EB', background: '#FAFAFA', textAlign: 'center', minHeight: 160, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <p style={{ fontSize: 14, color: '#6B7280', margin: 0, fontWeight: 500 }}>
                     {isTR ? 'Kütüphaneden şablon seçerek başlayın.' : 'Start by adding templates from the library.'}
                   </p>
                 </div>
               ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {libraryFavorites.map((fav) => {
                     const isActive = fav.checked;
                     return (
@@ -549,54 +563,34 @@ export default function Home() {
                         key={fav.favId}
                         onClick={() => setActiveMockupId(fav.mockup.id)}
                         className="group"
-                        style={{
-                          display: 'flex', alignItems: 'center', gap: 12, padding: '8px 12px', borderRadius: 12,
-                          background: isActive ? 'rgba(249, 115, 22, 0.04)' : theme.surface,
-                          border: `1px solid ${isActive ? theme.accent : theme.border}`,
-                          cursor: 'pointer', transition: 'all 0.2s ease',
-                          boxShadow: isActive ? '0 2px 8px rgba(249, 115, 22, 0.08)' : 'none'
-                        }}
+                        style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 14px', borderRadius: 12, background: isActive ? 'rgba(249, 115, 22, 0.04)' : '#FFFFFF', border: `1.5px solid ${isActive ? '#F97316' : '#E5E7EB'}`, cursor: 'pointer', transition: 'all 0.2s ease', boxShadow: isActive ? '0 2px 8px rgba(249, 115, 22, 0.08)' : 'none' }}
                       >
                         <div
                           onClick={(e) => { e.stopPropagation(); toggleFav(fav.favId); }}
-                          style={{
-                            width: 20, height: 20, borderRadius: 6, flexShrink: 0,
-                            border: `2px solid ${isActive ? theme.accent : '#D1D5DB'}`,
-                            background: isActive ? theme.accent : '#fff',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            transition: 'all 0.2s', cursor: 'pointer'
-                          }}
+                          style={{ width: 22, height: 22, borderRadius: 6, flexShrink: 0, border: `2px solid ${isActive ? '#F97316' : '#D1D5DB'}`, background: isActive ? '#F97316' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', cursor: 'pointer' }}
                         >
-                          {isActive && <svg width="12" height="12" viewBox="0 0 12 12"><polyline points="2.5,6 5,8.5 9.5,3.5" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                          {isActive && <svg width="14" height="14" viewBox="0 0 12 12"><polyline points="2.5,6 5,8.5 9.5,3.5" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>}
                         </div>
-
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={fav.image} alt={fav.name} style={{ width: 44, height: 44, objectFit: 'cover', borderRadius: 8, border: `1px solid ${theme.border}`, opacity: isActive ? 1 : 0.6, transition: 'opacity 0.2s' }} />
-
+                        <img src={fav.image} alt={fav.name} style={{ width: 52, height: 52, objectFit: 'cover', borderRadius: 8, border: '1px solid #E5E7EB', opacity: isActive ? 1 : 0.6, transition: 'opacity 0.2s' }} />
                         <div style={{ flex: 1, minWidth: 0 }}>
-                          <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: isActive ? theme.textMain : theme.textMuted, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{fav.name}</p>
-                          <p style={{ margin: 0, fontSize: 11, color: theme.textMuted, marginTop: 2, fontWeight: 500 }}>{fav.mockup.frames.length} {isTR ? 'çerçeve' : 'frames'}</p>
+                          <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: isActive ? '#111827' : '#6B7280', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{fav.name}</p>
+                          <p style={{ margin: 0, fontSize: 12, color: '#6B7280', marginTop: 4, fontWeight: 500 }}>{fav.mockup.frames.length} {isTR ? 'çerçeve' : 'frames'}</p>
                         </div>
-
                         <button
                           onClick={(e) => { e.stopPropagation(); removeFav(fav.favId); }}
                           className="opacity-0 group-hover:opacity-100"
-                          style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#9CA3AF', padding: 4, transition: 'color 0.2s, opacity 0.2s', display: 'flex' }}
+                          style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#9CA3AF', padding: 6, transition: 'color 0.2s, opacity 0.2s', display: 'flex' }}
                           onMouseEnter={(e) => e.currentTarget.style.color = '#EF4444'}
                           onMouseLeave={(e) => e.currentTarget.style.color = '#9CA3AF'}
                         >
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                         </button>
                       </div>
                     );
                   })}
                 </div>
               )}
-
-              {/* Manual Upload Fallback */}
-              <div style={{ marginTop: 20 }}>
-                <DropZone onFiles={handleMockupUpload} label={isTR ? 'Kendi şablonunuzu yükleyin' : 'Upload custom template'} multiple={false} minHeight={80} disabled={mockups.length >= MAX_MOCKUPS} />
-              </div>
             </div>
 
           </div>
@@ -688,7 +682,7 @@ export default function Home() {
           }}>
             {/* Editor Toolbar */}
             <div style={{ padding: '16px 24px', borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#FAFAFA' }}>
-              <div style={{ fontWeight: 600, color: theme.textMain }}>{isTR ? 'Çerçeve Düzenleyici' : 'Frame Editor'}</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 800, color: theme.textMain, letterSpacing: '-0.02em' }}>{isTR ? 'Çerçeve Düzenleyici' : 'Frame Editor'}</div>
               {activeMockup && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                   {activeMockup.frames.length > 0 && (
@@ -723,7 +717,7 @@ export default function Home() {
           {results.length > 0 && (
             <div style={{ marginTop: 48 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-                <h2 style={{ margin: 0, fontSize: 24, fontWeight: 800, color: theme.textMain, letterSpacing: '-0.02em' }}>
+                <h2 style={{ margin: 0, fontSize: 24, fontWeight: 800, color: theme.textMain, letterSpacing: '-0.02em', fontFamily: 'var(--font-display)' }}>
                   {isTR ? 'Sonuçlar' : 'Results'}
                 </h2>
                 <button onClick={handleClearResults} style={{ padding: '8px 16px', borderRadius: 8, background: '#FEE2E2', color: '#DC2626', border: 'none', fontWeight: 600, cursor: 'pointer', fontSize: 13 }}>
