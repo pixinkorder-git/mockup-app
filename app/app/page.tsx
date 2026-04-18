@@ -751,7 +751,7 @@ export default function Home() {
           }}>
             {/* Editor Toolbar */}
             <div style={{ padding: '16px 24px', borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#FAFAFA' }}>
-              <div style={{ fontFamily: theme.fontFamily, fontSize: 20, fontWeight: 800, color: theme.textMain, letterSpacing: '-0.02em' }}>{isTR ? 'Çerçeve Düzenleyici' : 'Frame Editor'}</div>
+              <div style={{ fontFamily: theme.fontFamily, fontSize: 22, fontWeight: 800, color: theme.textMain, letterSpacing: '-0.02em' }}>{isTR ? 'Çerçeve Düzenleyici' : 'Frame Editor'}</div>
               {activeMockup && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                   {activeMockup.frames.length > 0 && (
@@ -786,7 +786,7 @@ export default function Home() {
           {results.length > 0 && (
             <div style={{ marginTop: 40 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-                <h2 style={{ margin: 0, fontSize: 24, fontWeight: 800, color: theme.textMain, letterSpacing: '-0.02em', fontFamily: theme.fontFamily }}>
+                <h2 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: theme.textMain, letterSpacing: '-0.02em', fontFamily: theme.fontFamily }}>
                   {isTR ? 'Sonuçlar' : 'Results'}
                 </h2>
                 <button onClick={handleClearResults} style={{ padding: '8px 16px', borderRadius: 8, background: '#FEE2E2', color: '#DC2626', border: 'none', fontWeight: 700, fontFamily: theme.fontFamily, cursor: 'pointer', fontSize: 13, boxShadow: '0 2px 0 rgba(220,38,38,0.28), 0 4px 10px rgba(220,38,38,0.10)', transform: 'translateY(0)', transition: 'transform 0.1s, box-shadow 0.1s' }}>
@@ -814,7 +814,7 @@ export default function Home() {
             style={{ width: '100%', maxWidth: 800, maxHeight: '85vh', background: theme.surface, borderRadius: 24, display: 'flex', flexDirection: 'column', boxShadow: '0 24px 48px rgba(0,0,0,0.2)', overflow: 'hidden' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '24px 32px', borderBottom: `1px solid ${theme.border}` }}>
-              <h2 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: theme.textMain }}>{isTR ? 'Kütüphane' : 'Browse Library'}</h2>
+              <h2 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: theme.textMain, fontFamily: theme.fontFamily, letterSpacing: '-0.02em' }}>{isTR ? 'Kütüphane' : 'Browse Library'}</h2>
               <button onClick={() => setLibraryModalOpen(false)} style={{ width: 36, height: 36, borderRadius: '50%', background: '#F3F4F6', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: theme.textMuted, transition: 'background 0.2s' }} onMouseEnter={e => e.currentTarget.style.background = '#E5E7EB'} onMouseLeave={e => e.currentTarget.style.background = '#F3F4F6'}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
               </button>
