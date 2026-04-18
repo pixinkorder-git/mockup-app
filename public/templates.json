@@ -15,6 +15,351 @@
     ]
   },
   {
+    "name": "Template 2",
+    "category": "wall-frame",
+    "image": "/templates/template (2).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 3",
+    "category": "wall-frame",
+    "image": "/templates/template (3).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 4",
+    "category": "wall-frame",
+    "image": "/templates/template (4).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 5",
+    "category": "wall-frame",
+    "image": "/templates/template (5).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 6",
+    "category": "wall-frame",
+    "image": "/templates/template (6).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 7",
+    "category": "wall-frame",
+    "image": "/templates/template (7).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 8",
+    "category": "wall-frame",
+    "image": "/templates/template (8).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 9",
+    "category": "wall-frame",
+    "image": "/templates/template (9).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 10",
+    "category": "wall-frame",
+    "image": "/templates/template (10).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 11",
+    "category": "wall-frame",
+    "image": "/templates/template (11).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 12",
+    "category": "wall-frame",
+    "image": "/templates/template (12).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 13",
+    "category": "wall-frame",
+    "image": "/templates/template (13).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 14",
+    "category": "wall-frame",
+    "image": "/templates/template (14).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 15",
+    "category": "wall-frame",
+    "image": "/templates/template (15).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 16",
+    "category": "wall-frame",
+    "image": "/templates/template (16).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 17",
+    "category": "wall-frame",
+    "image": "/templates/template (17).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 18",
+    "category": "wall-frame",
+    "image": "/templates/template (18).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 19",
+    "category": "wall-frame",
+    "image": "/templates/template (19).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 20",
+    "category": "wall-frame",
+    "image": "/templates/template (20).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 21",
+    "category": "wall-frame",
+    "image": "/templates/template (21).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 22",
+    "category": "wall-frame",
+    "image": "/templates/template (22).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 23",
+    "category": "wall-frame",
+    "image": "/templates/template (23).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 24",
+    "category": "wall-frame",
+    "image": "/templates/template (24).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
     "name": "Ekran görüntüsü 2026-03-13 221732",
     "category": "wall-frame",
     "image": "/templates/template (25).png",
@@ -40,6 +385,36 @@
         "y": 0.1551,
         "w": 0.1601,
         "h": 0.2433,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 26",
+    "category": "wall-frame",
+    "image": "/templates/template (26).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "Template 27",
+    "category": "wall-frame",
+    "image": "/templates/template (27).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
         "rotation": 0,
         "cornerRadius": 0
       }
