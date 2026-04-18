@@ -198,7 +198,7 @@ export default function MockupEditor({
         const fy = frame.y * scale;
         const fw = frame.w * scale;
         const fh = frame.h * scale;
-        const fr = cornerRadius * scale;
+        const fr = (frame.cornerRadius ?? cornerRadius) * scale;
         const isHighlighted = frame.id === highlightId;
 
         const framePath = () => {

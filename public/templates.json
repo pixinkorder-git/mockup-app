@@ -1,5 +1,20 @@
 [
   {
+    "name": "template (1)",
+    "category": "wall-frame",
+    "image": "/templates/template (1).png",
+    "frames": [
+      {
+        "x": 0.2813,
+        "y": 0.1699,
+        "w": 0.4492,
+        "h": 0.5557,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
     "name": "template (2)",
     "category": "wall-frame",
     "image": "/templates/template (2).png",
@@ -459,6 +474,37 @@
         "y": 0.2112,
         "w": 0.157,
         "h": 0.2533,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "template (25)",
+    "category": "wall-frame",
+    "image": "/templates/template (25).png",
+    "frames": [
+      {
+        "x": 0.6034,
+        "y": 0.2368,
+        "w": 0.2272,
+        "h": 0.1616,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.3845,
+        "y": 0.2544,
+        "w": 0.1685,
+        "h": 0.247,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.1732,
+        "y": 0.1551,
+        "w": 0.1601,
+        "h": 0.2433,
         "rotation": 0,
         "cornerRadius": 0
       }
