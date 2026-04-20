@@ -1707,18 +1707,71 @@ footer {
   const wrap = document.getElementById('hsBeforeWrap');
   const divider = document.getElementById('hsDivider');
   let dragging = false;
-  function setPos(x){
-    const rect = slider.getBoundingClientRect();
-    let pct = Math.min(Math.max((x - rect.left) / rect.width * 100, 0), 100);
+  let hintRaf = null;
+
+  function setPct(pct) {
     wrap.style.width = pct + '%';
     divider.style.left = pct + '%';
   }
-  slider.addEventListener('mousedown', e=>{ dragging=true; setPos(e.clientX); });
-  window.addEventListener('mousemove', e=>{ if(dragging) setPos(e.clientX); });
-  window.addEventListener('mouseup', ()=>{ dragging=false; });
-  slider.addEventListener('touchstart', e=>{ dragging=true; setPos(e.touches[0].clientX); },{passive:true});
-  window.addEventListener('touchmove', e=>{ if(dragging) setPos(e.touches[0].clientX); },{passive:true});
-  window.addEventListener('touchend', ()=>{ dragging=false; });
+  function setPos(x) {
+    const rect = slider.getBoundingClientRect();
+    setPct(Math.min(Math.max((x - rect.left) / rect.width * 100, 0), 100));
+  }
+
+  // Damped sinusoidal hint — swings left/right then fades out
+  function startHint() {
+    cancelAnimationFrame(hintRaf);
+    const t0 = performance.now();
+    const amplitude = 10;   // % each side
+    const freq = 0.0038;    // rad/ms → ~1.65 s per cycle
+    const duration = 3000;  // ms until fully decayed
+    function frame(now) {
+      if (dragging) return;
+      const elapsed = now - t0;
+      const decay = Math.max(0, 1 - elapsed / duration);
+      setPct(50 + amplitude * decay * Math.sin(freq * elapsed));
+      if (decay > 0) hintRaf = requestAnimationFrame(frame);
+      else setPct(50);
+    }
+    hintRaf = requestAnimationFrame(frame);
+  }
+  function stopHint() { cancelAnimationFrame(hintRaf); hintRaf = null; }
+
+  // Subtle 3D tilt following the mouse
+  function applyTilt(e) {
+    const rect = slider.getBoundingClientRect();
+    const x = (e.clientX - rect.left - rect.width  / 2) / (rect.width  / 2);
+    const y = (e.clientY - rect.top  - rect.height / 2) / (rect.height / 2);
+    slider.style.transition = 'transform 0.14s ease, box-shadow 0.14s ease';
+    slider.style.transform  = `perspective(900px) rotateY(${x*5}deg) rotateX(${-y*3}deg) scale(1.012)`;
+    slider.style.boxShadow  = `${-x*10}px ${y*6+20}px 60px rgba(0,0,0,0.18)`;
+  }
+  function resetTilt() {
+    slider.style.transition = 'transform 0.5s ease, box-shadow 0.5s ease';
+    slider.style.transform  = '';
+    slider.style.boxShadow  = '';
+  }
+
+  // Hover: start hint + enable tilt
+  slider.addEventListener('mouseenter', () => startHint());
+  slider.addEventListener('mousemove',  e  => { if (!dragging) applyTilt(e); });
+  slider.addEventListener('mouseleave', ()  => { stopHint(); resetTilt(); });
+
+  // Drag: stop hint, drop tilt
+  slider.addEventListener('mousedown', e => {
+    dragging = true;
+    stopHint();
+    slider.style.transition = 'none';
+    slider.style.transform  = '';
+    setPos(e.clientX);
+  });
+  window.addEventListener('mousemove', e  => { if (dragging) setPos(e.clientX); });
+  window.addEventListener('mouseup',   ()  => { dragging = false; });
+
+  // Touch
+  slider.addEventListener('touchstart', e => { dragging=true; setPos(e.touches[0].clientX); }, {passive:true});
+  window.addEventListener('touchmove',  e => { if(dragging) setPos(e.touches[0].clientX); },  {passive:true});
+  window.addEventListener('touchend',   ()  => { dragging=false; });
 })();
 </script>
 
