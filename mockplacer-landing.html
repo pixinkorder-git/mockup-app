@@ -83,7 +83,9 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
   gap: 10px;
   text-decoration: none;
   color: var(--black);
+  flex-shrink: 0;
 }
+.logo img { display: block; max-width: 220px; height: auto; }
 
 .logo-icon {
   width: 32px; height: 32px;
@@ -127,7 +129,12 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
   align-items: center;
   gap: 36px;
   list-style: none;
+  flex-wrap: nowrap;
+  flex-shrink: 1;
+  min-width: 0;
 }
+
+.nav-links li { flex-shrink: 0; }
 
 .nav-links a {
   text-decoration: none;
@@ -135,6 +142,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
   font-size: 1.38rem;
   font-weight: 500;
   transition: color 0.2s;
+  white-space: nowrap;
 }
 
 .nav-links a:hover { color: var(--black); }
@@ -151,6 +159,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 4px 0 rgba(0,0,0,0.65), 0 5px 0 rgba(0,0,0,0.18), 0 9px 20px rgba(0,0,0,0.16);
   transform: translateY(0);
   display: inline-block;
+  white-space: nowrap;
 }
 .nav-cta:hover {
   background: linear-gradient(to bottom, #fb923c 0%, #f97316 100%) !important;
@@ -173,6 +182,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
   padding: 9px 22px;
   transition: transform 0.1s, box-shadow 0.1s, background 0.1s, color 0.1s;
   white-space: nowrap;
+  flex-shrink: 0;
   box-shadow: inset 0 1px 0 rgba(255,107,53,0.12), 0 4px 0 #b33000, 0 5px 0 rgba(179,48,0,0.22), 0 8px 16px rgba(255,107,53,0.16);
   transform: translateY(0);
   display: inline-block;
@@ -1222,6 +1232,23 @@ footer {
 /* ══════════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════════ */
+
+/* 1280px — large laptop: nav yazı ve boşluk küçült */
+@media (max-width: 1280px) {
+  .nav-links { gap: 22px; }
+  .nav-links a { font-size: 1.1rem; }
+  .nav-cta { padding: 10px 22px; font-size: 1.1rem !important; }
+  .nav-sign-in { padding: 8px 16px; font-size: 1.08rem !important; }
+}
+
+/* 1150px — hamburger menü devreye girer (8 nav öğesi sığmaz) */
+@media (max-width: 1150px) {
+  nav { height: 70px; }
+  .nav-links { display: none; }
+  .mobile-menu-btn { display: block; }
+}
+
+/* 960px — tablet grid düzenlemeleri */
 @media (max-width: 960px) {
   .steps-grid { grid-template-columns: repeat(2, 1fr); }
   .why-grid { grid-template-columns: 1fr; }
@@ -1229,11 +1256,21 @@ footer {
   .footer-inner { grid-template-columns: 1fr 1fr; }
 }
 
-@media (max-width: 700px) {
-  .nav-links { display: none; }
-  .mobile-menu-btn { display: block; }
+/* 768px — tablet dikey / büyük mobil */
+@media (max-width: 768px) {
+  nav { height: 64px; }
+  .logo img { max-width: 145px; }
+  .hero { padding-top: 80px; padding-bottom: 32px; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .btn { width: 100%; justify-content: center; }
+  .testi-grid { grid-template-columns: 1fr; gap: 14px; }
+}
 
-  .hero { padding-top: 100px; padding-bottom: 40px; min-height: auto; }
+/* 700px — mobil */
+@media (max-width: 700px) {
+  nav { height: 60px; }
+  .logo img { max-width: 125px; }
+  .hero { padding-top: 76px; padding-bottom: 40px; min-height: auto; }
   .hero-slider-wrap { margin-top: 24px; padding: 0 12px; }
 
   .fm-laptop { display: none; }
@@ -1255,9 +1292,6 @@ footer {
 
   .footer-inner { grid-template-columns: 1fr; gap: 28px; }
   .footer-bottom { flex-direction: column; gap: 14px; text-align: center; }
-
-  .hero-actions { flex-direction: column; width: 100%; }
-  .btn { width: 100%; justify-content: center; }
 }
 
 /* ── Animated Demo ──────────────────────────────────────── */
@@ -2537,20 +2571,51 @@ addEventListener('mousemove', e => {
 });
 
 // Mobile menu
-document.querySelector('.mobile-menu-btn')?.addEventListener('click', () => {
+(function() {
+  const btn = document.querySelector('.mobile-menu-btn');
   const links = document.querySelector('.nav-links');
-  links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
-  links.style.position = 'fixed';
-  links.style.top = '72px';
-  links.style.left = '0';
-  links.style.right = '0';
-  links.style.background = 'white';
-  links.style.flexDirection = 'column';
-  links.style.padding = '20px';
-  links.style.gap = '16px';
-  links.style.boxShadow = '0 8px 32px rgba(0,0,0,0.1)';
-  links.style.zIndex = '99';
-});
+  const navbar = document.getElementById('navbar');
+  if (!btn || !links) return;
+
+  function openMenu() {
+    links.style.display = 'flex';
+    links.style.position = 'fixed';
+    links.style.top = (navbar ? navbar.offsetHeight : 70) + 'px';
+    links.style.left = '0';
+    links.style.right = '0';
+    links.style.background = 'white';
+    links.style.flexDirection = 'column';
+    links.style.padding = '20px';
+    links.style.gap = '16px';
+    links.style.boxShadow = '0 8px 32px rgba(0,0,0,0.1)';
+    links.style.zIndex = '99';
+    links.style.borderBottom = '1px solid #E5E5E5';
+  }
+
+  function closeMenu() {
+    links.style.display = '';
+    links.style.position = '';
+    links.style.top = '';
+    links.style.flexDirection = '';
+    links.style.padding = '';
+    links.style.gap = '';
+    links.style.boxShadow = '';
+    links.style.borderBottom = '';
+    links.style.zIndex = '';
+  }
+
+  btn.addEventListener('click', () => {
+    links.style.display === 'flex' ? closeMenu() : openMenu();
+  });
+
+  // Close menu on resize to desktop
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 1150) closeMenu();
+  });
+
+  // Close menu when a nav link is clicked
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+})();
 
 // i18n Translation System
 const translations = {
