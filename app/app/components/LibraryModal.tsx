@@ -2,7 +2,12 @@
 
 import { theme, LibraryTemplateItem, LibraryFav } from './ui/editorTheme';
 
-const FREE_TEMPLATES = ['mockup1', 'mockup2', 'mockup18'];
+const FREE_TEMPLATES = ['template (1)', 'template (2)', 'mockup18'];
+
+function extractNumber(name: string): number {
+  const m = name.match(/\d+/);
+  return m ? parseInt(m[0], 10) : 0;
+}
 
 interface LibraryModalProps {
   open: boolean;
@@ -51,20 +56,6 @@ export default function LibraryModal({
         </div>
 
         <div style={{ flex: 1, overflowY: 'auto', padding: 32 }}>
-          {categories.length > 1 && (
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 24 }}>
-              {['all', ...categories].map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setCategory(cat)}
-                  style={{ padding: '8px 16px', borderRadius: 99, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600, background: category === cat ? theme.textMain : '#F3F4F6', color: category === cat ? '#fff' : theme.textMuted, transition: 'all 0.2s' }}
-                >
-                  {cat === 'all' ? (isTR ? 'Tümü' : 'All') : cat.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
-                </button>
-              ))}
-            </div>
-          )}
-
           {loading ? (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 200, color: theme.textMuted, fontWeight: 500 }}>
               {isTR ? 'Yükleniyor...' : 'Loading...'}
@@ -75,7 +66,12 @@ export default function LibraryModal({
             </div>
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 20 }}>
-              {templates.map((tpl) => {
+              {[...templates].sort((a, b) => {
+                const aFree = FREE_TEMPLATES.includes(a.name);
+                const bFree = FREE_TEMPLATES.includes(b.name);
+                if (aFree !== bFree) return aFree ? -1 : 1;
+                return extractNumber(a.name) - extractNumber(b.name);
+              }).map((tpl) => {
                 const isSelected = favorites.some((f) => f.tplId === tpl.image);
                 const isLocked = plan !== 'pro' && !FREE_TEMPLATES.includes(tpl.name);
                 return (
