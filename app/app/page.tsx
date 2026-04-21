@@ -1,16 +1,15 @@
 'use client';
 
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
-import Link from 'next/link';
 import { createClient } from '@/utils/supabase/client';
 import DropZone from '@/app/components/DropZone';
 import MockupEditor from '@/app/components/MockupEditor';
 import ResultsGrid from '@/app/components/ResultsGrid';
-import UserDropdown from '@/app/components/UserDropdown';
 import { ArtImage, MockupTemplate, Frame, GeneratedResult } from '@/app/utils/types';
 import { computeCombinations, orderCombinations, generateBatch } from '@/app/utils/compositor';
-import { theme, FRAME_COLORS, Divider, SectionLabel, AssetThumb, NavStat, LibraryTemplateItem, LibraryFav } from './components/ui/editorTheme';
+import { theme, FRAME_COLORS, Divider, SectionLabel, AssetThumb, LibraryTemplateItem, LibraryFav } from './components/ui/editorTheme';
 import LibraryModal from './components/LibraryModal';
+import AppHeader, { NAV_H } from './components/AppHeader';
 
 const BATCH_SIZE = 36;
 const MAX_ART = 6;
@@ -28,9 +27,6 @@ function loadImageDimensions(url: string): Promise<{ w: number; h: number }> {
     img.src = url;
   });
 }
-
-// ─── Layout constants ─────────────────────────────────────────────────────────
-const NAV_H = 90;
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function Home() {
@@ -318,47 +314,16 @@ export default function Home() {
     <div style={{ minHeight: '100vh', background: theme.bg, fontFamily: theme.fontFamily }}>
 
       {/* ── NAVBAR ───────────────────────────────────────────────────────────── */}
-      <header style={{
-        position: 'sticky', top: 0, zIndex: 100, height: NAV_H,
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 40px', background: 'rgba(255, 255, 255, 0.85)',
-        backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
-        borderBottom: `1px solid ${theme.border}`,
-      }}>
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/1logo.png" width="220" height="55" style={{ display: 'block', objectFit: 'contain' }} alt="MockPlacer" />
-        </Link>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-          <div style={{ display: 'flex', gap: 16 }}>
-            <NavStat label={isTR ? 'Görsel' : 'Art'} value={artImages.length} />
-            <div style={{ width: 1, height: 24, background: theme.border, alignSelf: 'center' }} />
-            <NavStat label={isTR ? 'Şablon' : 'Templates'} value={mockups.length} />
-            {results.length > 0 && (
-              <>
-                <div style={{ width: 1, height: 24, background: theme.border, alignSelf: 'center' }} />
-                <NavStat label={isTR ? 'Sonuç' : 'Results'} value={results.length} accent />
-              </>
-            )}
-          </div>
-          <div style={{ width: 1, height: 24, background: theme.border }} />
-          {user ? (
-            <UserDropdown user={user} plan={plan} lang={lang} onSignOut={() => setUser(null)} />
-          ) : (
-            <Link
-              href="/login"
-              style={{ fontSize: 18, fontWeight: 700, fontFamily: theme.fontFamily, color: theme.accent, textDecoration: 'none', padding: '10px 24px', borderRadius: 8, background: 'rgba(249, 115, 22, 0.08)', display: 'inline-block', boxShadow: 'inset 0 1px 0 rgba(249,115,22,0.10), 0 4px 0 rgba(234,88,12,0.45), 0 5px 0 rgba(234,88,12,0.18), 0 8px 16px rgba(249,115,22,0.14)', transform: 'translateY(0)', transition: 'transform 0.1s, box-shadow 0.1s' }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(2px)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(249,115,22,0.10), 0 2px 0 rgba(234,88,12,0.40), 0 3px 0 rgba(234,88,12,0.14), 0 5px 10px rgba(249,115,22,0.12)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(249,115,22,0.10), 0 4px 0 rgba(234,88,12,0.45), 0 5px 0 rgba(234,88,12,0.18), 0 8px 16px rgba(249,115,22,0.14)'; }}
-              onMouseDown={(e) => { e.currentTarget.style.transform = 'translateY(5px)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(249,115,22,0.08), 0 0px 0 rgba(234,88,12,0.40), 0 2px 6px rgba(249,115,22,0.10)'; }}
-              onMouseUp={(e) => { e.currentTarget.style.transform = 'translateY(2px)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(249,115,22,0.10), 0 2px 0 rgba(234,88,12,0.40), 0 3px 0 rgba(234,88,12,0.14), 0 5px 10px rgba(249,115,22,0.12)'; }}
-            >
-              {isTR ? 'Giriş Yap' : 'Sign In'}
-            </Link>
-          )}
-        </div>
-      </header>
+      <AppHeader
+        artCount={artImages.length}
+        mockupCount={mockups.length}
+        resultCount={results.length}
+        user={user}
+        plan={plan}
+        lang={lang}
+        isTR={isTR}
+        onSignOut={() => setUser(null)}
+      />
 
       {/* ── MAIN WORKSPACE ─────────────────────────────────────────────────── */}
       <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', height: `calc(100vh - ${NAV_H}px)` }}>
