@@ -9,19 +9,12 @@ import ResultsGrid from '@/app/components/ResultsGrid';
 import UserDropdown from '@/app/components/UserDropdown';
 import { ArtImage, MockupTemplate, Frame, GeneratedResult } from '@/app/utils/types';
 import { computeCombinations, orderCombinations, generateBatch } from '@/app/utils/compositor';
+import { theme, FRAME_COLORS, Divider, SectionLabel, AssetThumb, NavStat, LibraryTemplateItem, LibraryFav } from './components/ui/editorTheme';
+import LibraryModal from './components/LibraryModal';
 
 const BATCH_SIZE = 36;
 const MAX_ART = 6;
 const MAX_MOCKUPS = 6;
-
-const FRAME_COLORS = [
-  'rgba(249, 115, 22, 0.50)', // Tailwind Orange 500
-  'rgba(56, 189, 248, 0.50)', // Sky 400
-  'rgba(74, 222, 128, 0.50)', // Green 400
-  'rgba(167, 139, 250, 0.50)', // Violet 400
-  'rgba(244, 114, 182, 0.50)', // Pink 400
-  'rgba(250, 204, 21, 0.50)', // Yellow 400
-];
 
 function genId() {
   return Math.random().toString(36).slice(2, 10);
@@ -37,134 +30,7 @@ function loadImageDimensions(url: string): Promise<{ w: number; h: number }> {
 }
 
 // ─── Layout constants ─────────────────────────────────────────────────────────
-const SIDEBAR_W = 380;
 const NAV_H = 90;
-
-// ─── Shared Theme Styles ──────────────────────────────────────────────────────
-const theme = {
-  bg: '#F9FAFB', // Light gray background for canvas area
-  surface: '#FFFFFF', // White for panels
-  border: '#E5E7EB',
-  accent: '#F97316', // Orange 500
-  accentHover: '#EA580C', // Orange 600
-  textMain: '#111827',
-  textMuted: '#6B7280',
-  fontFamily: "'Plus Jakarta Sans', sans-serif",
-};
-
-// ─── Divider ──────────────────────────────────────────────────────────────────
-function Divider() {
-  return <div style={{ height: 1, background: '#E5E7EB', margin: '4px 0' }} />;
-}
-
-// ─── Section label ────────────────────────────────────────────────────────────
-function SectionLabel({ children, badge, action }: { children: React.ReactNode; badge?: number; action?: React.ReactNode }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <h3 style={{
-          fontFamily: theme.fontFamily,
-          fontSize: 22,
-          fontWeight: 800,
-          color: theme.textMain,
-          margin: 0,
-          letterSpacing: '-0.02em'
-        }}>
-          {children}
-        </h3>
-        {badge !== undefined && (
-          <span style={{
-            fontSize: 12, fontWeight: 600, fontFamily: theme.fontFamily,
-            padding: '2px 8px', borderRadius: 99,
-            background: badge > 0 ? 'rgba(249, 115, 22, 0.1)' : '#F3F4F6',
-            color: badge > 0 ? theme.accent : theme.textMuted,
-          }}>
-            {badge}
-          </span>
-        )}
-      </div>
-      {action && <div>{action}</div>}
-    </div>
-  );
-}
-
-// ─── Asset thumbnail ──────────────────────────────────────────────────────────
-function AssetThumb({
-  url, name, onRemove, isActive, onClick, badge, isMobile,
-}: {
-  url: string; name: string; onRemove: () => void;
-  isActive?: boolean; onClick?: () => void; badge?: string; isMobile?: boolean;
-}) {
-  return (
-    <div
-      onClick={onClick}
-      className="group relative"
-      style={{
-        width: 72, height: 72, flexShrink: 0,
-        borderRadius: 12, overflow: 'hidden',
-        border: `2px solid ${isActive ? theme.accent : theme.border}`,
-        cursor: onClick ? 'pointer' : 'default',
-        boxShadow: isActive ? '0 4px 12px rgba(249, 115, 22, 0.2)' : 'none',
-        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-        background: '#fff'
-      }}
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={url} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-
-      <div style={{
-        position: 'absolute', inset: 0,
-        background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 40%)',
-        opacity: isActive ? 1 : 0, transition: 'opacity 0.2s'
-      }} className="group-hover:opacity-100" />
-
-      <button
-        onClick={(e) => { e.stopPropagation(); onRemove(); }}
-        title="Remove"
-        className={isMobile ? '' : 'opacity-0 group-hover:opacity-100 transition-opacity'}
-        style={{
-          position: 'absolute', top: 4, right: 4,
-          width: 22, height: 22, borderRadius: '50%',
-          background: 'rgba(255,255,255,0.9)', border: 'none', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          zIndex: 2, color: '#EF4444',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-        }}
-      >
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-          <line x1="1" y1="1" x2="9" y2="9" /><line x1="9" y1="1" x2="1" y2="9" />
-        </svg>
-      </button>
-
-      {badge && (
-        <div
-          className="absolute bottom-1 right-1"
-          style={{ background: 'rgba(0,0,0,0.7)', color: '#fff', fontSize: 10, fontWeight: 600, padding: '2px 6px', borderRadius: 6, backdropFilter: 'blur(4px)' }}
-        >
-          {badge}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ─── Interfaces ─────────────────────────────────────────────────────────────
-interface LibraryTemplateItem {
-  id: number;
-  name: string;
-  category: string;
-  image: string;
-  frames: { x: number; y: number; w: number; h: number; cornerRadius: number }[];
-}
-
-interface LibraryFav {
-  favId: string;
-  tplId: string;
-  name: string;
-  image: string;
-  mockup: MockupTemplate;
-  checked: boolean;
-}
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function Home() {
@@ -805,66 +671,20 @@ export default function Home() {
       </div>
 
       {/* ── BROWSE LIBRARY MODAL ───────────────────────────────────────────── */}
-      {libraryModalOpen && (
-        <div
-          onClick={() => setLibraryModalOpen(false)}
-          style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(17, 24, 39, 0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{ width: '100%', maxWidth: 800, maxHeight: '85vh', background: theme.surface, borderRadius: 24, display: 'flex', flexDirection: 'column', boxShadow: '0 24px 48px rgba(0,0,0,0.2)', overflow: 'hidden' }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '24px 32px', borderBottom: `1px solid ${theme.border}` }}>
-              <h2 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: theme.textMain, fontFamily: theme.fontFamily, letterSpacing: '-0.02em' }}>{isTR ? 'Kütüphane' : 'Browse Library'}</h2>
-              <button onClick={() => setLibraryModalOpen(false)} style={{ width: 36, height: 36, borderRadius: '50%', background: '#F3F4F6', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: theme.textMuted, transition: 'background 0.2s' }} onMouseEnter={e => e.currentTarget.style.background = '#E5E7EB'} onMouseLeave={e => e.currentTarget.style.background = '#F3F4F6'}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-              </button>
-            </div>
-
-            <div style={{ flex: 1, overflowY: 'auto', padding: 32 }}>
-              {libraryCategories.length > 1 && (
-                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 24 }}>
-                  {['all', ...libraryCategories].map((cat) => (
-                    <button key={cat} onClick={() => setLibraryCategory(cat)} style={{ padding: '8px 16px', borderRadius: 99, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600, background: libraryCategory === cat ? theme.textMain : '#F3F4F6', color: libraryCategory === cat ? '#fff' : theme.textMuted, transition: 'all 0.2s' }}>
-                      {cat === 'all' ? (isTR ? 'Tümü' : 'All') : cat.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {libraryLoading ? (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 200, color: theme.textMuted, fontWeight: 500 }}>{isTR ? 'Yükleniyor...' : 'Loading...'}</div>
-              ) : filteredLibraryTemplates.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '64px 0', color: theme.textMuted, fontWeight: 500 }}>{isTR ? 'Şablon bulunamadı' : 'No templates found'}</div>
-              ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 20 }}>
-                  {filteredLibraryTemplates.map((tpl) => {
-                    const isSelected = libraryFavorites.some((f) => f.tplId === tpl.image);
-                    const isLocked = plan !== 'pro' && !FREE_TEMPLATES.includes(tpl.name);
-                    return (
-                      <div
-                        key={tpl.id} onClick={() => isLocked ? (setToast(isTR ? 'Pro plana geç — tüm şablonlara eriş' : 'Upgrade to Pro to unlock all templates'), setTimeout(() => setToast(null), 3000)) : addFromLibrary(tpl)} className="group"
-                        style={{ borderRadius: 16, overflow: 'hidden', cursor: 'pointer', border: `2px solid ${isSelected ? theme.accent : theme.border}`, boxShadow: isSelected ? '0 8px 24px rgba(249, 115, 22, 0.15)' : 'none', transition: 'all 0.2s', position: 'relative', background: theme.surface }}
-                        onMouseEnter={(e) => { if (!isSelected) (e.currentTarget as HTMLDivElement).style.borderColor = theme.accent; (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)'; }}
-                        onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = isSelected ? theme.accent : theme.border; (e.currentTarget as HTMLDivElement).style.transform = 'none'; }}
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={tpl.image} alt={tpl.name} style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', display: 'block' }} />
-                        <div style={{ padding: '12px 16px', background: theme.surface }}>
-                          <p style={{ fontSize: 13, fontWeight: 700, color: theme.textMain, margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{tpl.image.split('/').pop() || tpl.name}</p>
-                        </div>
-                        {tpl.frames.length > 0 && <div style={{ position: 'absolute', top: 10, right: 10, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', color: '#fff', fontSize: 11, fontWeight: 700, padding: '4px 8px', borderRadius: 8 }}>{tpl.frames.length}f</div>}
-                        {isSelected && <div style={{ position: 'absolute', top: 10, left: 10, width: 24, height: 24, borderRadius: '50%', background: theme.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }}><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="2.5,6 5,8.5 9.5,3.5" /></svg></div>}
-                        {isLocked && <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.6)', borderRadius: 'inherit', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6, pointerEvents: 'none' }}><span style={{ fontSize: 24 }}>🔒</span><span style={{ background: '#FF6B35', color: '#fff', fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 99 }}>Pro</span></div>}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      <LibraryModal
+        open={libraryModalOpen}
+        loading={libraryLoading}
+        templates={filteredLibraryTemplates}
+        categories={libraryCategories}
+        category={libraryCategory}
+        favorites={libraryFavorites}
+        plan={plan}
+        isTR={isTR}
+        setOpen={setLibraryModalOpen}
+        setCategory={setLibraryCategory}
+        addFromLibrary={addFromLibrary}
+        setToast={setToast}
+      />
 
       {/* ── TOAST ─────────────────────────────────────────────────────────── */}
       {toast && (
@@ -876,12 +696,3 @@ export default function Home() {
   );
 }
 
-// ─── Micro-components ─────────────────────────────────────────────────────────
-function NavStat({ label, value, accent = false }: { label: string; value: number; accent?: boolean }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-      <span style={{ fontSize: 16, color: theme.textMuted, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</span>
-      <span style={{ fontSize: 26, fontWeight: 800, color: accent ? theme.accent : theme.textMain }}>{value}</span>
-    </div>
-  );
-}
