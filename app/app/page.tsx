@@ -231,6 +231,7 @@ export default function Home() {
 
   const isTR = lang === 'tr';
 
+  const FREE_TEMPLATES = ['mockup1', 'mockup2', 'mockup18'];
   const [plan, setPlan] = useState<'free' | 'basic' | 'pro'>('free');
   const [libraryModalOpen, setLibraryModalOpen] = useState(false);
   const [libraryTemplates, setLibraryTemplates] = useState<LibraryTemplateItem[]>([]);
@@ -839,9 +840,10 @@ export default function Home() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 20 }}>
                   {filteredLibraryTemplates.map((tpl) => {
                     const isSelected = libraryFavorites.some((f) => f.tplId === tpl.image);
+                    const isLocked = plan !== 'pro' && !FREE_TEMPLATES.includes(tpl.name);
                     return (
                       <div
-                        key={tpl.id} onClick={() => addFromLibrary(tpl)} className="group"
+                        key={tpl.id} onClick={() => isLocked ? (setToast(isTR ? 'Pro plana geç — tüm şablonlara eriş' : 'Upgrade to Pro to unlock all templates'), setTimeout(() => setToast(null), 3000)) : addFromLibrary(tpl)} className="group"
                         style={{ borderRadius: 16, overflow: 'hidden', cursor: 'pointer', border: `2px solid ${isSelected ? theme.accent : theme.border}`, boxShadow: isSelected ? '0 8px 24px rgba(249, 115, 22, 0.15)' : 'none', transition: 'all 0.2s', position: 'relative', background: theme.surface }}
                         onMouseEnter={(e) => { if (!isSelected) (e.currentTarget as HTMLDivElement).style.borderColor = theme.accent; (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)'; }}
                         onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = isSelected ? theme.accent : theme.border; (e.currentTarget as HTMLDivElement).style.transform = 'none'; }}
@@ -853,6 +855,7 @@ export default function Home() {
                         </div>
                         {tpl.frames.length > 0 && <div style={{ position: 'absolute', top: 10, right: 10, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', color: '#fff', fontSize: 11, fontWeight: 700, padding: '4px 8px', borderRadius: 8 }}>{tpl.frames.length}f</div>}
                         {isSelected && <div style={{ position: 'absolute', top: 10, left: 10, width: 24, height: 24, borderRadius: '50%', background: theme.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }}><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="2.5,6 5,8.5 9.5,3.5" /></svg></div>}
+                        {isLocked && <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.6)', borderRadius: 'inherit', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6, pointerEvents: 'none' }}><span style={{ fontSize: 24 }}>🔒</span><span style={{ background: '#FF6B35', color: '#fff', fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 99 }}>Pro</span></div>}
                       </div>
                     );
                   })}
