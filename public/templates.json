@@ -513,7 +513,7 @@
   {
     "name": "mockup27",
     "category": "wall-frame",
-    "image": "/templates/mockup27.png",
+    "image": "/mockups/mockup27.png",
     "frames": [
       {
         "x": 0.306,
@@ -592,7 +592,7 @@
   {
     "name": "mockup26",
     "category": "wall-frame",
-    "image": "/templates/mockup26.png",
+    "image": "/mockups/mockup26.png",
     "frames": [
       {
         "x": 0.303,
@@ -671,7 +671,7 @@
   {
     "name": "mockup49",
     "category": "wall-frame",
-    "image": "/templates/mockup49.png",
+    "image": "/mockups/mockup49.png",
     "frames": [
       {
         "x": 0.3591,
@@ -686,7 +686,7 @@
   {
     "name": "mockup18",
     "category": "wall-frame",
-    "image": "/templates/mockup18.png",
+    "image": "/mockups/mockup18.png",
     "frames": [
       {
         "x": 0.387,
@@ -701,7 +701,7 @@
   {
     "name": "mockup19",
     "category": "wall-frame",
-    "image": "/templates/mockup19.png",
+    "image": "/mockups/mockup19.png",
     "frames": [
       {
         "x": 0.201,
@@ -868,7 +868,7 @@
   {
     "name": "mockup31",
     "category": "wall-frame",
-    "image": "/templates/mockup31.png",
+    "image": "/mockups/mockup31.png",
     "frames": [
       {
         "x": 0.28,
@@ -931,7 +931,7 @@
   {
     "name": "mockup28",
     "category": "wall-frame",
-    "image": "/templates/mockup28.png",
+    "image": "/mockups/mockup28.png",
     "frames": [
       {
         "x": 0.277,
@@ -994,7 +994,7 @@
   {
     "name": "mockup32",
     "category": "wall-frame",
-    "image": "/templates/mockup32.png",
+    "image": "/mockups/mockup32.png",
     "frames": [
       {
         "x": 0.304,
@@ -1073,7 +1073,7 @@
   {
     "name": "mockup30",
     "category": "wall-frame",
-    "image": "/templates/mockup30.png",
+    "image": "/mockups/mockup30.png",
     "frames": [
       {
         "x": 0.0565,
@@ -1160,7 +1160,7 @@
   {
     "name": "mockup36",
     "category": "wall-frame",
-    "image": "/templates/mockup36.png",
+    "image": "/mockups/mockup36.png",
     "frames": [
       {
         "x": 0.2768,
@@ -1239,7 +1239,7 @@
   {
     "name": "mockup29",
     "category": "wall-frame",
-    "image": "/templates/mockup29.png",
+    "image": "/mockups/mockup29.png",
     "frames": [
       {
         "x": 0.3056,
@@ -1318,7 +1318,7 @@
   {
     "name": "mockup42",
     "category": "wall-frame",
-    "image": "/templates/mockup42.png",
+    "image": "/mockups/mockup42.png",
     "frames": [
       {
         "x": 0.2566,
@@ -1381,7 +1381,7 @@
   {
     "name": "mockup46",
     "category": "wall-frame",
-    "image": "/templates/mockup46.png",
+    "image": "/mockups/mockup46.png",
     "frames": [
       {
         "x": 0.2209,
@@ -1404,7 +1404,7 @@
   {
     "name": "mockup45",
     "category": "wall-frame",
-    "image": "/templates/mockup45.png",
+    "image": "/mockups/mockup45.png",
     "frames": [
       {
         "x": 0.1635,
@@ -1451,7 +1451,7 @@
   {
     "name": "mockup43",
     "category": "wall-frame",
-    "image": "/templates/mockup43.png",
+    "image": "/mockups/mockup43.png",
     "frames": [
       {
         "x": 0.2324,
@@ -1498,7 +1498,7 @@
   {
     "name": "mockup48",
     "category": "wall-frame",
-    "image": "/templates/mockup48.png",
+    "image": "/mockups/mockup48.png",
     "frames": [
       {
         "x": 0.3365,
@@ -1513,7 +1513,7 @@
   {
     "name": "mockup38",
     "category": "wall-frame",
-    "image": "/templates/mockup38.png",
+    "image": "/mockups/mockup38.png",
     "frames": [
       {
         "x": 0.4323,
@@ -1568,7 +1568,7 @@
   {
     "name": "mockup44",
     "category": "wall-frame",
-    "image": "/templates/mockup44.png",
+    "image": "/mockups/mockup44.png",
     "frames": [
       {
         "x": 0.2559,
@@ -1623,7 +1623,7 @@
   {
     "name": "mockup53",
     "category": "wall-frame",
-    "image": "/templates/mockup53.png",
+    "image": "/mockups/mockup53.png",
     "frames": [
       {
         "x": 0.2862,
@@ -1694,7 +1694,7 @@
   {
     "name": "mockup47",
     "category": "wall-frame",
-    "image": "/templates/mockup47.png",
+    "image": "/mockups/mockup47.png",
     "frames": [
       {
         "x": 0.2544,
@@ -1741,7 +1741,7 @@
   {
     "name": "mockup51",
     "category": "wall-frame",
-    "image": "/templates/mockup51.png",
+    "image": "/mockups/mockup51.png",
     "frames": [
       {
         "x": 0.3941,
@@ -1756,7 +1756,7 @@
   {
     "name": "mockup14",
     "category": "wall-frame",
-    "image": "/templates/mockup14.png",
+    "image": "/mockups/mockup14.png",
     "frames": [
       {
         "x": 0.214,
@@ -1795,7 +1795,7 @@
   {
     "name": "mockup50",
     "category": "wall-frame",
-    "image": "/templates/mockup50.png",
+    "image": "/mockups/mockup50.png",
     "frames": [
       {
         "x": 0.3709,
@@ -1810,7 +1810,7 @@
   {
     "name": "mockup54",
     "category": "wall-frame",
-    "image": "/templates/mockup54.png",
+    "image": "/mockups/mockup54.png",
     "frames": [
       {
         "x": 0.3812,
@@ -1865,7 +1865,7 @@
   {
     "name": "mockup56",
     "category": "wall-frame",
-    "image": "/templates/mockup56.png",
+    "image": "/mockups/mockup56.png",
     "frames": [
       {
         "x": 0.3166,
@@ -1920,7 +1920,7 @@
   {
     "name": "mockup55",
     "category": "wall-frame",
-    "image": "/templates/mockup55.png",
+    "image": "/mockups/mockup55.png",
     "frames": [
       {
         "x": 0.3791,
@@ -1975,7 +1975,7 @@
   {
     "name": "mockup57",
     "category": "wall-frame",
-    "image": "/templates/mockup57.png",
+    "image": "/mockups/mockup57.png",
     "frames": [
       {
         "x": 0.274,
@@ -1990,7 +1990,7 @@
   {
     "name": "mockup61",
     "category": "wall-frame",
-    "image": "/templates/mockup61.png",
+    "image": "/mockups/mockup61.png",
     "frames": [
       {
         "x": 0.3078,
@@ -2005,7 +2005,7 @@
   {
     "name": "mockup62",
     "category": "wall-frame",
-    "image": "/templates/mockup62.png",
+    "image": "/mockups/mockup62.png",
     "frames": [
       {
         "x": 0.2544,
@@ -2020,7 +2020,7 @@
   {
     "name": "mockup63",
     "category": "wall-frame",
-    "image": "/templates/mockup63.png",
+    "image": "/mockups/mockup63.png",
     "frames": [
       {
         "x": 0.1922,
@@ -2035,7 +2035,7 @@
   {
     "name": "mockup67",
     "category": "wall-frame",
-    "image": "/templates/mockup67.png",
+    "image": "/mockups/mockup67.png",
     "frames": [
       {
         "x": 0.0712,
@@ -2146,7 +2146,7 @@
   {
     "name": "mockup69",
     "category": "wall-frame",
-    "image": "/templates/mockup69.png",
+    "image": "/mockups/mockup69.png",
     "frames": [
       {
         "x": 0.2859,
@@ -2161,7 +2161,7 @@
   {
     "name": "mockup13",
     "category": "wall-frame",
-    "image": "/templates/mockup13.png",
+    "image": "/mockups/mockup13.png",
     "frames": [
       {
         "x": 0.1327,
@@ -2192,7 +2192,7 @@
   {
     "name": "mockup17",
     "category": "wall-frame",
-    "image": "/templates/mockup17.png",
+    "image": "/mockups/mockup17.png",
     "frames": [
       {
         "x": 0.1302,
@@ -2207,7 +2207,7 @@
   {
     "name": "mockup15",
     "category": "wall-frame",
-    "image": "/templates/mockup15.png",
+    "image": "/mockups/mockup15.png",
     "frames": [
       {
         "x": 0.292,
@@ -2222,7 +2222,7 @@
   {
     "name": "mockup16",
     "category": "wall-frame",
-    "image": "/templates/mockup16.png",
+    "image": "/mockups/mockup16.png",
     "frames": [
       {
         "x": 0.2532,
@@ -2237,7 +2237,7 @@
   {
     "name": "mockup20",
     "category": "wall-frame",
-    "image": "/templates/mockup20.png",
+    "image": "/mockups/mockup20.png",
     "frames": [
       {
         "x": 0.3253,
@@ -2252,7 +2252,7 @@
   {
     "name": "mockup24",
     "category": "wall-frame",
-    "image": "/templates/mockup24.png",
+    "image": "/mockups/mockup24.png",
     "frames": [
       {
         "x": 0.1895,
@@ -2331,7 +2331,7 @@
   {
     "name": "mockup21",
     "category": "wall-frame",
-    "image": "/templates/mockup21.png",
+    "image": "/mockups/mockup21.png",
     "frames": [
       {
         "x": 0.1855,
@@ -2362,7 +2362,7 @@
   {
     "name": "mockup23",
     "category": "wall-frame",
-    "image": "/templates/mockup23.png",
+    "image": "/mockups/mockup23.png",
     "frames": [
       {
         "x": 0.2002,
@@ -2393,7 +2393,7 @@
   {
     "name": "mockup22",
     "category": "wall-frame",
-    "image": "/templates/mockup22.png",
+    "image": "/mockups/mockup22.png",
     "frames": [
       {
         "x": 0.264,
@@ -2416,7 +2416,7 @@
   {
     "name": "mockup34",
     "category": "wall-frame",
-    "image": "/templates/mockup34.png",
+    "image": "/mockups/mockup34.png",
     "frames": [
       {
         "x": 0.3472,
@@ -2455,7 +2455,7 @@
   {
     "name": "mockup37",
     "category": "wall-frame",
-    "image": "/templates/mockup37.png",
+    "image": "/mockups/mockup37.png",
     "frames": [
       {
         "x": 0.2275,
@@ -2510,7 +2510,7 @@
   {
     "name": "mockup33",
     "category": "wall-frame",
-    "image": "/templates/mockup33.png",
+    "image": "/mockups/mockup33.png",
     "frames": [
       {
         "x": 0.199,
@@ -2589,7 +2589,7 @@
   {
     "name": "mockup39",
     "category": "wall-frame",
-    "image": "/templates/mockup39.png",
+    "image": "/mockups/mockup39.png",
     "frames": [
       {
         "x": 0.2954,
@@ -2676,7 +2676,7 @@
   {
     "name": "mockup40",
     "category": "wall-frame",
-    "image": "/templates/mockup40.png",
+    "image": "/mockups/mockup40.png",
     "frames": [
       {
         "x": 0.1963,
@@ -2739,7 +2739,7 @@
   {
     "name": "mockup35",
     "category": "wall-frame",
-    "image": "/templates/mockup35.png",
+    "image": "/mockups/mockup35.png",
     "frames": [
       {
         "x": 0.5164,
@@ -2778,7 +2778,7 @@
   {
     "name": "mockup41",
     "category": "wall-frame",
-    "image": "/templates/mockup41.png",
+    "image": "/mockups/mockup41.png",
     "frames": [
       {
         "x": 0.2557,
@@ -2849,7 +2849,7 @@
   {
     "name": "mockup52",
     "category": "wall-frame",
-    "image": "/templates/mockup52.png",
+    "image": "/mockups/mockup52.png",
     "frames": [
       {
         "x": 0.0559,
@@ -2992,7 +2992,7 @@
   {
     "name": "mockup59",
     "category": "wall-frame",
-    "image": "/templates/mockup59.png",
+    "image": "/mockups/mockup59.png",
     "frames": [
       {
         "x": 0.5093,
@@ -3007,7 +3007,7 @@
   {
     "name": "mockup60",
     "category": "wall-frame",
-    "image": "/templates/mockup60.png",
+    "image": "/mockups/mockup60.png",
     "frames": [
       {
         "x": 0.2485,
@@ -3022,7 +3022,7 @@
   {
     "name": "mockup64",
     "category": "wall-frame",
-    "image": "/templates/mockup64.png",
+    "image": "/mockups/mockup64.png",
     "frames": [
       {
         "x": 0.2334,
@@ -3045,7 +3045,7 @@
   {
     "name": "mockup68",
     "category": "wall-frame",
-    "image": "/templates/mockup68.png",
+    "image": "/mockups/mockup68.png",
     "frames": [
       {
         "x": 0.1474,
@@ -3148,7 +3148,7 @@
   {
     "name": "mockup58",
     "category": "wall-frame",
-    "image": "/templates/mockup58.png",
+    "image": "/mockups/mockup58.png",
     "frames": [
       {
         "x": 0.3853,
@@ -3163,7 +3163,7 @@
   {
     "name": "mockup66",
     "category": "wall-frame",
-    "image": "/templates/mockup66.png",
+    "image": "/mockups/mockup66.png",
     "frames": [
       {
         "x": 0.189,
@@ -3178,7 +3178,7 @@
   {
     "name": "mockup65",
     "category": "wall-frame",
-    "image": "/templates/mockup65.png",
+    "image": "/mockups/mockup65.png",
     "frames": [
       {
         "x": 0.5742,
@@ -3193,7 +3193,7 @@
   {
     "name": "mockup25",
     "category": "wall-frame",
-    "image": "/templates/mockup25.png",
+    "image": "/mockups/mockup25.png",
     "frames": [
       {
         "x": 0.276,
