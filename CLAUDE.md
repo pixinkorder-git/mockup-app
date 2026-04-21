@@ -13,7 +13,7 @@ npm run lint     # Run ESLint
 
 ## Architecture
 
-This is a **Next.js 16 App Router** project with TypeScript, Tailwind CSS v4, and React 19. It is a **fully client-side** mockup placer web app — no backend, no API routes, no server actions.
+This is a **Next.js 16 App Router** project with TypeScript, Tailwind CSS v4, and React 19. It is a mockup placer web app with a client-side canvas editor and a backend powered by **Supabase** (auth + profiles) and **LemonSqueezy** (payments).
 
 ### Key conventions
 
@@ -28,9 +28,22 @@ The app is a mockup placer tool. File layout:
 
 ```
 app/
-  page.tsx               # Main app — all state lives here (client component)
-  layout.tsx             # Fonts: Bebas Neue (display), Syne (body), JetBrains Mono (mono)
+  page.tsx               # Landing page (static)
+  layout.tsx             # Root layout, fonts
   globals.css            # CSS vars + @theme inline for Tailwind v4
+  app/
+    page.tsx             # Main editor — all canvas/state lives here (client component)
+  auth/
+    callback/            # Supabase OAuth callback
+    signout/             # Sign-out handler
+  api/
+    templates/           # Serves templates.json (or DB-backed list)
+    webhooks/
+      lemonsqueezy/      # LemonSqueezy payment webhook → updates profiles.plan
+  pricing/               # Pricing page
+  profile/               # User profile page
+  login/                 # Login page
+  contact/ feedback/ privacy/ terms/   # Static pages
   components/
     DropZone.tsx         # Drag-and-drop file upload
     MockupEditor.tsx     # Canvas-based frame pinning editor
@@ -55,6 +68,12 @@ app/
 **Distribution logic:**
 - Multi-frame mockup: one result with arts placed round-robin across frames
 - Single-frame mockup: one result per art image
+
+**Plan gating (Browse Library):**
+- `plan` state is fetched from `profiles.plan` (Supabase) on load — values: `'free'` | `'basic'` | `'pro'`
+- `FREE_TEMPLATES = ['mockup1', 'mockup2', 'mockup18']` — always unlocked
+- Non-pro users see a lock overlay + "Pro" badge on all other library cards; clicking shows a toast
+- Pro users have no restrictions
 
 ### Fonts
 
@@ -97,16 +116,19 @@ Geist Sans and Geist Mono are loaded via `next/font/google` in `app/layout.tsx` 
 
 ## 📋 Roadmap
 
-### Faz 1: MVP (Mevcut) ✅
+### Faz 1: MVP ✅
 - Landing page
 - Temel mockup editörü
 - Kullanıcı upload sistemi
 
-### Faz 2: Beta (Sonraki)
-- Kullanıcı hesapları
-- Ödeme entegrasyonu (Stripe)
-- Daha fazla şablon
+### Faz 2: Beta ✅
+- Kullanıcı hesapları (Supabase Auth)
+- Ödeme entegrasyonu (LemonSqueezy)
+- Kütüphane kilitleme (free/pro plan gating)
+- Daha fazla şablon (mockup13-69)
 
-### Faz 3: Launch
+### Faz 3: Launch (Sonraki)
 - SEO optimizasyonu
 - Marketing kampanyaları
+- Watermark (free tier)
+- Aylık mockup limiti (free tier)
