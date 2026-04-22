@@ -2,7 +2,7 @@
 
 import { theme, LibraryTemplateItem, LibraryFav } from './ui/editorTheme';
 
-const FREE_TEMPLATES = ['template (1)', 'template (2)', 'mockup18'];
+const FREE_TEMPLATES = ['mockup1', 'mockup2', 'mockup18'];
 
 function extractNumber(name: string): number {
   const m = name.match(/\d+/);

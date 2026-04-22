@@ -3252,5 +3252,17 @@
         "cornerRadius": 0
       }
     ]
-  }
+  },
+  { "name": "mockup1", "category": "wall-frame", "image": "/mockups/mockup1.png", "frames": [] },
+  { "name": "mockup2", "category": "wall-frame", "image": "/mockups/mockup2.png", "frames": [] },
+  { "name": "mockup3", "category": "wall-frame", "image": "/mockups/mockup3.png", "frames": [] },
+  { "name": "mockup4", "category": "wall-frame", "image": "/mockups/mockup4.png", "frames": [] },
+  { "name": "mockup5", "category": "wall-frame", "image": "/mockups/mockup5.png", "frames": [] },
+  { "name": "mockup6", "category": "wall-frame", "image": "/mockups/mockup6.png", "frames": [] },
+  { "name": "mockup7", "category": "wall-frame", "image": "/mockups/mockup7.png", "frames": [] },
+  { "name": "mockup8", "category": "wall-frame", "image": "/mockups/mockup8.png", "frames": [] },
+  { "name": "mockup9", "category": "wall-frame", "image": "/mockups/mockup9.png", "frames": [] },
+  { "name": "mockup10", "category": "wall-frame", "image": "/mockups/mockup10.png", "frames": [] },
+  { "name": "mockup11", "category": "wall-frame", "image": "/mockups/mockup11.png", "frames": [] },
+  { "name": "mockup12", "category": "wall-frame", "image": "/mockups/mockup12.png", "frames": [] }
 ]
