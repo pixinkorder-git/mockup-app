@@ -1,683 +1,186 @@
 [
   {
-    "name": "template (2)",
+    "name": "mockup1",
     "category": "wall-frame",
-    "image": "/templates/template (2).png",
+    "image": "/mockups/mockup1.png",
+    "frames": []
+  },
+  {
+    "name": "mockup2",
+    "category": "wall-frame",
+    "image": "/mockups/mockup2.png",
+    "frames": []
+  },
+  {
+    "name": "mockup3",
+    "category": "wall-frame",
+    "image": "/mockups/mockup3.png",
+    "frames": []
+  },
+  {
+    "name": "mockup4",
+    "category": "wall-frame",
+    "image": "/mockups/mockup4.png",
+    "frames": []
+  },
+  {
+    "name": "mockup5",
+    "category": "wall-frame",
+    "image": "/mockups/mockup5.png",
+    "frames": []
+  },
+  {
+    "name": "mockup6",
+    "category": "wall-frame",
+    "image": "/mockups/mockup6.png",
+    "frames": []
+  },
+  {
+    "name": "mockup7",
+    "category": "wall-frame",
+    "image": "/mockups/mockup7.png",
+    "frames": []
+  },
+  {
+    "name": "mockup8",
+    "category": "wall-frame",
+    "image": "/mockups/mockup8.png",
+    "frames": []
+  },
+  {
+    "name": "mockup9",
+    "category": "wall-frame",
+    "image": "/mockups/mockup9.png",
+    "frames": []
+  },
+  {
+    "name": "mockup10",
+    "category": "wall-frame",
+    "image": "/mockups/mockup10.png",
+    "frames": []
+  },
+  {
+    "name": "mockup11",
+    "category": "wall-frame",
+    "image": "/mockups/mockup11.png",
+    "frames": []
+  },
+  {
+    "name": "mockup12",
+    "category": "wall-frame",
+    "image": "/mockups/mockup12.png",
+    "frames": []
+  },
+  {
+    "name": "mockup13",
+    "category": "wall-frame",
+    "image": "/mockups/mockup13.png",
     "frames": [
       {
-        "x": 0.325,
-        "y": 0.255,
-        "w": 0.348,
-        "h": 0.479,
+        "x": 0.1327,
+        "y": 0.1772,
+        "w": 0.2045,
+        "h": 0.2161,
         "rotation": 0,
         "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "template (3)",
-    "category": "wall-frame",
-    "image": "/templates/template (3).png",
-    "frames": [
+      },
       {
-        "x": 0.37,
-        "y": 0.194,
-        "w": 0.257,
-        "h": 0.566,
+        "x": 0.3995,
+        "y": 0.1782,
+        "w": 0.2045,
+        "h": 0.2161,
         "rotation": 0,
-        "cornerRadius": 35
-      }
-    ]
-  },
-  {
-    "name": "template (4)",
-    "category": "wall-frame",
-    "image": "/templates/template (4).png",
-    "frames": [
+        "cornerRadius": 0
+      },
       {
-        "x": 0.395,
-        "y": 0.208,
-        "w": 0.202,
-        "h": 0.443,
-        "rotation": 0,
-        "cornerRadius": 27
-      }
-    ]
-  },
-  {
-    "name": "template (6)",
-    "category": "wall-frame",
-    "image": "/templates/template (6).png",
-    "frames": [
-      {
-        "x": 0.341,
-        "y": 0.13,
-        "w": 0.324,
-        "h": 0.74,
-        "rotation": 0,
-        "cornerRadius": 35
-      }
-    ]
-  },
-  {
-    "name": "template (7)",
-    "category": "wall-frame",
-    "image": "/templates/template (7).png",
-    "frames": [
-      {
-        "x": 0.362,
-        "y": 0.195,
-        "w": 0.273,
-        "h": 0.567,
-        "rotation": 0,
-        "cornerRadius": 32
-      }
-    ]
-  },
-  {
-    "name": "template (9)",
-    "category": "wall-frame",
-    "image": "/templates/template (9).png",
-    "frames": [
-      {
-        "x": 0.394,
-        "y": 0.396,
-        "w": 0.212,
-        "h": 0.433,
-        "rotation": 0,
-        "cornerRadius": 27
-      }
-    ]
-  },
-  {
-    "name": "template (10)",
-    "category": "wall-frame",
-    "image": "/templates/template (10).png",
-    "frames": [
-      {
-        "x": 0.142,
+        "x": 0.6613,
         "y": 0.178,
-        "w": 0.21,
-        "h": 0.303,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.391,
-        "y": 0.177,
-        "w": 0.208,
-        "h": 0.303,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.637,
-        "y": 0.179,
-        "w": 0.201,
-        "h": 0.301,
+        "w": 0.2045,
+        "h": 0.2161,
         "rotation": 0,
         "cornerRadius": 0
       }
     ]
   },
   {
-    "name": "template (11)",
+    "name": "mockup14",
     "category": "wall-frame",
-    "image": "/templates/template (11).png",
+    "image": "/mockups/mockup14.png",
     "frames": [
       {
-        "x": 0.419,
-        "y": 0.184,
-        "w": 0.366,
-        "h": 0.393,
+        "x": 0.214,
+        "y": 0.2342,
+        "w": 0.1627,
+        "h": 0.1808,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4051,
+        "y": 0.2339,
+        "w": 0.1593,
+        "h": 0.1826,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5925,
+        "y": 0.3282,
+        "w": 0.1243,
+        "h": 0.094,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5937,
+        "y": 0.2324,
+        "w": 0.1232,
+        "h": 0.0805,
         "rotation": 0,
         "cornerRadius": 0
       }
     ]
   },
   {
-    "name": "template (12)",
+    "name": "mockup15",
     "category": "wall-frame",
-    "image": "/templates/template (12).png",
+    "image": "/mockups/mockup15.png",
     "frames": [
       {
-        "x": 0.31,
-        "y": 0.078,
-        "w": 0.357,
-        "h": 0.457,
+        "x": 0.292,
+        "y": 0.2486,
+        "w": 0.4177,
+        "h": 0.5036,
         "rotation": 0,
         "cornerRadius": 0
       }
     ]
   },
   {
-    "name": "template (13)",
+    "name": "mockup16",
     "category": "wall-frame",
-    "image": "/templates/template (13).png",
+    "image": "/mockups/mockup16.png",
     "frames": [
       {
-        "x": 0.237,
-        "y": 0.092,
-        "w": 0.518,
-        "h": 0.441,
+        "x": 0.2532,
+        "y": 0.3038,
+        "w": 0.491,
+        "h": 0.3879,
         "rotation": 0,
         "cornerRadius": 0
       }
     ]
   },
   {
-    "name": "template (14)",
+    "name": "mockup17",
     "category": "wall-frame",
-    "image": "/templates/template (14).png",
+    "image": "/mockups/mockup17.png",
     "frames": [
       {
-        "x": 0.386,
-        "y": 0.18,
-        "w": 0.302,
-        "h": 0.34,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "template (15)",
-    "category": "wall-frame",
-    "image": "/templates/template (15).png",
-    "frames": [
-      {
-        "x": 0.055,
-        "y": 0.132,
-        "w": 0.201,
-        "h": 0.248,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.3,
-        "y": 0.131,
-        "w": 0.197,
-        "h": 0.249,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.54,
-        "y": 0.133,
-        "w": 0.199,
-        "h": 0.248,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "template (16)",
-    "category": "wall-frame",
-    "image": "/templates/template (16).png",
-    "frames": [
-      {
-        "x": 0.06,
-        "y": 0.133,
-        "w": 0.141,
-        "h": 0.173,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.252,
-        "y": 0.13,
-        "w": 0.143,
-        "h": 0.175,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "template (17)",
-    "category": "wall-frame",
-    "image": "/templates/template (17).png",
-    "frames": [
-      {
-        "x": 0.313,
-        "y": 0.2072,
-        "w": 0.392,
-        "h": 0.5276,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "template (18)",
-    "category": "wall-frame",
-    "image": "/templates/template (18).png",
-    "frames": [
-      {
-        "x": 0.386,
-        "y": 0.1788,
-        "w": 0.241,
-        "h": 0.3517,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "template (19)",
-    "category": "wall-frame",
-    "image": "/templates/template (19).png",
-    "frames": [
-      {
-        "x": 0.173,
-        "y": 0.0486,
-        "w": 0.273,
-        "h": 0.421,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.535,
-        "y": 0.0526,
-        "w": 0.286,
-        "h": 0.4169,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "template (20)",
-    "category": "wall-frame",
-    "image": "/templates/template (20).png",
-    "frames": [
-      {
-        "x": 0.056,
-        "y": 0.3517,
-        "w": 0.185,
-        "h": 0.2806,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.29,
-        "y": 0.3517,
-        "w": 0.185,
-        "h": 0.2806,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.524,
-        "y": 0.3517,
-        "w": 0.187,
-        "h": 0.2806,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.768,
-        "y": 0.3517,
-        "w": 0.184,
-        "h": 0.2806,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "template (21)",
-    "category": "wall-frame",
-    "image": "/templates/template (21).png",
-    "frames": [
-      {
-        "x": 0.166,
-        "y": 0.1467,
-        "w": 0.166,
-        "h": 0.2396,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.412,
-        "y": 0.1447,
-        "w": 0.167,
-        "h": 0.2425,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.669,
-        "y": 0.1497,
-        "w": 0.167,
-        "h": 0.2356,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "template (22)",
-    "category": "wall-frame",
-    "image": "/templates/template (22).png",
-    "frames": [
-      {
-        "x": 0.132,
-        "y": 0.1396,
-        "w": 0.203,
-        "h": 0.3244,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.402,
-        "y": 0.1395,
-        "w": 0.202,
-        "h": 0.3278,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.669,
-        "y": 0.1373,
-        "w": 0.203,
-        "h": 0.33,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "template (23)",
-    "category": "wall-frame",
-    "image": "/templates/template (23).png",
-    "frames": [
-      {
-        "x": 0.375,
-        "y": 0.1136,
-        "w": 0.264,
-        "h": 0.3685,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "template (24)",
-    "category": "wall-frame",
-    "image": "/templates/template (24).png",
-    "frames": [
-      {
-        "x": 0.338,
-        "y": 0.115,
-        "w": 0.333,
-        "h": 0.4945,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "template (26)",
-    "category": "wall-frame",
-    "image": "/templates/template (26).png",
-    "frames": [
-      {
-        "x": 0.396,
-        "y": 0.2538,
-        "w": 0.235,
-        "h": 0.3594,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "template (27)",
-    "category": "wall-frame",
-    "image": "/templates/template (27).png",
-    "frames": [
-      {
-        "x": 0.649,
-        "y": 0.2082,
-        "w": 0.157,
-        "h": 0.2593,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.414,
-        "y": 0.2112,
-        "w": 0.158,
-        "h": 0.2563,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.18,
-        "y": 0.2112,
-        "w": 0.157,
-        "h": 0.2533,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "template (1)",
-    "category": "tablet",
-    "image": "/templates/template (1).png",
-    "frames": [
-      {
-        "x": 0.2806,
-        "y": 0.1693,
-        "w": 0.4499,
-        "h": 0.5568,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "template (25)",
-    "category": "wall-frame",
-    "image": "/templates/template (25).png",
-    "frames": [
-      {
-        "x": 0.1726,
-        "y": 0.1543,
-        "w": 0.1615,
-        "h": 0.2442,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.3842,
-        "y": 0.2542,
-        "w": 0.1693,
-        "h": 0.2475,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6036,
-        "y": 0.2364,
-        "w": 0.2272,
-        "h": 0.162,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup27",
-    "category": "wall-frame",
-    "image": "/mockups/mockup27.png",
-    "frames": [
-      {
-        "x": 0.306,
-        "y": 0.146,
-        "w": 0.086,
-        "h": 0.088,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.463,
-        "y": 0.145,
-        "w": 0.086,
-        "h": 0.088,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.624,
-        "y": 0.146,
-        "w": 0.086,
-        "h": 0.088,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.305,
-        "y": 0.301,
-        "w": 0.086,
-        "h": 0.088,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.462,
-        "y": 0.3,
-        "w": 0.086,
-        "h": 0.088,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.623,
-        "y": 0.301,
-        "w": 0.086,
-        "h": 0.088,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.304,
-        "y": 0.459,
-        "w": 0.086,
-        "h": 0.088,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.461,
-        "y": 0.458,
-        "w": 0.086,
-        "h": 0.088,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.622,
-        "y": 0.459,
-        "w": 0.086,
-        "h": 0.088,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup26",
-    "category": "wall-frame",
-    "image": "/mockups/mockup26.png",
-    "frames": [
-      {
-        "x": 0.303,
-        "y": 0.145,
-        "w": 0.088,
-        "h": 0.09,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.461,
-        "y": 0.147,
-        "w": 0.088,
-        "h": 0.09,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.619,
-        "y": 0.144,
-        "w": 0.088,
-        "h": 0.09,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.302,
-        "y": 0.303,
-        "w": 0.088,
-        "h": 0.09,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.46,
-        "y": 0.305,
-        "w": 0.088,
-        "h": 0.09,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.618,
-        "y": 0.302,
-        "w": 0.088,
-        "h": 0.09,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.3,
-        "y": 0.462,
-        "w": 0.088,
-        "h": 0.09,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.458,
-        "y": 0.464,
-        "w": 0.088,
-        "h": 0.09,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.616,
-        "y": 0.461,
-        "w": 0.088,
-        "h": 0.09,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup49",
-    "category": "wall-frame",
-    "image": "/mockups/mockup49.png",
-    "frames": [
-      {
-        "x": 0.3591,
-        "y": 0.2258,
-        "w": 0.2849,
-        "h": 0.5814,
+        "x": 0.1302,
+        "y": 0.2161,
+        "w": 0.7396,
+        "h": 0.5579,
         "rotation": 0,
         "cornerRadius": 0
       }
@@ -866,63 +369,400 @@
     ]
   },
   {
-    "name": "mockup31",
+    "name": "mockup20",
     "category": "wall-frame",
-    "image": "/mockups/mockup31.png",
+    "image": "/mockups/mockup20.png",
     "frames": [
       {
-        "x": 0.28,
-        "y": 0.153,
-        "w": 0.104,
-        "h": 0.101,
+        "x": 0.3253,
+        "y": 0.4122,
+        "w": 0.3373,
+        "h": 0.3681,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup21",
+    "category": "wall-frame",
+    "image": "/mockups/mockup21.png",
+    "frames": [
+      {
+        "x": 0.1855,
+        "y": 0.0662,
+        "w": 0.1495,
+        "h": 0.3795,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.439,
-        "y": 0.125,
-        "w": 0.118,
-        "h": 0.121,
+        "x": 0.4063,
+        "y": 0.0641,
+        "w": 0.1615,
+        "h": 0.3795,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.608,
-        "y": 0.147,
-        "w": 0.113,
-        "h": 0.19,
+        "x": 0.6446,
+        "y": 0.0655,
+        "w": 0.1567,
+        "h": 0.3795,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup22",
+    "category": "wall-frame",
+    "image": "/mockups/mockup22.png",
+    "frames": [
+      {
+        "x": 0.264,
+        "y": 0.0418,
+        "w": 0.1954,
+        "h": 0.3997,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.607,
-        "y": 0.384,
+        "x": 0.5346,
+        "y": 0.0412,
+        "w": 0.1954,
+        "h": 0.3997,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup23",
+    "category": "wall-frame",
+    "image": "/mockups/mockup23.png",
+    "frames": [
+      {
+        "x": 0.2002,
+        "y": 0.1841,
+        "w": 0.1427,
+        "h": 0.3272,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4214,
+        "y": 0.1849,
+        "w": 0.1427,
+        "h": 0.3272,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6522,
+        "y": 0.1832,
+        "w": 0.1427,
+        "h": 0.3272,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup24",
+    "category": "wall-frame",
+    "image": "/mockups/mockup24.png",
+    "frames": [
+      {
+        "x": 0.1895,
+        "y": 0.1369,
+        "w": 0.1642,
+        "h": 0.1193,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4174,
+        "y": 0.1361,
+        "w": 0.1642,
+        "h": 0.1193,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.1886,
+        "y": 0.291,
+        "w": 0.1642,
+        "h": 0.1193,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4165,
+        "y": 0.2902,
+        "w": 0.1642,
+        "h": 0.1193,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.1886,
+        "y": 0.4462,
+        "w": 0.1642,
+        "h": 0.1193,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4165,
+        "y": 0.4454,
+        "w": 0.1642,
+        "h": 0.1193,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.65,
+        "y": 0.1349,
+        "w": 0.1642,
+        "h": 0.1193,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6491,
+        "y": 0.289,
+        "w": 0.1642,
+        "h": 0.1193,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6491,
+        "y": 0.4442,
+        "w": 0.1642,
+        "h": 0.1193,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup25",
+    "category": "wall-frame",
+    "image": "/mockups/mockup25.png",
+    "frames": [
+      {
+        "x": 0.276,
+        "y": 0.181,
+        "w": 0.102,
+        "h": 0.13,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.424,
+        "y": 0.102,
         "w": 0.106,
-        "h": 0.104,
+        "h": 0.129,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.431,
-        "y": 0.297,
-        "w": 0.125,
-        "h": 0.211,
+        "x": 0.583,
+        "y": 0.09,
+        "w": 0.169,
+        "h": 0.126,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.278,
-        "y": 0.293,
-        "w": 0.111,
-        "h": 0.08,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.274,
-        "y": 0.417,
+        "x": 0.656,
+        "y": 0.283,
         "w": 0.113,
-        "h": 0.074,
+        "h": 0.085,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.653,
+        "y": 0.417,
+        "w": 0.119,
+        "h": 0.083,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.437,
+        "y": 0.29,
+        "w": 0.144,
+        "h": 0.184,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.275,
+        "y": 0.356,
+        "w": 0.104,
+        "h": 0.132,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup26",
+    "category": "wall-frame",
+    "image": "/mockups/mockup26.png",
+    "frames": [
+      {
+        "x": 0.303,
+        "y": 0.145,
+        "w": 0.088,
+        "h": 0.09,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.461,
+        "y": 0.147,
+        "w": 0.088,
+        "h": 0.09,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.619,
+        "y": 0.144,
+        "w": 0.088,
+        "h": 0.09,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.302,
+        "y": 0.303,
+        "w": 0.088,
+        "h": 0.09,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.46,
+        "y": 0.305,
+        "w": 0.088,
+        "h": 0.09,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.618,
+        "y": 0.302,
+        "w": 0.088,
+        "h": 0.09,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.3,
+        "y": 0.462,
+        "w": 0.088,
+        "h": 0.09,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.458,
+        "y": 0.464,
+        "w": 0.088,
+        "h": 0.09,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.616,
+        "y": 0.461,
+        "w": 0.088,
+        "h": 0.09,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup27",
+    "category": "wall-frame",
+    "image": "/mockups/mockup27.png",
+    "frames": [
+      {
+        "x": 0.306,
+        "y": 0.146,
+        "w": 0.086,
+        "h": 0.088,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.463,
+        "y": 0.145,
+        "w": 0.086,
+        "h": 0.088,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.624,
+        "y": 0.146,
+        "w": 0.086,
+        "h": 0.088,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.305,
+        "y": 0.301,
+        "w": 0.086,
+        "h": 0.088,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.462,
+        "y": 0.3,
+        "w": 0.086,
+        "h": 0.088,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.623,
+        "y": 0.301,
+        "w": 0.086,
+        "h": 0.088,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.304,
+        "y": 0.459,
+        "w": 0.086,
+        "h": 0.088,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.461,
+        "y": 0.458,
+        "w": 0.086,
+        "h": 0.088,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.622,
+        "y": 0.459,
+        "w": 0.086,
+        "h": 0.088,
         "rotation": 0,
         "cornerRadius": 0
       }
@@ -992,79 +832,79 @@
     ]
   },
   {
-    "name": "mockup32",
+    "name": "mockup29",
     "category": "wall-frame",
-    "image": "/mockups/mockup32.png",
+    "image": "/mockups/mockup29.png",
     "frames": [
       {
-        "x": 0.304,
-        "y": 0.146,
-        "w": 0.087,
-        "h": 0.089,
+        "x": 0.3056,
+        "y": 0.1456,
+        "w": 0.0859,
+        "h": 0.0859,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.462,
-        "y": 0.145,
-        "w": 0.087,
-        "h": 0.089,
+        "x": 0.4653,
+        "y": 0.1453,
+        "w": 0.0859,
+        "h": 0.0859,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.618,
-        "y": 0.146,
-        "w": 0.087,
-        "h": 0.089,
+        "x": 0.6217,
+        "y": 0.1444,
+        "w": 0.0859,
+        "h": 0.0859,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.303,
-        "y": 0.302,
-        "w": 0.087,
-        "h": 0.089,
+        "x": 0.3071,
+        "y": 0.3062,
+        "w": 0.0859,
+        "h": 0.0859,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.461,
-        "y": 0.301,
-        "w": 0.087,
-        "h": 0.089,
+        "x": 0.4668,
+        "y": 0.3059,
+        "w": 0.0859,
+        "h": 0.0859,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.617,
-        "y": 0.302,
-        "w": 0.087,
-        "h": 0.089,
+        "x": 0.6232,
+        "y": 0.305,
+        "w": 0.0859,
+        "h": 0.0859,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.304,
-        "y": 0.462,
-        "w": 0.087,
-        "h": 0.089,
+        "x": 0.3071,
+        "y": 0.4626,
+        "w": 0.0859,
+        "h": 0.0859,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.462,
-        "y": 0.461,
-        "w": 0.087,
-        "h": 0.089,
+        "x": 0.4668,
+        "y": 0.4623,
+        "w": 0.0859,
+        "h": 0.0859,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.618,
-        "y": 0.462,
-        "w": 0.087,
-        "h": 0.089,
+        "x": 0.6232,
+        "y": 0.4614,
+        "w": 0.0859,
+        "h": 0.0859,
         "rotation": 0,
         "cornerRadius": 0
       }
@@ -1158,1350 +998,142 @@
     ]
   },
   {
-    "name": "mockup36",
+    "name": "mockup31",
     "category": "wall-frame",
-    "image": "/mockups/mockup36.png",
+    "image": "/mockups/mockup31.png",
     "frames": [
       {
-        "x": 0.2768,
-        "y": 0.1354,
-        "w": 0.1053,
-        "h": 0.1043,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4462,
-        "y": 0.1363,
-        "w": 0.1053,
-        "h": 0.1043,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6168,
-        "y": 0.1353,
-        "w": 0.1053,
-        "h": 0.1043,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.2767,
-        "y": 0.2878,
-        "w": 0.1053,
-        "h": 0.1043,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4461,
-        "y": 0.2887,
-        "w": 0.1053,
-        "h": 0.1043,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6167,
-        "y": 0.2877,
-        "w": 0.1053,
-        "h": 0.1043,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.2767,
-        "y": 0.4473,
-        "w": 0.1053,
-        "h": 0.1043,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4461,
-        "y": 0.4482,
-        "w": 0.1053,
-        "h": 0.1043,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6167,
-        "y": 0.4472,
-        "w": 0.1053,
-        "h": 0.1043,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup29",
-    "category": "wall-frame",
-    "image": "/mockups/mockup29.png",
-    "frames": [
-      {
-        "x": 0.3056,
-        "y": 0.1456,
-        "w": 0.0859,
-        "h": 0.0859,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4653,
-        "y": 0.1453,
-        "w": 0.0859,
-        "h": 0.0859,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6217,
-        "y": 0.1444,
-        "w": 0.0859,
-        "h": 0.0859,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.3071,
-        "y": 0.3062,
-        "w": 0.0859,
-        "h": 0.0859,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4668,
-        "y": 0.3059,
-        "w": 0.0859,
-        "h": 0.0859,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6232,
-        "y": 0.305,
-        "w": 0.0859,
-        "h": 0.0859,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.3071,
-        "y": 0.4626,
-        "w": 0.0859,
-        "h": 0.0859,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4668,
-        "y": 0.4623,
-        "w": 0.0859,
-        "h": 0.0859,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6232,
-        "y": 0.4614,
-        "w": 0.0859,
-        "h": 0.0859,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup42",
-    "category": "wall-frame",
-    "image": "/mockups/mockup42.png",
-    "frames": [
-      {
-        "x": 0.2566,
-        "y": 0.2061,
-        "w": 0.0775,
-        "h": 0.3658,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6339,
-        "y": 0.1989,
-        "w": 0.0719,
-        "h": 0.3753,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4487,
-        "y": 0.2128,
-        "w": 0.0703,
-        "h": 0.3586,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.3629,
-        "y": 0.4222,
-        "w": 0.0584,
-        "h": 0.1496,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.3631,
-        "y": 0.2025,
-        "w": 0.0584,
-        "h": 0.1496,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.5458,
-        "y": 0.2029,
-        "w": 0.0584,
-        "h": 0.1496,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.5474,
-        "y": 0.4234,
-        "w": 0.0584,
-        "h": 0.1496,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup46",
-    "category": "wall-frame",
-    "image": "/mockups/mockup46.png",
-    "frames": [
-      {
-        "x": 0.2209,
-        "y": 0.3485,
-        "w": 0.2129,
-        "h": 0.3206,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.5521,
-        "y": 0.35,
-        "w": 0.2129,
-        "h": 0.3206,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup45",
-    "category": "wall-frame",
-    "image": "/mockups/mockup45.png",
-    "frames": [
-      {
-        "x": 0.1635,
-        "y": 0.283,
-        "w": 0.2871,
-        "h": 0.4164,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.5455,
-        "y": 0.286,
-        "w": 0.1435,
-        "h": 0.1994,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6977,
-        "y": 0.2865,
-        "w": 0.1435,
-        "h": 0.1994,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.5445,
-        "y": 0.497,
-        "w": 0.1435,
-        "h": 0.1994,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6967,
-        "y": 0.4995,
-        "w": 0.1435,
-        "h": 0.1994,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup43",
-    "category": "wall-frame",
-    "image": "/mockups/mockup43.png",
-    "frames": [
-      {
-        "x": 0.2324,
-        "y": 0.1582,
-        "w": 0.1275,
-        "h": 0.1212,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4186,
-        "y": 0.0949,
-        "w": 0.1474,
-        "h": 0.1854,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4183,
-        "y": 0.3387,
-        "w": 0.1474,
-        "h": 0.1854,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6335,
-        "y": 0.1778,
-        "w": 0.1691,
-        "h": 0.2008,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.2794,
-        "y": 0.3363,
-        "w": 0.0823,
-        "h": 0.1103,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup48",
-    "category": "wall-frame",
-    "image": "/mockups/mockup48.png",
-    "frames": [
-      {
-        "x": 0.3365,
-        "y": 0.206,
-        "w": 0.3285,
-        "h": 0.6291,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup38",
-    "category": "wall-frame",
-    "image": "/mockups/mockup38.png",
-    "frames": [
-      {
-        "x": 0.4323,
-        "y": 0.1528,
-        "w": 0.1235,
-        "h": 0.0823,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6547,
-        "y": 0.1536,
-        "w": 0.1235,
-        "h": 0.0823,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4342,
-        "y": 0.3026,
-        "w": 0.1235,
-        "h": 0.0823,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6566,
-        "y": 0.3034,
-        "w": 0.1235,
-        "h": 0.0823,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4328,
-        "y": 0.449,
-        "w": 0.1235,
-        "h": 0.0823,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6552,
-        "y": 0.4498,
-        "w": 0.1235,
-        "h": 0.0823,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup44",
-    "category": "wall-frame",
-    "image": "/mockups/mockup44.png",
-    "frames": [
-      {
-        "x": 0.2559,
-        "y": 0.1781,
-        "w": 0.0886,
-        "h": 0.1266,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6335,
-        "y": 0.1624,
-        "w": 0.1004,
-        "h": 0.1402,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4111,
-        "y": 0.1091,
-        "w": 0.1528,
-        "h": 0.1953,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.2276,
-        "y": 0.364,
-        "w": 0.1184,
-        "h": 0.151,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.412,
-        "y": 0.3686,
-        "w": 0.151,
-        "h": 0.1953,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6347,
-        "y": 0.3752,
+        "x": 0.28,
+        "y": 0.153,
         "w": 0.104,
-        "h": 0.1356,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup53",
-    "category": "wall-frame",
-    "image": "/mockups/mockup53.png",
-    "frames": [
-      {
-        "x": 0.2862,
-        "y": 0.1447,
-        "w": 0.0831,
-        "h": 0.1868,
+        "h": 0.101,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.4055,
-        "y": 0.1446,
-        "w": 0.0831,
-        "h": 0.1868,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.5246,
-        "y": 0.1457,
-        "w": 0.0831,
-        "h": 0.1868,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6439,
-        "y": 0.1456,
-        "w": 0.0831,
-        "h": 0.1868,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.2864,
-        "y": 0.3757,
-        "w": 0.0831,
-        "h": 0.1868,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4057,
-        "y": 0.3756,
-        "w": 0.0831,
-        "h": 0.1868,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.5248,
-        "y": 0.3767,
-        "w": 0.0831,
-        "h": 0.1868,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6441,
-        "y": 0.3766,
-        "w": 0.0831,
-        "h": 0.1868,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup47",
-    "category": "wall-frame",
-    "image": "/mockups/mockup47.png",
-    "frames": [
-      {
-        "x": 0.2544,
-        "y": 0.3602,
-        "w": 0.1579,
-        "h": 0.261,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.5335,
-        "y": 0.3416,
-        "w": 0.1069,
-        "h": 0.1417,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6642,
-        "y": 0.3422,
-        "w": 0.1069,
-        "h": 0.1417,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.533,
-        "y": 0.5034,
-        "w": 0.1069,
-        "h": 0.1417,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6637,
-        "y": 0.504,
-        "w": 0.1069,
-        "h": 0.1417,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup51",
-    "category": "wall-frame",
-    "image": "/mockups/mockup51.png",
-    "frames": [
-      {
-        "x": 0.3941,
-        "y": 0.2245,
-        "w": 0.2062,
-        "h": 0.5592,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup14",
-    "category": "wall-frame",
-    "image": "/mockups/mockup14.png",
-    "frames": [
-      {
-        "x": 0.214,
-        "y": 0.2342,
-        "w": 0.1627,
-        "h": 0.1808,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4051,
-        "y": 0.2339,
-        "w": 0.1593,
-        "h": 0.1826,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.5925,
-        "y": 0.3282,
-        "w": 0.1243,
-        "h": 0.094,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.5937,
-        "y": 0.2324,
-        "w": 0.1232,
-        "h": 0.0805,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup50",
-    "category": "wall-frame",
-    "image": "/mockups/mockup50.png",
-    "frames": [
-      {
-        "x": 0.3709,
-        "y": 0.1503,
-        "w": 0.2574,
-        "h": 0.7404,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup54",
-    "category": "wall-frame",
-    "image": "/mockups/mockup54.png",
-    "frames": [
-      {
-        "x": 0.3812,
-        "y": 0.1186,
-        "w": 0.0734,
-        "h": 0.1522,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.3815,
-        "y": 0.3339,
-        "w": 0.0734,
-        "h": 0.1522,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4935,
-        "y": 0.1186,
-        "w": 0.0734,
-        "h": 0.1522,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4938,
-        "y": 0.3339,
-        "w": 0.0734,
-        "h": 0.1522,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6119,
-        "y": 0.1177,
-        "w": 0.0734,
-        "h": 0.1522,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6122,
-        "y": 0.333,
-        "w": 0.0734,
-        "h": 0.1522,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup56",
-    "category": "wall-frame",
-    "image": "/mockups/mockup56.png",
-    "frames": [
-      {
-        "x": 0.3166,
-        "y": 0.1357,
+        "x": 0.439,
+        "y": 0.125,
         "w": 0.118,
-        "h": 0.2006,
+        "h": 0.121,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.3169,
-        "y": 0.3618,
-        "w": 0.118,
-        "h": 0.2077,
+        "x": 0.608,
+        "y": 0.147,
+        "w": 0.113,
+        "h": 0.19,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.4493,
-        "y": 0.1351,
-        "w": 0.118,
-        "h": 0.2006,
+        "x": 0.607,
+        "y": 0.384,
+        "w": 0.106,
+        "h": 0.104,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.4496,
-        "y": 0.3612,
-        "w": 0.118,
-        "h": 0.2077,
+        "x": 0.431,
+        "y": 0.297,
+        "w": 0.125,
+        "h": 0.211,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.5816,
-        "y": 0.136,
-        "w": 0.118,
-        "h": 0.2006,
+        "x": 0.278,
+        "y": 0.293,
+        "w": 0.111,
+        "h": 0.08,
         "rotation": 0,
         "cornerRadius": 0
       },
-      {
-        "x": 0.5819,
-        "y": 0.3621,
-        "w": 0.118,
-        "h": 0.2077,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup55",
-    "category": "wall-frame",
-    "image": "/mockups/mockup55.png",
-    "frames": [
-      {
-        "x": 0.3791,
-        "y": 0.1194,
-        "w": 0.0758,
-        "h": 0.1522,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.3794,
-        "y": 0.3347,
-        "w": 0.0766,
-        "h": 0.1522,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4914,
-        "y": 0.1194,
-        "w": 0.0734,
-        "h": 0.1522,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4917,
-        "y": 0.3347,
-        "w": 0.0734,
-        "h": 0.1522,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6098,
-        "y": 0.1185,
-        "w": 0.0734,
-        "h": 0.1522,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6101,
-        "y": 0.3338,
-        "w": 0.0734,
-        "h": 0.1522,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup57",
-    "category": "wall-frame",
-    "image": "/mockups/mockup57.png",
-    "frames": [
       {
         "x": 0.274,
-        "y": 0.415,
-        "w": 0.3526,
-        "h": 0.3499,
+        "y": 0.417,
+        "w": 0.113,
+        "h": 0.074,
         "rotation": 0,
         "cornerRadius": 0
       }
     ]
   },
   {
-    "name": "mockup61",
+    "name": "mockup32",
     "category": "wall-frame",
-    "image": "/mockups/mockup61.png",
+    "image": "/mockups/mockup32.png",
     "frames": [
       {
-        "x": 0.3078,
-        "y": 0.1247,
-        "w": 0.3957,
-        "h": 0.6776,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup62",
-    "category": "wall-frame",
-    "image": "/mockups/mockup62.png",
-    "frames": [
-      {
-        "x": 0.2544,
-        "y": 0.2794,
-        "w": 0.2368,
-        "h": 0.4125,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup63",
-    "category": "wall-frame",
-    "image": "/mockups/mockup63.png",
-    "frames": [
-      {
-        "x": 0.1922,
-        "y": 0.1343,
-        "w": 0.3549,
-        "h": 0.6344,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup67",
-    "category": "wall-frame",
-    "image": "/mockups/mockup67.png",
-    "frames": [
-      {
-        "x": 0.0712,
-        "y": 0.0967,
-        "w": 0.2441,
-        "h": 0.1637,
+        "x": 0.304,
+        "y": 0.146,
+        "w": 0.087,
+        "h": 0.089,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.3732,
-        "y": 0.1239,
-        "w": 0.1031,
-        "h": 0.0904,
+        "x": 0.462,
+        "y": 0.145,
+        "w": 0.087,
+        "h": 0.089,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.5224,
-        "y": 0.0687,
-        "w": 0.1998,
-        "h": 0.2278,
+        "x": 0.618,
+        "y": 0.146,
+        "w": 0.087,
+        "h": 0.089,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.7756,
-        "y": 0.1166,
-        "w": 0.1438,
-        "h": 0.1863,
+        "x": 0.303,
+        "y": 0.302,
+        "w": 0.087,
+        "h": 0.089,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.0902,
-        "y": 0.34,
-        "w": 0.1148,
-        "h": 0.1601,
+        "x": 0.461,
+        "y": 0.301,
+        "w": 0.087,
+        "h": 0.089,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.2982,
-        "y": 0.2893,
-        "w": 0.1537,
-        "h": 0.2053,
+        "x": 0.617,
+        "y": 0.302,
+        "w": 0.087,
+        "h": 0.089,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.5045,
-        "y": 0.3626,
-        "w": 0.1736,
-        "h": 0.1112,
+        "x": 0.304,
+        "y": 0.462,
+        "w": 0.087,
+        "h": 0.089,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.7279,
-        "y": 0.3662,
-        "w": 0.2161,
-        "h": 0.2966,
+        "x": 0.462,
+        "y": 0.461,
+        "w": 0.087,
+        "h": 0.089,
         "rotation": 0,
         "cornerRadius": 0
       },
       {
-        "x": 0.7188,
-        "y": 0.7125,
-        "w": 0.198,
-        "h": 0.1881,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.5235,
-        "y": 0.528,
-        "w": 0.1501,
-        "h": 0.1772,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4204,
-        "y": 0.755,
-        "w": 0.2278,
-        "h": 0.1745,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.0995,
-        "y": 0.5669,
-        "w": 0.2206,
-        "h": 0.292,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.3942,
-        "y": 0.5759,
-        "w": 0.0678,
-        "h": 0.1203,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup69",
-    "category": "wall-frame",
-    "image": "/mockups/mockup69.png",
-    "frames": [
-      {
-        "x": 0.2859,
-        "y": 0.1293,
-        "w": 0.4152,
-        "h": 0.4123,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup13",
-    "category": "wall-frame",
-    "image": "/mockups/mockup13.png",
-    "frames": [
-      {
-        "x": 0.1327,
-        "y": 0.1772,
-        "w": 0.2045,
-        "h": 0.2161,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.3995,
-        "y": 0.1782,
-        "w": 0.2045,
-        "h": 0.2161,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6613,
-        "y": 0.178,
-        "w": 0.2045,
-        "h": 0.2161,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup17",
-    "category": "wall-frame",
-    "image": "/mockups/mockup17.png",
-    "frames": [
-      {
-        "x": 0.1302,
-        "y": 0.2161,
-        "w": 0.7396,
-        "h": 0.5579,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup15",
-    "category": "wall-frame",
-    "image": "/mockups/mockup15.png",
-    "frames": [
-      {
-        "x": 0.292,
-        "y": 0.2486,
-        "w": 0.4177,
-        "h": 0.5036,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup16",
-    "category": "wall-frame",
-    "image": "/mockups/mockup16.png",
-    "frames": [
-      {
-        "x": 0.2532,
-        "y": 0.3038,
-        "w": 0.491,
-        "h": 0.3879,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup20",
-    "category": "wall-frame",
-    "image": "/mockups/mockup20.png",
-    "frames": [
-      {
-        "x": 0.3253,
-        "y": 0.4122,
-        "w": 0.3373,
-        "h": 0.3681,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup24",
-    "category": "wall-frame",
-    "image": "/mockups/mockup24.png",
-    "frames": [
-      {
-        "x": 0.1895,
-        "y": 0.1369,
-        "w": 0.1642,
-        "h": 0.1193,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4174,
-        "y": 0.1361,
-        "w": 0.1642,
-        "h": 0.1193,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.1886,
-        "y": 0.291,
-        "w": 0.1642,
-        "h": 0.1193,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4165,
-        "y": 0.2902,
-        "w": 0.1642,
-        "h": 0.1193,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.1886,
-        "y": 0.4462,
-        "w": 0.1642,
-        "h": 0.1193,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4165,
-        "y": 0.4454,
-        "w": 0.1642,
-        "h": 0.1193,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.65,
-        "y": 0.1349,
-        "w": 0.1642,
-        "h": 0.1193,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6491,
-        "y": 0.289,
-        "w": 0.1642,
-        "h": 0.1193,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6491,
-        "y": 0.4442,
-        "w": 0.1642,
-        "h": 0.1193,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup21",
-    "category": "wall-frame",
-    "image": "/mockups/mockup21.png",
-    "frames": [
-      {
-        "x": 0.1855,
-        "y": 0.0662,
-        "w": 0.1495,
-        "h": 0.3795,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4063,
-        "y": 0.0641,
-        "w": 0.1615,
-        "h": 0.3795,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6446,
-        "y": 0.0655,
-        "w": 0.1567,
-        "h": 0.3795,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup23",
-    "category": "wall-frame",
-    "image": "/mockups/mockup23.png",
-    "frames": [
-      {
-        "x": 0.2002,
-        "y": 0.1841,
-        "w": 0.1427,
-        "h": 0.3272,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4214,
-        "y": 0.1849,
-        "w": 0.1427,
-        "h": 0.3272,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.6522,
-        "y": 0.1832,
-        "w": 0.1427,
-        "h": 0.3272,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup22",
-    "category": "wall-frame",
-    "image": "/mockups/mockup22.png",
-    "frames": [
-      {
-        "x": 0.264,
-        "y": 0.0418,
-        "w": 0.1954,
-        "h": 0.3997,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.5346,
-        "y": 0.0412,
-        "w": 0.1954,
-        "h": 0.3997,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup34",
-    "category": "wall-frame",
-    "image": "/mockups/mockup34.png",
-    "frames": [
-      {
-        "x": 0.3472,
-        "y": 0.198,
-        "w": 0.1212,
-        "h": 0.1248,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.5366,
-        "y": 0.1986,
-        "w": 0.1212,
-        "h": 0.1248,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.3478,
-        "y": 0.3854,
-        "w": 0.1212,
-        "h": 0.1248,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.5372,
-        "y": 0.386,
-        "w": 0.1212,
-        "h": 0.1248,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup37",
-    "category": "wall-frame",
-    "image": "/mockups/mockup37.png",
-    "frames": [
-      {
-        "x": 0.2275,
-        "y": 0.1139,
-        "w": 0.1669,
-        "h": 0.1085,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4655,
-        "y": 0.1154,
-        "w": 0.1669,
-        "h": 0.1085,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.2281,
-        "y": 0.2673,
-        "w": 0.1669,
-        "h": 0.1085,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4661,
-        "y": 0.2688,
-        "w": 0.1669,
-        "h": 0.1085,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.2281,
-        "y": 0.4165,
-        "w": 0.1669,
-        "h": 0.1085,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.4661,
-        "y": 0.418,
-        "w": 0.1669,
-        "h": 0.1085,
+        "x": 0.618,
+        "y": 0.462,
+        "w": 0.087,
+        "h": 0.089,
         "rotation": 0,
         "cornerRadius": 0
       }
@@ -2581,6 +1213,273 @@
         "y": 0.4608,
         "w": 0.1408,
         "h": 0.1016,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup34",
+    "category": "wall-frame",
+    "image": "/mockups/mockup34.png",
+    "frames": [
+      {
+        "x": 0.3472,
+        "y": 0.198,
+        "w": 0.1212,
+        "h": 0.1248,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5366,
+        "y": 0.1986,
+        "w": 0.1212,
+        "h": 0.1248,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.3478,
+        "y": 0.3854,
+        "w": 0.1212,
+        "h": 0.1248,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5372,
+        "y": 0.386,
+        "w": 0.1212,
+        "h": 0.1248,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup35",
+    "category": "wall-frame",
+    "image": "/mockups/mockup35.png",
+    "frames": [
+      {
+        "x": 0.5164,
+        "y": 0.1723,
+        "w": 0.1275,
+        "h": 0.1232,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5181,
+        "y": 0.3747,
+        "w": 0.1275,
+        "h": 0.1232,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.7232,
+        "y": 0.1726,
+        "w": 0.1275,
+        "h": 0.1232,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.7249,
+        "y": 0.375,
+        "w": 0.1275,
+        "h": 0.1232,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup36",
+    "category": "wall-frame",
+    "image": "/mockups/mockup36.png",
+    "frames": [
+      {
+        "x": 0.2768,
+        "y": 0.1354,
+        "w": 0.1053,
+        "h": 0.1043,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4462,
+        "y": 0.1363,
+        "w": 0.1053,
+        "h": 0.1043,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6168,
+        "y": 0.1353,
+        "w": 0.1053,
+        "h": 0.1043,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.2767,
+        "y": 0.2878,
+        "w": 0.1053,
+        "h": 0.1043,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4461,
+        "y": 0.2887,
+        "w": 0.1053,
+        "h": 0.1043,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6167,
+        "y": 0.2877,
+        "w": 0.1053,
+        "h": 0.1043,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.2767,
+        "y": 0.4473,
+        "w": 0.1053,
+        "h": 0.1043,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4461,
+        "y": 0.4482,
+        "w": 0.1053,
+        "h": 0.1043,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6167,
+        "y": 0.4472,
+        "w": 0.1053,
+        "h": 0.1043,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup37",
+    "category": "wall-frame",
+    "image": "/mockups/mockup37.png",
+    "frames": [
+      {
+        "x": 0.2275,
+        "y": 0.1139,
+        "w": 0.1669,
+        "h": 0.1085,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4655,
+        "y": 0.1154,
+        "w": 0.1669,
+        "h": 0.1085,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.2281,
+        "y": 0.2673,
+        "w": 0.1669,
+        "h": 0.1085,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4661,
+        "y": 0.2688,
+        "w": 0.1669,
+        "h": 0.1085,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.2281,
+        "y": 0.4165,
+        "w": 0.1669,
+        "h": 0.1085,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4661,
+        "y": 0.418,
+        "w": 0.1669,
+        "h": 0.1085,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup38",
+    "category": "wall-frame",
+    "image": "/mockups/mockup38.png",
+    "frames": [
+      {
+        "x": 0.4323,
+        "y": 0.1528,
+        "w": 0.1235,
+        "h": 0.0823,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6547,
+        "y": 0.1536,
+        "w": 0.1235,
+        "h": 0.0823,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4342,
+        "y": 0.3026,
+        "w": 0.1235,
+        "h": 0.0823,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6566,
+        "y": 0.3034,
+        "w": 0.1235,
+        "h": 0.0823,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4328,
+        "y": 0.449,
+        "w": 0.1235,
+        "h": 0.0823,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6552,
+        "y": 0.4498,
+        "w": 0.1235,
+        "h": 0.0823,
         "rotation": 0,
         "cornerRadius": 0
       }
@@ -2737,45 +1636,6 @@
     ]
   },
   {
-    "name": "mockup35",
-    "category": "wall-frame",
-    "image": "/mockups/mockup35.png",
-    "frames": [
-      {
-        "x": 0.5164,
-        "y": 0.1723,
-        "w": 0.1275,
-        "h": 0.1232,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.5181,
-        "y": 0.3747,
-        "w": 0.1275,
-        "h": 0.1232,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.7232,
-        "y": 0.1726,
-        "w": 0.1275,
-        "h": 0.1232,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.7249,
-        "y": 0.375,
-        "w": 0.1275,
-        "h": 0.1232,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
     "name": "mockup41",
     "category": "wall-frame",
     "image": "/mockups/mockup41.png",
@@ -2841,6 +1701,348 @@
         "y": 0.3929,
         "w": 0.0748,
         "h": 0.1703,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup42",
+    "category": "wall-frame",
+    "image": "/mockups/mockup42.png",
+    "frames": [
+      {
+        "x": 0.2566,
+        "y": 0.2061,
+        "w": 0.0775,
+        "h": 0.3658,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6339,
+        "y": 0.1989,
+        "w": 0.0719,
+        "h": 0.3753,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4487,
+        "y": 0.2128,
+        "w": 0.0703,
+        "h": 0.3586,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.3629,
+        "y": 0.4222,
+        "w": 0.0584,
+        "h": 0.1496,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.3631,
+        "y": 0.2025,
+        "w": 0.0584,
+        "h": 0.1496,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5458,
+        "y": 0.2029,
+        "w": 0.0584,
+        "h": 0.1496,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5474,
+        "y": 0.4234,
+        "w": 0.0584,
+        "h": 0.1496,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup43",
+    "category": "wall-frame",
+    "image": "/mockups/mockup43.png",
+    "frames": [
+      {
+        "x": 0.2324,
+        "y": 0.1582,
+        "w": 0.1275,
+        "h": 0.1212,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4186,
+        "y": 0.0949,
+        "w": 0.1474,
+        "h": 0.1854,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4183,
+        "y": 0.3387,
+        "w": 0.1474,
+        "h": 0.1854,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6335,
+        "y": 0.1778,
+        "w": 0.1691,
+        "h": 0.2008,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.2794,
+        "y": 0.3363,
+        "w": 0.0823,
+        "h": 0.1103,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup44",
+    "category": "wall-frame",
+    "image": "/mockups/mockup44.png",
+    "frames": [
+      {
+        "x": 0.2559,
+        "y": 0.1781,
+        "w": 0.0886,
+        "h": 0.1266,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6335,
+        "y": 0.1624,
+        "w": 0.1004,
+        "h": 0.1402,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4111,
+        "y": 0.1091,
+        "w": 0.1528,
+        "h": 0.1953,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.2276,
+        "y": 0.364,
+        "w": 0.1184,
+        "h": 0.151,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.412,
+        "y": 0.3686,
+        "w": 0.151,
+        "h": 0.1953,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6347,
+        "y": 0.3752,
+        "w": 0.104,
+        "h": 0.1356,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup45",
+    "category": "wall-frame",
+    "image": "/mockups/mockup45.png",
+    "frames": [
+      {
+        "x": 0.1635,
+        "y": 0.283,
+        "w": 0.2871,
+        "h": 0.4164,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5455,
+        "y": 0.286,
+        "w": 0.1435,
+        "h": 0.1994,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6977,
+        "y": 0.2865,
+        "w": 0.1435,
+        "h": 0.1994,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5445,
+        "y": 0.497,
+        "w": 0.1435,
+        "h": 0.1994,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6967,
+        "y": 0.4995,
+        "w": 0.1435,
+        "h": 0.1994,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup46",
+    "category": "wall-frame",
+    "image": "/mockups/mockup46.png",
+    "frames": [
+      {
+        "x": 0.2209,
+        "y": 0.3485,
+        "w": 0.2129,
+        "h": 0.3206,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5521,
+        "y": 0.35,
+        "w": 0.2129,
+        "h": 0.3206,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup47",
+    "category": "wall-frame",
+    "image": "/mockups/mockup47.png",
+    "frames": [
+      {
+        "x": 0.2544,
+        "y": 0.3602,
+        "w": 0.1579,
+        "h": 0.261,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5335,
+        "y": 0.3416,
+        "w": 0.1069,
+        "h": 0.1417,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6642,
+        "y": 0.3422,
+        "w": 0.1069,
+        "h": 0.1417,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.533,
+        "y": 0.5034,
+        "w": 0.1069,
+        "h": 0.1417,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6637,
+        "y": 0.504,
+        "w": 0.1069,
+        "h": 0.1417,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup48",
+    "category": "wall-frame",
+    "image": "/mockups/mockup48.png",
+    "frames": [
+      {
+        "x": 0.3365,
+        "y": 0.206,
+        "w": 0.3285,
+        "h": 0.6291,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup49",
+    "category": "wall-frame",
+    "image": "/mockups/mockup49.png",
+    "frames": [
+      {
+        "x": 0.3591,
+        "y": 0.2258,
+        "w": 0.2849,
+        "h": 0.5814,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup50",
+    "category": "wall-frame",
+    "image": "/mockups/mockup50.png",
+    "frames": [
+      {
+        "x": 0.3709,
+        "y": 0.1503,
+        "w": 0.2574,
+        "h": 0.7404,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup51",
+    "category": "wall-frame",
+    "image": "/mockups/mockup51.png",
+    "frames": [
+      {
+        "x": 0.3941,
+        "y": 0.2245,
+        "w": 0.2062,
+        "h": 0.5592,
         "rotation": 0,
         "cornerRadius": 0
       }
@@ -2990,6 +2192,272 @@
     ]
   },
   {
+    "name": "mockup53",
+    "category": "wall-frame",
+    "image": "/mockups/mockup53.png",
+    "frames": [
+      {
+        "x": 0.2862,
+        "y": 0.1447,
+        "w": 0.0831,
+        "h": 0.1868,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4055,
+        "y": 0.1446,
+        "w": 0.0831,
+        "h": 0.1868,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5246,
+        "y": 0.1457,
+        "w": 0.0831,
+        "h": 0.1868,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6439,
+        "y": 0.1456,
+        "w": 0.0831,
+        "h": 0.1868,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.2864,
+        "y": 0.3757,
+        "w": 0.0831,
+        "h": 0.1868,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4057,
+        "y": 0.3756,
+        "w": 0.0831,
+        "h": 0.1868,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5248,
+        "y": 0.3767,
+        "w": 0.0831,
+        "h": 0.1868,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6441,
+        "y": 0.3766,
+        "w": 0.0831,
+        "h": 0.1868,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup54",
+    "category": "wall-frame",
+    "image": "/mockups/mockup54.png",
+    "frames": [
+      {
+        "x": 0.3812,
+        "y": 0.1186,
+        "w": 0.0734,
+        "h": 0.1522,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.3815,
+        "y": 0.3339,
+        "w": 0.0734,
+        "h": 0.1522,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4935,
+        "y": 0.1186,
+        "w": 0.0734,
+        "h": 0.1522,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4938,
+        "y": 0.3339,
+        "w": 0.0734,
+        "h": 0.1522,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6119,
+        "y": 0.1177,
+        "w": 0.0734,
+        "h": 0.1522,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6122,
+        "y": 0.333,
+        "w": 0.0734,
+        "h": 0.1522,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup55",
+    "category": "wall-frame",
+    "image": "/mockups/mockup55.png",
+    "frames": [
+      {
+        "x": 0.3791,
+        "y": 0.1194,
+        "w": 0.0758,
+        "h": 0.1522,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.3794,
+        "y": 0.3347,
+        "w": 0.0766,
+        "h": 0.1522,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4914,
+        "y": 0.1194,
+        "w": 0.0734,
+        "h": 0.1522,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4917,
+        "y": 0.3347,
+        "w": 0.0734,
+        "h": 0.1522,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6098,
+        "y": 0.1185,
+        "w": 0.0734,
+        "h": 0.1522,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.6101,
+        "y": 0.3338,
+        "w": 0.0734,
+        "h": 0.1522,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup56",
+    "category": "wall-frame",
+    "image": "/mockups/mockup56.png",
+    "frames": [
+      {
+        "x": 0.3166,
+        "y": 0.1357,
+        "w": 0.118,
+        "h": 0.2006,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.3169,
+        "y": 0.3618,
+        "w": 0.118,
+        "h": 0.2077,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4493,
+        "y": 0.1351,
+        "w": 0.118,
+        "h": 0.2006,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4496,
+        "y": 0.3612,
+        "w": 0.118,
+        "h": 0.2077,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5816,
+        "y": 0.136,
+        "w": 0.118,
+        "h": 0.2006,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5819,
+        "y": 0.3621,
+        "w": 0.118,
+        "h": 0.2077,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup57",
+    "category": "wall-frame",
+    "image": "/mockups/mockup57.png",
+    "frames": [
+      {
+        "x": 0.274,
+        "y": 0.415,
+        "w": 0.3526,
+        "h": 0.3499,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup58",
+    "category": "wall-frame",
+    "image": "/mockups/mockup58.png",
+    "frames": [
+      {
+        "x": 0.3853,
+        "y": 0.2442,
+        "w": 0.2466,
+        "h": 0.3214,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
     "name": "mockup59",
     "category": "wall-frame",
     "image": "/mockups/mockup59.png",
@@ -3020,6 +2488,51 @@
     ]
   },
   {
+    "name": "mockup61",
+    "category": "wall-frame",
+    "image": "/mockups/mockup61.png",
+    "frames": [
+      {
+        "x": 0.3078,
+        "y": 0.1247,
+        "w": 0.3957,
+        "h": 0.6776,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup62",
+    "category": "wall-frame",
+    "image": "/mockups/mockup62.png",
+    "frames": [
+      {
+        "x": 0.2544,
+        "y": 0.2794,
+        "w": 0.2368,
+        "h": 0.4125,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup63",
+    "category": "wall-frame",
+    "image": "/mockups/mockup63.png",
+    "frames": [
+      {
+        "x": 0.1922,
+        "y": 0.1343,
+        "w": 0.3549,
+        "h": 0.6344,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
     "name": "mockup64",
     "category": "wall-frame",
     "image": "/mockups/mockup64.png",
@@ -3037,6 +2550,147 @@
         "y": 0.3165,
         "w": 0.2251,
         "h": 0.5758,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup65",
+    "category": "wall-frame",
+    "image": "/mockups/mockup65.png",
+    "frames": [
+      {
+        "x": 0.5742,
+        "y": 0.3209,
+        "w": 0.2432,
+        "h": 0.2866,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup66",
+    "category": "wall-frame",
+    "image": "/mockups/mockup66.png",
+    "frames": [
+      {
+        "x": 0.189,
+        "y": 0.4115,
+        "w": 0.2407,
+        "h": 0.2988,
+        "rotation": 0,
+        "cornerRadius": 0
+      }
+    ]
+  },
+  {
+    "name": "mockup67",
+    "category": "wall-frame",
+    "image": "/mockups/mockup67.png",
+    "frames": [
+      {
+        "x": 0.0712,
+        "y": 0.0967,
+        "w": 0.2441,
+        "h": 0.1637,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.3732,
+        "y": 0.1239,
+        "w": 0.1031,
+        "h": 0.0904,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5224,
+        "y": 0.0687,
+        "w": 0.1998,
+        "h": 0.2278,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.7756,
+        "y": 0.1166,
+        "w": 0.1438,
+        "h": 0.1863,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.0902,
+        "y": 0.34,
+        "w": 0.1148,
+        "h": 0.1601,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.2982,
+        "y": 0.2893,
+        "w": 0.1537,
+        "h": 0.2053,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5045,
+        "y": 0.3626,
+        "w": 0.1736,
+        "h": 0.1112,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.7279,
+        "y": 0.3662,
+        "w": 0.2161,
+        "h": 0.2966,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.7188,
+        "y": 0.7125,
+        "w": 0.198,
+        "h": 0.1881,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.5235,
+        "y": 0.528,
+        "w": 0.1501,
+        "h": 0.1772,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.4204,
+        "y": 0.755,
+        "w": 0.2278,
+        "h": 0.1745,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.0995,
+        "y": 0.5669,
+        "w": 0.2206,
+        "h": 0.292,
+        "rotation": 0,
+        "cornerRadius": 0
+      },
+      {
+        "x": 0.3942,
+        "y": 0.5759,
+        "w": 0.0678,
+        "h": 0.1203,
         "rotation": 0,
         "cornerRadius": 0
       }
@@ -3146,123 +2800,18 @@
     ]
   },
   {
-    "name": "mockup58",
+    "name": "mockup69",
     "category": "wall-frame",
-    "image": "/mockups/mockup58.png",
+    "image": "/mockups/mockup69.png",
     "frames": [
       {
-        "x": 0.3853,
-        "y": 0.2442,
-        "w": 0.2466,
-        "h": 0.3214,
+        "x": 0.2859,
+        "y": 0.1293,
+        "w": 0.4152,
+        "h": 0.4123,
         "rotation": 0,
         "cornerRadius": 0
       }
     ]
-  },
-  {
-    "name": "mockup66",
-    "category": "wall-frame",
-    "image": "/mockups/mockup66.png",
-    "frames": [
-      {
-        "x": 0.189,
-        "y": 0.4115,
-        "w": 0.2407,
-        "h": 0.2988,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup65",
-    "category": "wall-frame",
-    "image": "/mockups/mockup65.png",
-    "frames": [
-      {
-        "x": 0.5742,
-        "y": 0.3209,
-        "w": 0.2432,
-        "h": 0.2866,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  {
-    "name": "mockup25",
-    "category": "wall-frame",
-    "image": "/mockups/mockup25.png",
-    "frames": [
-      {
-        "x": 0.276,
-        "y": 0.181,
-        "w": 0.102,
-        "h": 0.13,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.424,
-        "y": 0.102,
-        "w": 0.106,
-        "h": 0.129,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.583,
-        "y": 0.09,
-        "w": 0.169,
-        "h": 0.126,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.656,
-        "y": 0.283,
-        "w": 0.113,
-        "h": 0.085,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.653,
-        "y": 0.417,
-        "w": 0.119,
-        "h": 0.083,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.437,
-        "y": 0.29,
-        "w": 0.144,
-        "h": 0.184,
-        "rotation": 0,
-        "cornerRadius": 0
-      },
-      {
-        "x": 0.275,
-        "y": 0.356,
-        "w": 0.104,
-        "h": 0.132,
-        "rotation": 0,
-        "cornerRadius": 0
-      }
-    ]
-  },
-  { "name": "mockup1", "category": "wall-frame", "image": "/mockups/mockup1.png", "frames": [] },
-  { "name": "mockup2", "category": "wall-frame", "image": "/mockups/mockup2.png", "frames": [] },
-  { "name": "mockup3", "category": "wall-frame", "image": "/mockups/mockup3.png", "frames": [] },
-  { "name": "mockup4", "category": "wall-frame", "image": "/mockups/mockup4.png", "frames": [] },
-  { "name": "mockup5", "category": "wall-frame", "image": "/mockups/mockup5.png", "frames": [] },
-  { "name": "mockup6", "category": "wall-frame", "image": "/mockups/mockup6.png", "frames": [] },
-  { "name": "mockup7", "category": "wall-frame", "image": "/mockups/mockup7.png", "frames": [] },
-  { "name": "mockup8", "category": "wall-frame", "image": "/mockups/mockup8.png", "frames": [] },
-  { "name": "mockup9", "category": "wall-frame", "image": "/mockups/mockup9.png", "frames": [] },
-  { "name": "mockup10", "category": "wall-frame", "image": "/mockups/mockup10.png", "frames": [] },
-  { "name": "mockup11", "category": "wall-frame", "image": "/mockups/mockup11.png", "frames": [] },
-  { "name": "mockup12", "category": "wall-frame", "image": "/mockups/mockup12.png", "frames": [] }
+  }
 ]
